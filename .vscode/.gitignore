@@ -1,0 +1,7 @@
+/*
+!.gitignore
+
+# Keep project-specific settings
+!/extensions.json
+!/launch.json
+!/tasks.json
