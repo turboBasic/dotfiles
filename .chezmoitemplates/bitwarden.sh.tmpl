@@ -1,0 +1,24 @@
+# shellcheck disable=SC1072,SC2148
+### Bitwarden template begin
+
+function bw-get-field() {
+    local item=$1
+    local field=$2
+    local json
+
+    json=$(bw --nointeraction get item "$item")
+    # shellcheck disable=SC2181
+    if [[ $? -ne 0 ]]; then
+        echo "Error: Unable to retrieve item '$item' from Bitwarden."
+        return 1
+    fi
+
+    jq --raw-output ".fields[] | select(.name == \"$field\") | .value" <<< "$json"
+}
+
+function bw-unlock() {
+    bw unlock --raw --passwordfile ~/.ssh/bw_password
+}
+
+### Bitwarden template end
+# shellcheck enable=SC1072,SC2148

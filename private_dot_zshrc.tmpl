@@ -1,0 +1,478 @@
+# shellcheck disable=SC2148
+
+##  Zsh vars and options
+# shellcheck disable=SC1036
+setopt interactive_comments
+fpath=( $fpath $HOME/.zfunc(-N/) )
+
+
+##  Zsh key bindings
+bindkey -e
+bindkey '^U' push-input
+
+
+##  Zsh aliases
+alias history='builtin fc -il'
+alias ls='command ls --color=auto --time-style=long-iso --group-directories-first'
+alias ll='command ls --color=auto --time-style=long-iso --group-directories-first --classify --format=long --all'
+alias  l='command ls --color=auto --time-style=long-iso --group-directories-first --classify --format=long --almost-all'
+
+alias cz='command chezmoi'
+alias d-i-f='command docker images --format="{{`{{.ID}}`}}・\
+{{`{{if gt (len .Repository) 35}}…{{slice .Repository (slice .Repository 34|len)}}`}}\
+{{`{{else}}{{printf \"%-35s\" .Repository}}{{end}}`}}・\
+{{`{{if gt (len .Tag) 15}}{{slice .Tag 14}}…{{else}}{{.Tag}}{{end}}`}}"'
+
+
+##  Zsh history
+HISTFILE=${HISTFILE:-"$HOME/.zsh_history"}
+HISTSIZE=999999999
+SAVEHIST=$HISTSIZE
+setopt  \
+    extended_history \
+    share_history \
+    hist_find_no_dups \
+    hist_ignore_space \
+    hist_ignore_dups \
+    hist_no_store \
+    hist_reduce_blanks \
+    hist_verify \
+
+
+##  Homebrew
+() {
+    typeset -aU homebrew=( $commands[brew] $HOMEBREW_PREFIX/bin/brew /usr/local/bin/brew /opt/homebrew/bin/brew )
+    homebrew=( ${^homebrew}(-*N) )      # only executable files, including symlinks to them
+
+    if [[ -n $homebrew ]]; then
+        export HOMEBREW_PREFIX=$($homebrew[1] --prefix)
+        path=( $HOMEBREW_PREFIX/bin $HOMEBREW_PREFIX/sbin $path )
+        path=( ${^path}(-N/) )          # only directories and symlinks to directories
+        fpath=(
+            $HOMEBREW_PREFIX/share/zsh/site-functions(-N/)
+            $fpath
+            $HOME/.zfunc(-N/)
+        )
+        manpath+=( "$ZPFX/man" /usr/share/man )
+    fi
+}
+
+
+##  Zinit install
+() {
+    ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+    if [ ! -d $ZINIT_HOME/.git ]; then
+        mkdir -p "$$ZINIT_HOME"
+        git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+    fi
+
+    path=( $HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin(-N/) $path ) source $ZINIT_HOME/zinit.zsh
+    path=(
+        $ZPFX/bin(-N/)
+        $path
+        $HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin(-N/)
+    )
+}
+
+
+##  Homebrew install
+() {
+    declare HOMEBREW_PREFIX=${HOMEBREW_PREFIX-/opt/homebrew}
+    zinit light-mode lucid for \
+            id-as='brew' \
+            pick='brew.zsh' \
+            nocompile='!' \
+            atclone='
+                if [[ ! -x "$HOMEBREW_PREFIX/bin/brew" ]]; then
+                    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+                fi
+                $HOMEBREW_PREFIX/bin/brew shellenv > brew.zsh
+            ' \
+            atpull='brew update' \
+            run-atpull \
+        zdharma-continuum/null
+
+    ##  Homebrew install essential packages
+    ##  Enforce the installation of essential Homebrew formulae by executing `zinit update brew-essential-formulae`
+    (( $+commands[brew] )) &&
+    zinit light-mode lucid for \
+            id-as='brew-essential-formulae' \
+            nocompile='!' \
+            atclone=$'
+                (( $+commands[asdf] )) || brew install asdf
+                (( $+commands[atuin] )) || brew install atuin
+                (( $+commands[grealpath] )) || brew install coreutils
+                (( $+commands[gawk] )) || brew install gawk
+                (( $+commands[gfind] )) || brew install findutils
+                (( $+commands[ggrep] )) || brew install grep
+                (( $+commands[gsed] )) || brew install gnu-sed
+                (( $+commands[gtar] )) || brew install gnu-tar
+                (( $+commands[aws] )) || brew install awscli
+                (( $+commands[chezmoi] )) || brew install chezmoi
+                (( $+commands[cookiecutter] )) || brew install cookiecutter
+                (( $+commands[diff-so-fancy] )) || brew install diff-so-fancy
+                (( $+commands[dive] )) || brew install dive
+                (( $+commands[docker] )) || brew install --cask docker
+                (( $+commands[hatch] )) || brew install hatch
+                (( $+commands[jq] )) || brew install jq
+                (( $+commands[gman] )) || brew install man-db
+                (( $+commands[nvim] )) || brew install neovim
+                (( $+commands[pipx] )) || brew install pipx
+                (( $+commands[pkg-config] )) || brew install pkg-config
+                (( $+commands[pre-commit] )) || brew install pre-commit
+                (( $+commands[repo] )) || brew install repo
+                (( $+commands[rg] )) || brew install ripgrep
+                (( $+commands[tldr] )) || brew install tldr
+                (( $+commands[tree] )) || brew install tree
+                (( $+commands[yq] )) || brew install yq
+                (( $+commands[zstd] )) || brew install zstd
+                (( $+commands[zx] )) || brew install zx
+                brew list arc &> /dev/null || brew install arc
+                brew list bash &> /dev/null || brew install bash
+                brew list curl &> /dev/null || brew install curl
+                brew list git-lfs &> /dev/null || brew install git-lfs
+                brew list inkscape &> /dev/null || brew install inkscape
+                brew list keystore-explorer &> /dev/null || brew install keystore-explorer
+                brew list less &> /dev/null || brew install less
+                brew list font-fira-code-nerd-font &> /dev/null || {
+                    brew tap homebrew/cask-fonts
+                    brew install font-fira-code-nerd-font
+                }
+                brew list visual-studio-code &> /dev/null || brew install visual-studio-code
+
+                local i j files symlinks
+
+                # install symlinks to Homebrew versions of utilities
+                symlinks=(
+                    $HOMEBREW_PREFIX/opt/*/libexec/gnubin/*(-*N)
+                    $HOMEBREW_PREFIX/opt/man-db/libexec/bin/*(-*N)
+                    $HOMEBREW_PREFIX/opt/curl/bin/*(-*N)
+                )
+                for j in $symlinks; do
+                    ln -sfv "$j" $HOME/.local/bin/"$(basename "$j")"
+                done
+
+                # update Man path
+                echo "
+                    man_paths=(
+                        \$HOMEBREW_PREFIX/opt/*/libexec/gnuman(N)
+                        \$HOMEBREW_PREFIX/opt/curl/share/man(N)
+                    )
+                    for i in \$man_paths; do
+                        manpath=( \$i \$manpath )
+                    done
+                " > brew-essential-formulae.zsh
+
+                # create symlinks for autocompletion
+                symlinks=(
+                    $HOMEBREW_PREFIX/opt/curl/share/zsh/site-functions/_curl
+                )
+                for i in $symlinks; do
+                    ln -svf "$i" ~/.local/share/zinit/completions/
+                done
+            ' \
+            atpull='%atclone' \
+            run-atpull \
+        zdharma-continuum/null
+}
+
+
+##  Zinit lightweight plugins, loaded synchronously
+#
+#      pick Select the file to source, or the file to set as command (when using snippet --command
+#           or the ice as"program"); it is a pattern, alphabetically first matched file is being chosen;
+#           e.g. zinit ice pick"*.plugin.zsh"; zinit load ….
+#       src Specify additional file to source after sourcing main file or after setting up command (via as"program").
+#           It is not a pattern but a plain file name.
+#   compile Pattern (+ possible {...} expansion, like {a/*,b*}) to select additional files to compile,
+#           e.g. `compile="(pure|async).zsh"
+# nocompile Don't try to compile pick-pointed files. If passed the exclamation mark (i.e. nocompile'!'),
+#           then do compile, but after make'' and atclone'' (useful if Makefile installs some scripts, to point
+#           pick'' at the location of their installation).
+#
+#           Order of execution of related Ice-mods:
+#               atinit -> atpull! -> make'!!' -> mv -> cp -> make! ->
+#               atclone/atpull -> make -> (plugin script loading) ->
+#               src -> multisrc -> atload
+#
+#   See     https://github.com/zdharma-continuum/zinit?tab=readme-ov-file#ice-modifiers
+#
+# shellcheck disable=SC1072,SC1073
+() {
+    # Enable these when required
+    #   OMZP::invoke \
+    #   OMZP::jfrog \
+    #   OMZP::pip \
+    #   OMZP::aws \
+    zinit light-mode lucid for \
+        zdharma-continuum/z-a-meta-plugins \
+        zdharma-continuum/zinit-annex-unscope \
+        zdharma-continuum/zinit-annex-readurl \
+        zdharma-continuum/zinit-annex-patch-dl \
+        zdharma-continuum/zinit-annex-submods \
+        zdharma-continuum/zinit-annex-bin-gem-node \
+        @sharkdp \
+            id-as='aws-helpers' \
+        https://gist.githubusercontent.com/turboBasic/b4e893d23586f620c91fb9883c31939c/raw/aws.zsh \
+            id-as='generate-ls-colors' \
+            pick='colors.sh' \
+            nocompile='!' \
+            atclone='zsh --no-rcs generate-ls-colors molokai > colors.sh' \
+            atpull='%atclone' \
+            atload='zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"' \
+        https://gist.githubusercontent.com/turboBasic/26d0b94957864767a07f18e7c689a0ce/raw/generate.sh \
+            \
+            compile='(pure|async).zsh' pick='async.zsh' src='pure.zsh' \
+        sindresorhus/pure \
+            \
+            atload='unfunction uninstall_oh_my_zsh upgrade_oh_my_zsh' \
+        OMZL::functions.zsh \
+            \
+        OMZL::clipboard.zsh \
+        OMZL::git.zsh \
+            \
+            as='null' \
+            id-as='idea' \
+            sbin='idea' sbin='pycharm' \
+            atclone='
+                local idea_scripts_path="$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
+                if [[ -d "$idea_scripts_path" ]]; then
+                    cp "$idea_scripts_path"/* ./
+                else
+                    +zi-log "{b}{u-warn}ERROR{b-warn}:{rst} Directory {cmd}$idea_scripts_path{rst} does not exist"
+                    false
+                fi
+            ' \
+        zdharma-continuum/null \
+            \
+            as='program' \
+            pick='bin/git-dsf' \
+        zdharma-continuum/zsh-diff-so-fancy \
+            \
+            as='null' \
+            id-as='asdf' \
+            atclone='export ASDF_DATA_DIR=$HOME/.asdf' \
+            atpull='%atclone' \
+            atload='
+                export ASDF_DATA_DIR=$HOME/.asdf
+                path=( $ASDF_DATA_DIR/shims $path )
+            ' \
+        zdharma-continuum/null
+}
+
+
+##  Heavy Zinit plugins, loaded asynchronously in Turbo mode
+() {
+    zinit light-mode lucid wait for \
+            pack='bgn-binary' \
+        fzf \
+            \
+            from='gh-r' \
+            as='program' \
+            mv='direnv* -> direnv' \
+            pick='direnv' \
+            src='zhook.zsh' \
+            atclone='./direnv hook zsh > zhook.zsh' \
+            atpull='%atclone' \
+        direnv/direnv \
+            \
+            wait='1y' \
+            as='null' \
+            id-as='sdkman' \
+            cp='$ZPFX/sdkman/bin/sdkman-init.sh -> sdkman-init.zsh' \
+            compile='sdkman-init.zsh' \
+            atinit='export SDKMAN_DIR=$ZPFX/sdkman' \
+            atclone='
+                curl --output scr.sh "https://get.sdkman.io/?rcupdate=false"
+                SDKMAN_DIR=$ZPFX/sdkman bash scr.sh
+            ' \
+            atpull='SDKMAN_DIR=$ZPFX/sdkman sdk selfupdate || true' \
+            run-atpull \
+            atload='
+                mkdir -p $ZPFX/sdkman/ext
+                SDKMAN_DIR=$ZPFX/sdkman source sdkman-init.zsh
+            ' \
+        zdharma-continuum/null \
+            \
+            if='[[ -x $HOME/anaconda3/bin/conda ]]' \
+            wait \
+            id-as='conda' \
+            nocompile='!' \
+            atclone='
+                $HOME/anaconda3/bin/conda shell.zsh hook 2>/dev/null > conda.zsh
+                echo "
+                    conda deactivate
+                    path=( \${(@)path:#\$HOME/anaconda3/condabin} )
+                    path+=( \$HOME/anaconda3/bin )
+                " >> conda.zsh
+            ' \
+            atpull='%atclone' \
+        zdharma-continuum/null \
+            \
+            wait \
+            atclone='
+                atuin init zsh --disable-up-arrow > atuin-arrow-up-disabled.plugin.zsh
+            ' \
+            pick='atuin-arrow-up-disabled.plugin.zsh' \
+            nocompile='!' \
+            run-atpull \
+            atpull='%atclone' \
+        atuinsh/atuin \
+            \
+        mattmc3/zman
+    # TODO for some reason atuinsh/atuin does not get recompiled when `zinit update atuinsh/atuin`
+
+
+    zinit lucid for \
+            wait \
+            as='none' \
+            has='pkg-config' \
+            pick='misc/quitcd/quitcd.bash_sh_zsh' \
+            sbin='nnn -> nnn' \
+            make \
+        jarun/nnn
+}
+
+
+##  Zinit Zsh completion plugins
+() {
+    zinit light-mode lucid wait for \
+    {{- if eq .chezmoi.os "darwin" }}
+            id-as='_curl' \
+            as='completion' \
+            is-snippet \
+        $HOMEBREW_PREFIX/opt/curl/share/zsh/site-functions/_curl \
+    {{- end }}
+            \
+            id-as='_chezmoi' \
+            as='completion' \
+            is-snippet \
+        https://raw.githubusercontent.com/twpayne/chezmoi/refs/heads/master/completions/chezmoi.zsh \
+            \
+            id-as='_docker' \
+            as='completion' \
+            is-snippet \
+        https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker \
+            \
+            id-as='_gpg' \
+            as='completion' \
+            is-snippet \
+        https://raw.githubusercontent.com/johan/zsh/master/Completion/Unix/Command/_gpg \
+            \
+            id-as='_kubectl' \
+            as='completion' \
+            nocompile='!' \
+            pick='_kubectl' \
+            atclone='
+                touch _kubectl
+                if [[ $commands[kubectl] ]]; then
+                    kubectl completion zsh >| _kubectl
+                fi
+            ' \
+            run-atpull \
+            atpull='%atclone' \
+        zdharma-continuum/null
+}
+
+
+##  Plugins which should be loaded the last
+() {
+    zinit light-mode lucid for \
+            wait \
+            atload='!_zsh_autosuggest_start' \
+        zsh-users/zsh-autosuggestions \
+            \
+            wait='1z' \
+            atinit='ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay' \
+        zdharma-continuum/fast-syntax-highlighting \
+            \
+            if='[[ -d $HOME/.local/bin ]]' \
+            id-as='local-gnu-utils' \
+            nocompile='!' \
+            atclone='
+                echo "path=( \$HOME/.local/bin \$path )" > local-gnu-utils.zsh
+            ' \
+            run-atpull \
+            atpull='%atclone' \
+        zdharma-continuum/null
+}
+
+
+##  Include all parts of the script
+
+{{ template "bitwarden.sh.tmpl" }}
+
+{{ if eq .chezmoi.hostname "mao-macbook-pro-14" }}
+{{-  template "work.sh.tmpl" . -}}
+{{ end }}
+
+
+##  Async functions
+
+function safe-echo {
+    printf "\n%s\n" "$1"
+    zle && zle reset-prompt
+}
+
+function set-env-var-async() {
+    local worker="bw_worker"
+
+    set_env_async_var_name="$1"
+    local func_name="$2"
+
+    # If function does not exist, reset to dummy variable and function
+    if ! typeset -f "$func_name" &>/dev/null; then
+        func_name="true"
+        set_env_async_var_name="set_env_async_dummy"
+    fi
+
+    # Save remaining arguments for chained calls
+    shift 2
+    declare -ag args=( "$@" )
+
+    # Define a function to process the result of the job
+    # See https://github.com/mafredri/zsh-async?tab=readme-ov-file#functions
+    # $1: Job name
+    # $2: Exit code of the job
+    # $3: Stdout of the job
+    #
+    # shellcheck disable=2296,2317
+    function set-env-async-callback() {
+        # dummy values for non-existent functions are ignored
+        if [[ "$2" -eq 0 && "$set_env_async_var_name" != "set_env_async_dummy" ]]; then
+            typeset -gx "${set_env_async_var_name}"="$3"
+            safe-echo "✅ $set_env_async_var_name set to ${(P)set_env_async_var_name}"
+        else
+            unset "${set_env_async_var_name}"
+        fi
+        unset set_env_async_var_name
+        async_stop_worker "$worker"
+
+        if [[ ${#args} -gt 0 ]]; then
+            # execute the next functions in the chain
+
+            #shellcheck disable=SC2068
+            set-env-var-async "${args[@]}"
+        else
+            unset args
+        fi
+    }
+
+    async_start_worker "$worker" -n
+    async_register_callback "$worker" set-env-async-callback
+    async_job "$worker" "$func_name"
+}
+
+
+##  Other functions
+
+
+##  Assign environment variables asnychronously
+
+set-env-var-async \
+    BW_SESSION bw-unlock \
+    TFE_TOKEN tfe-get-token \
+    XXX non-existent-function
+
+
+# vim: set fileformat=unix tabstop=4 shiftwidth=4 expandtab:
