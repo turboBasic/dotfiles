@@ -1,0 +1,5 @@
+{{- $privateEmail := promptStringOnce . "privateEmail" "Private email address" -}}
+
+[data]
+    privateEmail = {{ $privateEmail | quote }}
+    workEmail = {{ (bitwarden "item" "work.2025.05@secondary").identity.email | quote }}
