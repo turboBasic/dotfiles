@@ -1,0 +1,18 @@
+{
+  "files.associations": {
+    ".chezmoiignore": "gitignore",
+    "*.sh.tmpl": "shellscript",
+    "*.toml.tmpl": "toml",
+    "*zprofile": "shellscript",
+    "*zshenv": "shellscript",
+    "*zshrc": "shellscript",
+    ".zshrc_*": "shellscript",
+    "*zshrc.tmpl": "shellscript",
+
+  },
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#293100",
+    "titleBar.activeBackground": "#394501",
+    "titleBar.activeForeground": "#F6FFC8"
+  },
+}

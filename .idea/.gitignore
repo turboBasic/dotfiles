@@ -1,0 +1,9 @@
+# Default ignored files
+/dictionaries/
+/inspectionProfiles/
+/shelf/
+/usage.statistics.xml
+/workspace.xml
+
+# Basically ignore everything, work only from VS Code
+**/*
