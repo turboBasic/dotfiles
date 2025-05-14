@@ -1,0 +1,17 @@
+{{ $bwVersion := "2025.4.0" -}}
+
+{{- $platform := "" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+  {{- $platform = "macos" -}}
+{{- else if eq .chezmoi.os "linux" -}}
+  {{- $platform = "linux" -}}
+{{- else -}}
+  {{- $platform = "unknown" -}}
+{{- end -}}
+
+{{if not (lookPath "bw") -}}
+[".local/bin/bw"]
+    type = "archive-file"
+    url = "https://github.com/bitwarden/clients/releases/download/cli-v{{ $bwVersion }}/bw-{{ $platform }}-{{ $bwVersion }}.zip"
+    path = "bw"
+{{- end}}

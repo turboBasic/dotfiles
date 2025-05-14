@@ -2,7 +2,11 @@
 
 [data]
     privateEmail = {{ $privateEmail | quote }}
-    workEmail = {{ (bitwarden "item" "work.2025.05@secondary").identity.email | quote }}
+    {{if lookPath "bw" -}}
+        workEmail = {{ (bitwarden "item" "work.2025.05@secondary").identity.email | quote }}
+    {{else -}}
+        workEmail = "john@example.com"
+    {{- end}}
 
 [diff]
     pager = "diff-so-fancy"
