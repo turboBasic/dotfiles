@@ -29,6 +29,9 @@ setopt  \
 
 # shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073,SC1083
 {{ template "zinit_install.sh.tmpl" . }}
+{{ if and .chezmoi.osRelease (eq .chezmoi.osRelease.id "ubuntu") }}
+{{-  template "ubuntu.sh.tmpl" . -}}
+{{ end }}
 # shellcheck enable=SC1009,SC1050,SC1054,SC1072,SC1073,SC1083
 
 

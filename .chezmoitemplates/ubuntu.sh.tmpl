@@ -1,0 +1,20 @@
+# shellcheck disable=SC2148,SC1072
+### Ubuntu template begin
+
+zinit light-mode lucid for \
+        id-as='ubuntu-essential-packages' \
+        nocompile='!' \
+        atclone=$'
+            sudo apt-get update
+            (( $+commands[jq] ))    || sudo apt-get install --yes jq
+            (( $+commands[rg] ))    || sudo apt-get install --yes ripgrep
+            (( $+commands[tree] ))  || sudo apt-get install --yes tree
+            (( $+commands[unzip] )) || sudo apt-get install --yes unzip
+            (( $+commands[zip] ))   || sudo apt-get install --yes zip
+        ' \
+        atpull='%atclone' \
+        run-atpull \
+    zdharma-continuum/null
+
+### Ubuntu template end
+# shellcheck enable=SC2148,SC1072
