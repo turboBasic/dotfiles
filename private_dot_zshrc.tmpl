@@ -27,40 +27,9 @@ setopt  \
     hist_verify \
 
 
-##  Homebrew
-() {
-    typeset -aU homebrew=( $commands[brew] $HOMEBREW_PREFIX/bin/brew /usr/local/bin/brew /opt/homebrew/bin/brew )
-    homebrew=( ${^homebrew}(-*N) )      # only executable files, including symlinks to them
-
-    if [[ -n $homebrew ]]; then
-        export HOMEBREW_PREFIX=$($homebrew[1] --prefix)
-        path=( $HOMEBREW_PREFIX/bin $HOMEBREW_PREFIX/sbin $path )
-        path=( ${^path}(-N/) )          # only directories and symlinks to directories
-        fpath=(
-            $HOMEBREW_PREFIX/share/zsh/site-functions(-N/)
-            $fpath
-            $HOME/.zfunc(-N/)
-        )
-        manpath+=( "$ZPFX/man" /usr/share/man )
-    fi
-}
-
-
-##  Zinit install
-() {
-    ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-    if [ ! -d $ZINIT_HOME/.git ]; then
-        mkdir -p "$$ZINIT_HOME"
-        git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-    fi
-
-    path=( $HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin(-N/) $path ) source $ZINIT_HOME/zinit.zsh
-    path=(
-        $ZPFX/bin(-N/)
-        $path
-        $HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin(-N/)
-    )
-}
+# shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073,SC1083
+{{ template "zinit_install.sh.tmpl" . }}
+# shellcheck enable=SC1009,SC1050,SC1054,SC1072,SC1073,SC1083
 
 
 ##  Homebrew install

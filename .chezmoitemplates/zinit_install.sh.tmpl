@@ -1,0 +1,47 @@
+### Zinit Install template begin
+
+# shellcheck disable=SC1036
+function _path_to_homebrew() {
+    typeset -aU homebrew=(
+        $commands[brew]
+        $HOMEBREW_PREFIX/bin/brew
+        /usr/local/bin/brew
+        /opt/homebrew/bin/brew
+    )
+    reply=( ${^homebrew}(-*N) )  # only executable files, including symlinks to them
+}
+
+# shellcheck disable=SC1036
+function _path_to_gnu_utils_in_homebrew() {
+    _path_to_homebrew
+    if [[ -n $reply ]]; then
+        local homebrew_prefix=$("${reply[1]}" --prefix)
+        reply=( $homebrew_prefix/opt/coreutils/libexec/gnubin(-N/) )
+        reply=( ${^reply}(-N/) )  # only directories and symlinks to directories
+    else
+        reply=( )
+    fi
+}
+
+# shellcheck disable=SC1072,SC1073
+() {
+    ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+    if [ ! -d $ZINIT_HOME/.git ]; then
+        mkdir -p "$ZINIT_HOME"
+        git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+    fi
+
+    _path_to_gnu_utils_in_homebrew
+    path=( $reply $path ) source $ZINIT_HOME/zinit.zsh
+    path=(
+        $ZPFX/bin(-N/)
+        $path
+    )
+    manpath+=( "$ZPFX/man"(-N/) /usr/share/man(-N/) )
+
+    if [[ $(uname) == "Linux" ]]; then
+        unfunction _path_to_gnu_utils_in_homebrew _path_to_homebrew
+    fi
+}
+
+### Zinit Install template end
