@@ -1,0 +1,46 @@
+# shellcheck disable=SC1072,SC2148
+### Aliases template begin
+
+# Conditionally set alias from zstyle with fallback
+#
+# Usage example:
+#   zstyle ':dotfiles:alias' builtin_ls true
+#       ...
+#   set-builtin-command-alias ls '/bin/ls' 'command gls'
+function set-builtin-command-alias() {
+    local name=$1 true_cmd=$2 false_cmd=$3 default=${4:-false} value
+
+    # Try to read the value from zstyle, or fall back
+    if ! zstyle -s ':dotfiles:alias' "builtin_$name" value; then
+        value=$default
+    fi
+
+    alias $name="$( [[ $value == true ]] && echo "$true_cmd" || echo "$false_cmd" )"
+}
+
+function zstyle-value() {
+    local context=$1 setting=$2
+    zstyle -s "$context" "$setting" REPLY
+    print $REPLY
+}
+
+alias cz='command chezmoi'
+alias d-i-f='command docker images --format="{{`{{.ID}}`}}・\
+{{`{{if gt (len .Repository) 35}}…{{slice .Repository (slice .Repository 34|len)}}`}}\
+{{`{{else}}{{printf \"%-35s\" .Repository}}{{end}}`}}・\
+{{`{{if gt (len .Tag) 15}}{{slice .Tag 14}}…{{else}}{{.Tag}}{{end}}`}}"'
+
+alias history='builtin fc -il'
+set-builtin-command-alias ls '/bin/ls --color=auto' 'command ls --color=auto --time-style=long-iso --group-directories-first'
+alias  l='ls --classify --format=long --almost-all'
+alias ll='l --all'
+
+alias -s jpg=open
+alias -s jpeg=open
+alias -s md=open
+alias -s pdf=open
+alias -s png=open
+alias -s txt=open
+
+### Aliases template end
+# shellcheck enable=SC1072,SC2148

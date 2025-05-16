@@ -4,24 +4,12 @@
 # shellcheck disable=SC1036
 setopt interactive_comments
 fpath=( $fpath $HOME/.zfunc(-N/) )
+fpath=( ${^fpath}(-N/) )
 
 
 ##  Zsh key bindings
 bindkey -e
 bindkey '^U' push-input
-
-
-##  Zsh aliases
-alias history='builtin fc -il'
-alias ls='command ls --color=auto --time-style=long-iso --group-directories-first'
-alias ll='command ls --color=auto --time-style=long-iso --group-directories-first --classify --format=long --all'
-alias  l='command ls --color=auto --time-style=long-iso --group-directories-first --classify --format=long --almost-all'
-
-alias cz='command chezmoi'
-alias d-i-f='command docker images --format="{{`{{.ID}}`}}・\
-{{`{{if gt (len .Repository) 35}}…{{slice .Repository (slice .Repository 34|len)}}`}}\
-{{`{{else}}{{printf \"%-35s\" .Repository}}{{end}}`}}・\
-{{`{{if gt (len .Tag) 15}}{{slice .Tag 14}}…{{else}}{{.Tag}}{{end}}`}}"'
 
 
 ##  Zsh history
@@ -425,6 +413,14 @@ setopt  \
 {{ if eq .chezmoi.hostname "mao-macbook-pro-14" }}
 {{-  template "work.sh.tmpl" . -}}
 {{ end }}
+
+
+##  Zsh aliases
+zstyle ':dotfiles:alias' builtin_ls false
+
+# shellcheck disable=SC1054,1083
+{{ template "aliases.sh.tmpl" . }}
+# shellcheck enable=SC1054,SC1083
 
 
 ##  Async functions
