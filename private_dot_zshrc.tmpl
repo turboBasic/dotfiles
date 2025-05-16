@@ -279,18 +279,22 @@ setopt  \
             wait='1y' \
             as='null' \
             id-as='sdkman' \
-            cp='$ZPFX/sdkman/bin/sdkman-init.sh -> sdkman-init.zsh' \
-            compile='sdkman-init.zsh' \
             atinit='export SDKMAN_DIR=$ZPFX/sdkman' \
             atclone='
                 curl --output scr.sh "https://get.sdkman.io/?rcupdate=false"
-                SDKMAN_DIR=$ZPFX/sdkman bash scr.sh
+                export SDKMAN_DIR=$ZPFX/sdkman
+                bash scr.sh
+                for f in $ZPFX/sdkman/{bin,src}/*.sh; do zcompile $f; done
             ' \
-            atpull='SDKMAN_DIR=$ZPFX/sdkman sdk selfupdate || true' \
+            atpull='
+                export SDKMAN_DIR=$ZPFX/sdkman
+                sdk selfupdate || true
+                for f in $ZPFX/sdkman/{bin,src}/*.sh; do zcompile $f; done
+            ' \
             run-atpull \
             atload='
                 mkdir -p $ZPFX/sdkman/ext
-                SDKMAN_DIR=$ZPFX/sdkman source sdkman-init.zsh
+                source $ZPFX/sdkman/bin/sdkman-init.sh
             ' \
         zdharma-continuum/null \
             \
