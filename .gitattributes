@@ -1,0 +1,41 @@
+# Normalize line endings for text files
+* text=auto
+
+# Force specific file types to use LF (useful for cross-platform compatibility in source code)
+*.css text eol=lf
+*.html text eol=lf
+*.java text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.ts text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Force CRLF line endings for Windows-specific files (e.g., batch scripts)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Treat binary files as binary to prevent line-ending conversions
+*.7z binary
+*.dll binary
+*.exe binary
+*.gif binary
+*.gz binary
+*.ico binary
+*.jar binary
+*.jpg binary
+*.pdf binary
+*.png binary
+*.tar binary
+*.zip binary
+
+# Prevent Git from automatically converting line endings for specific files (e.g., Makefiles)
+Makefile -text
+
+# Handle UTF-8 encoding issues (ensure consistent text encoding across platforms)
+*.log text
+*.md text
+*.txt text
+
