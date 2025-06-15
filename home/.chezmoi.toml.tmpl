@@ -1,3 +1,6 @@
+[hooks.read-source-state.pre]
+    command = "{{ .chezmoi.workingTree }}/install.zsh"
+
 [data]
     dotfiles_id = "dotfiles-2025"
 {{- $profile := promptChoiceOnce . "profile" "Please select profile" (list "personal" "work.2025.05") }}
