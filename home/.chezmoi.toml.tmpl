@@ -1,7 +1,32 @@
+{{ $dotfiles_key_name := promptStringOnce . "dotfiles_key_name" "Enter main key name" "age-00-chezmoi.key" -}}
+{{ if (not $dotfiles_key_name) -}} {{ fail "dotfiles_key_name is missing" }} {{ end -}}
+
+{{ $dotfiles_public_key := promptStringOnce . "dotfiles_public_key" "Enter main public key" "age1m4vlfsmhefw77rdm4m8y9fjfvy9ym794pfp7939r76myvfxjl33sv94f28" -}}
+{{ if (not $dotfiles_public_key) -}} {{ fail "dotfiles_public_key is missing" }} {{ end -}}
+
+{{ $configDir := dir (env "CHEZMOI_CONFIG_FILE") -}}
+{{ if (not $configDir) -}} {{ fail "CHEZMOI_CONFIG_FILE is missing" }} {{ end -}}
+
+{{ $dotfiles_main_key_file := joinPath $configDir $dotfiles_key_name -}}
+
+encryption = "age"
+[age]
+    identity = {{ $dotfiles_main_key_file | quote }}
+    recipient = {{ $dotfiles_public_key | quote }}
+
+[scriptEnv]
+    DOTFILES_KEY_NAME = {{ $dotfiles_key_name | quote }}
+
 [hooks.read-source-state.pre]
     command = "{{ .chezmoi.workingTree }}/install.zsh"
 
 [data]
     dotfiles_id = "dotfiles-2025"
-{{- $profile := promptChoiceOnce . "profile" "Please select profile" (list "personal" "work.2025.05") }}
+    dotfiles_key_name = {{ $dotfiles_key_name | quote }}
+    dotfiles_public_key = {{ $dotfiles_public_key | quote }}
+{{- $profile := promptChoiceOnce . "profile" "Please select profile" (list "personal" "work.2025.05") "work.2025.05" }}
     profile = {{ $profile | quote }}
+
+{{- $script := joinPath .chezmoi.sourceDir ".chezmoiscripts/run_onchange_before_decrypt-chezmoi-secrets.sh" }}
+{{- $command := print "export DOTFILES_KEY_NAME=" $dotfiles_key_name "; zsh " $script }}
+{{- $_ := output "zsh" "-c" $command }}
