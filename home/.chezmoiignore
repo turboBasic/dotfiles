@@ -1,0 +1,8 @@
+# Encryption key used by Chezmoi
+*.key.age
+
+# Project files which should not be tracked by chezmoi
+
+# Generic macOS dirs and files
+**/.DS_Store
+.Trash
