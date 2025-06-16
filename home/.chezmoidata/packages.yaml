@@ -1,0 +1,98 @@
+packages:
+
+  darwin:
+    formulae:
+    - age
+    - age-plugin-se
+    - awscli
+    - bash
+    - bfg
+    - bitwarden-cli
+    - chezmoi
+    - cookiecutter
+    - coreutils
+    - curl
+    - db
+    - dive
+    - expect
+    - findutils
+    - gawk
+    - git
+    - git-lfs
+    - gnu-sed
+    - gnu-tar
+    - grep
+    - hatch
+    - jq
+    - less
+    - neovim
+    - pinentry
+    - pkg-config
+    - pre-commit
+    - rbw
+    - repo
+    - ripgrep
+    - tldr
+    - tree
+    - yq
+    - zstd
+    - zx
+
+    casks:
+    - arc
+    - docker
+    - font-fira-code-nerd-font
+    - font-jetbrains-mono-nerd-font
+    - inkscape
+    - keystore-explorer
+    - visual-studio-code
+
+  linux:
+    formulae:
+    - age
+    - awscli
+    - bfg
+    - bitwarden-cli
+    - chezmoi
+    - cookiecutter
+    - curl
+    - db
+    - dive
+    - git
+    - hatch
+    - jq
+    - less
+    - neovim
+    - pre-commit
+    - rbw
+    - repo
+    - ripgrep
+    - tldr
+    - tree
+    - yq
+    - zx
+
+    apts:
+    - apt-file
+    - apt-utils
+    - build-essential
+    - ca-certificates
+    - file
+    - findutils
+    - gawk
+    - gcc
+    - git
+    - less
+    - libreadline-dev
+    - locales
+    - make
+    - musl
+    - pinentry-tty
+    - pkgconf
+    - sudo
+    - tree
+    - tzdata
+    - unzip
+    - xz-utils
+    - zip
+    - zstd

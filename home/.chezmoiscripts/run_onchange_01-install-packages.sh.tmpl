@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# chezmoi:template:left-delimiter=#{ right-delimiter=}#
+# packages.yaml hash: #{ include ".chezmoidata/packages.yaml" | sha256sum }#
+
+#{ if eq .chezmoi.os "darwin" }#
+brew bundle --file=/dev/stdin <<EOF
+
+#{- range .packages.darwin.formulae -}#
+  #{- if eq "map" (kindOf .) }#
+tap #{ .tap | quote }#
+brew #{ .name | quote }#
+  #{- else }#
+brew #{ . | quote }#
+  #{- end }#
+#{- end }#
+
+#{- range .packages.darwin.casks -}#
+  #{- if eq "map" (kindOf .) }#
+tap #{ .tap | quote }#
+cask #{ .name | quote }#
+  #{- else }#
+cask #{ . | quote }#
+  #{- end }#
+#{- end }#
+
+EOF
+#{- end }#
+
+#{ if eq .chezmoi.os "linux" -}#
+sudo apt-get update
+sudo apt-get install --yes #{ .packages.linux.apts | join " " }#
+
+if [ -f /.dockerenv ]; then
+    # We are in Ubuntu Docker container in macOS, brew is not working properly there
+    # so we are just exiting
+    exit
+fi
+
+brew bundle --file=/dev/stdin <<EOF
+
+#{- range .packages.linux.formulae -}#
+  #{- if eq "map" (kindOf .) }#
+tap #{ .tap | quote }#
+brew #{ .name | quote }#
+  #{- else }#
+brew #{ . | quote }#
+  #{- end }#
+#{- end }#
+
+EOF
+
+#{ end -}#
