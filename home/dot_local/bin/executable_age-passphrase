@@ -1,0 +1,96 @@
+#!/bin/sh
+
+decrypt() {
+    expect <<EOF
+        log_user 0
+        spawn age --decrypt --output "$output_file" "$input_file"
+        send -- "$passphrase\n"
+        expect -- "\n"
+        log_user 1
+        expect eof
+EOF
+}
+
+encrypt() {
+    expect <<EOF
+        log_user 0
+        spawn age --encrypt --armor --passphrase --output "$output_file" "$input_file"
+        send -- "$passphrase\n"
+        # confirmation
+        send -- "$passphrase\n"
+        expect -- "\n"
+        log_user 1
+        expect eof
+EOF
+}
+
+
+mode=""
+passphrase=""
+input_file=""
+output_file=""
+
+while [ -n "$1" ]; do
+    case "$1" in
+        --decrypt)
+            if [ -n "$mode" ]; then
+                echo "Error: Multiple operation modes provided. Must be only one"
+                exit 1
+            else
+                mode="decrypt"
+                shift
+            fi
+            ;;
+        --encrypt)
+            if [ -n "$mode" ]; then
+                echo "Error: Multiple operation modes provided. Must be only one"
+                exit 1
+            else
+                mode="encrypt"
+                shift
+            fi
+            ;;
+        --passphrase)
+            if [ -n "$passphrase" ]; then
+                echo "Error: Multiple passphrases provided. Must be only one"
+                exit 1
+            else
+                shift
+                if [ -n "$1" ]; then
+                    passphrase="$1"
+                    shift
+                else
+                    echo "Error: Passphrase is missing."
+                    exit 1
+                fi
+            fi
+            ;;
+        --*)
+            echo "Error: Unknown option \"$1\"."
+            exit 1
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+for var_name in input_file output_file; do
+    eval "$var_name=$1"
+    shift 2>/dev/null
+done
+[ -n "$passphrase" ] || passphrase="$AGE_PASSPHRASE"
+
+[ -n "$mode" ] || { echo "Error: Operation mode (--encrypt or --decrypt) is missing."; exit 1; }
+[ -n "$input_file" ] || { echo "Error: Input file is missing."; exit 1; }
+[ -n "$output_file" ] || { echo "Error: Output file is missing."; exit 1; }
+[ -n "$passphrase" ] || { echo "Error: Passphrase is missing."; exit 1; }
+
+if [ $mode = "decrypt" ]; then
+    decrypt
+elif [ $mode = "encrypt" ]; then
+    encrypt
+else
+    echo "Error: Unknown mode."
+    exit 1
+fi
