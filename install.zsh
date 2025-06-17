@@ -34,6 +34,10 @@ function main install_main () {
     install_bin_dir || { log "❌ Error: install_bin_dir failed."; return 1 }
     install_age || { log "❌ Error: install_age failed."; return 1 }
     install_chezmoi || { log "❌ Error: install_chezmoi failed."; return 1 }
+    install_homebrew || { log "❌ Error: install_homebrew failed."; return 1 }
+    install_pinentry || { log "❌ Error: install_pinentry failed."; return 1 }
+    install_rbw || { log "❌ Error: install_rbw failed."; return 1 }
+    unlock_rbw || { log "❌ Error: unlock_rbw failed."; return 1 }
 
     if [[ "$1" == "--cleanup" ]]; then
         shift
@@ -112,6 +116,16 @@ function is_sourced() {
     fi
 }
 
+function _jq_field() {
+    grep '^\s*"'$1'":\s*' \
+    |   sed --regexp-extended '
+            s/^[^:]+:\s*//
+            s/,\s*$//
+            s/^\s*"//
+            s/"\s*$//
+        '
+}
+
 function log() {
     if [[ "${1[1,1]}" == "❌" ]]; then
         echo "$*" >&2
@@ -169,6 +183,137 @@ function install_age() {
         age="age"
         log "▫️ Age is already installed."
     fi
+}
+
+function _path_to_homebrew() {
+    declare -a homebrew_locations=(
+        "$(command -v brew)"
+        /usr/local/bin/brew
+        /opt/homebrew/bin/brew
+        /home/linuxbrew/.linuxbrew/bin/brew
+    )
+    reply=()
+    for f in "${homebrew_locations[@]}"; do
+        if [[ -f "$f" && -x "$f" ]]; then
+            reply+=("$f")
+        fi
+    done
+    set -- "${reply[@]}"
+    echo "$1"
+}
+
+function install_homebrew() {
+    log "▫️ Installing Homebrew..."
+    brew=$(_path_to_homebrew)
+    if [[ -z "$brew" ]]; then
+        NONINTERACTIVE=1 /bin/bash -c "$(
+            curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+        )"
+        brew=$(_path_to_homebrew)
+        if [[ -z "$brew" ]]; then
+            log "❌ Homebrew not found even after installation."
+            return 1
+        fi
+        log "✅ Homebrew is installed as $brew"
+    else
+        log "▫️ Homebrew is already installed."
+    fi
+    eval "$($brew shellenv zsh)"
+}
+
+function install_pinentry() {
+    log "▫️ Installing pinentry-tty..."
+    if ! command -v pinentry-tty &> /dev/null; then
+        if [[ "$CHEZMOI_OS" == "linux" ]]; then
+            sudo apt-get install --yes pinentry-tty
+            pinentry="pinentry-tty"
+        elif [[ "$CHEZMOI_OS" == "darwin" ]]; then
+            $brew install pinentry
+            pinentry="$($brew --prefix)/bin/pinentry-tty"
+        else
+            echo "❌ Unsupported OS: $CHEZMOI_OS" >&2
+            return 1
+        fi
+        log "✅ pinentry-tty is installed as $pinentry."
+    else
+        pinentry="pinentry-tty"
+        log "▫️ Pinentry-tty is already installed."
+    fi
+}
+
+function install_rbw() {
+    log "▫️ Installing Rbw..."
+    if ! command -v rbw &> /dev/null; then
+        local url_prefix="https://git.tozt.net/rbw/releases/deb/"
+        if [[ "$CHEZMOI_OS" == "linux" ]]; then
+            local latest_rbw latest_version current_version
+            latest_rbw=$(
+                curl --silent --location "$url_prefix" \
+                |   grep --only-matching --extended-regexp 'href="rbw_[^"]+_amd64\.deb"' \
+                |   sed 's/href="//; s/"$//' \
+                |   sort --version-sort \
+                |   tail --lines=1
+            )
+            latest_version=$(
+                echo "$latest_rbw" \
+                |   grep --only-matching --extended-regexp '_(\d+\.)+\d_' \
+                |   sed 's/_//g'
+            )
+            current_version=$(dpkg-query --showformat='${Version}' --show rbw 2> /dev/null || echo 0.0.0)
+            if dpkg --compare-versions "$latest_version" lt "$current_version"; then
+                curl --location --output "$latest_rbw" "$url_prefix/$latest_rbw"
+                sudo apt-get install --yes ./"$latest_rbw"
+                rm -f "$latest_rbw"
+            fi
+            rbw="rbw"
+        elif [[ "$CHEZMOI_OS" == "darwin" ]]; then
+            $brew install rbw
+            rbw="$($brew --prefix)/bin/rbw"
+        else
+            log "❌ Unsupported OS: $CHEZMOI_OS"
+            return 1
+        fi
+        log "✅ Rbw is installed as $rbw"
+    else
+        rbw="rbw"
+        log "▫️ Rbw is already installed."
+    fi
+}
+
+# shellcheck disable=SC2015,SC2155
+function unlock_rbw() {
+    log "▫️ Unlocking Rbw..."
+
+    if [[ -z "$($rbw config show | _jq_field email)" ]]; then
+        local bw_login
+        read "bw_login?Enter your Bitwarden login: "
+        $rbw config set email "$bw_login"
+    fi
+    if [[ "$($rbw config show | _jq_field lock_timeout)" != $(( 60*60*24 )) ]]; then
+        $rbw config set lock_timeout $(( 60*60*24 ))
+    fi
+
+    if [[ -z "$($rbw config show | _jq_field pinentry)" ]]; then
+        local pinentry
+        if command -v pinentry-mac &> /dev/null; then
+            pinentry="pinentry-mac"
+        elif command -v pinentry-gnome3 &> /dev/null; then
+            pinentry="pinentry-gnome3"
+        elif command -v pinentry-qt &> /dev/null; then
+            pinentry="pinentry-qt"
+        elif command -v pinentry-tty &> /dev/null; then
+            pinentry="pinentry-tty"
+        elif command -v pinentry &> /dev/null; then
+            pinentry="pinentry"
+        elif command -v pinentry-curses &> /dev/null; then
+            pinentry="pinentry-curses"
+        fi
+        if [[ -n "$pinentry" ]]; then
+            $rbw config set pinentry "$pinentry"
+        fi
+    fi
+
+    $rbw unlock && log "▫️ Rbw is unlocked" || return 1
 }
 
 
