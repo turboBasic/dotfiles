@@ -30,3 +30,14 @@ encryption = "age"
 {{- $script := joinPath .chezmoi.sourceDir ".chezmoiscripts/run_onchange_before_decrypt-chezmoi-secrets.sh" }}
 {{- $command := print "export DOTFILES_KEY_NAME=" $dotfiles_key_name "; zsh " $script }}
 {{- $_ := output "zsh" "-c" $command }}
+
+{{- $accounts_file := joinPath $configDir "accounts.json" }}
+{{- if (stat $accounts_file) }}
+    {{- $accounts := $accounts_file | include | fromJson }}
+    accounts = {{ $accounts | toJson | quote }}
+    {{- $aliases := dict -}}
+    {{- range $key, $val := $accounts }}
+    {{- $_ := set $aliases $val.alias.value $key -}}
+    {{- end }}
+    aliases = {{ $aliases | toJson | quote }}
+{{- end }}
