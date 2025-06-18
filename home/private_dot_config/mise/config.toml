@@ -1,0 +1,11 @@
+[tools]
+dotnet = "8"
+go = "latest"
+node = "latest"
+pipx = "latest"
+python = "latest"
+terraform = "1.9.6"
+uv = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = []
