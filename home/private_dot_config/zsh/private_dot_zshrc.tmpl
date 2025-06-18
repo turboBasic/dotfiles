@@ -44,6 +44,10 @@ zstyle ':dotfiles:alias' builtin_ls false
 {{ end }}
 
 
+## Zinit
+{{ include "private_dot_config/zsh/.include/zinit_00_install.zsh" }}
+
+
 ## Homebrew
 export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
 export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar"
