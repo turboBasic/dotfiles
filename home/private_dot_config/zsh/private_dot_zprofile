@@ -1,0 +1,15 @@
+# shellcheck disable=all
+
+# .zprofile for Zsh shell (executed only once per login session and is intentionally kept empty)
+#
+# Zsh config files loading order (https://unix.stackexchange.com/a/71258/65837):
+#
+# 0. /etc/zshenv always
+# 1. .zshenv is always sourced first
+# 2. .zprofile for login shells
+# 3. .zshrc for interactive shells
+# 4. .zlogin for login shells
+#
+# On exit of a Zsh shell:
+# 1. .zlogout for login shells
+# 2. /etc/zlogout for login shells

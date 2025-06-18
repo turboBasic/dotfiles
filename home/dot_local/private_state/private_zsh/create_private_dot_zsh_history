@@ -1,0 +1,5 @@
+: 1750240000:0;/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
+: 1750240005:0;rm -rf .zshenv .config/zsh .config/rbw .local/bin .local/share/zinit && zsh -c "$(curl -fsSL "https://raw.githubusercontent.com/turboBasic/dotfiles/refs/heads/main/install.zsh?$(date +%s)")" -- --cleanup init turboBasic/dotfiles
+: 1750240010:0;.local/share/chezmoi/test.zsh --local
+: 1750240020:0;zsh -c "$(curl -fsSL "https://raw.githubusercontent.com/turboBasic/dotfiles/refs/heads/main/install.zsh?$(date +%s)")" -- --cleanup init turboBasic/dotfiles
+: 1750240030:0;CHEZMOI_DEBUG= zsh -c "$(curl -fsLS "https://raw.githubusercontent.com/turboBasic/dotfiles/refs/heads/main/test.zsh?$(date +%s)")"

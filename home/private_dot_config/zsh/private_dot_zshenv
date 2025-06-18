@@ -1,0 +1,58 @@
+# shellcheck disable=all
+
+## Zsh configuration files location
+export ZDOTDIR="$HOME/.config/zsh"      # or export ZDOTDIR=${${(%):-%x}:P:h}   ;)
+
+## Zsh internal variables
+typeset -U CDPATH cdpath
+typeset -U FPATH fpath
+typeset -U MANPATH manpath
+typeset -U PATH path
+path+=( $HOME/.local/bin(N/) )
+
+## Global vars for returning results from functions
+typeset -aT REPLY reply $'\0'
+reply=()
+typeset -A reply_assoc=()
+
+## Other non-exported variables
+SHELL_SESSIONS_DISABLE=1    # Disable Apple's "save/restore shell state" feature
+                            # see https://superuser.com/a/1610999/317385
+skip_global_compinit=1      # skip global compinit to avoid loading system completions
+
+
+## Environment variables
+
+export LANG=en_GB.UTF-8
+export EDITOR='nvim'
+export FZF_DEFAULT_COMMAND=$'rg --files --no-ignore --hidden --follow --glob \'!.git/*\''
+export FZF_DEFAULT_OPTS='--height 50% --ansi --info=inline'
+export HOMEBREW_NO_ANALYTICS=1
+LESS=(
+    --buffers=128
+    --HILITE-UNREAD
+    --ignore-case
+    --LONG-PROMPT
+    --max-back-scroll=15
+    --no-init
+    --quiet
+    --quit-at-eof
+    --quit-if-one-screen
+    --RAW-CONTROL-CHARS
+    --status-line
+    --tabs=4
+    --window=-4
+)
+LESS="${(j: :)LESS}"
+export LESS
+export MANPAGER="less --use-color --color=d+g --color=u+y"  # colored Man pages
+export MANROFFOPT="-c"                                      # colored Man pages
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
+
+# XDG Base Directories
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+
+# vim: set fileformat=unix tabstop=4 shiftwidth=4 expandtab:
