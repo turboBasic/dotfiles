@@ -102,3 +102,22 @@
 [user]
     name = {{ $accounts | dig "accounts.personal" "git_username" "value" "" }}
     email = {{ $accounts | dig "accounts.personal" "email" "" }}
+
+
+#### Configs for specific accounts ####
+{{- range $index, $accountEntryName := $accounts | keys | sortAlpha }}
+{{-   $accountName := trimPrefix "accounts." $accountEntryName }}
+{{-   $accountData := get $accounts $accountEntryName }}
+{{-   $accountAlias := dig "alias" "value" $accountData.name $accountData }}
+
+## Config for {{$accountName}}
+
+[includeIf "gitdir:~/projects/{{$accountName}}/"]
+    path = {{$accountAlias}}.gitconfig
+{{-   $remote_override := dig "git_remote_override" "value" "{}" $accountData | fromJson }}
+{{    range $url, $git_config_name := $remote_override }}
+[includeIf "hasconfig:remote.*.url:*://{{$url}}"]
+    path = {{print $git_config_name ".gitconfig"}}
+{{    end }}
+
+{{- end }}

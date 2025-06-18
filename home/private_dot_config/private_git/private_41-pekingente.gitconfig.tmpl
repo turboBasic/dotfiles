@@ -1,0 +1,15 @@
+{{ $accountAlias := $.chezmoi.sourceFile | base | trimSuffix ".gitconfig.tmpl" | trimPrefix "private_" -}}
+{{ $account := get (.aliases | fromJson) $accountAlias -}}
+{{ $accountData := get (.accounts | fromJson) $account -}}
+{{ if $accountData -}}
+[user]
+    name = {{ dig "git_username" "value" (print $accountData.firstName " " $accountData.lastName) $accountData }}
+    email = {{ get $accountData "email" }}
+
+{{ $vcs_host := dig "gerrit_host" "value" "" $accountData -}}
+[http "https://{{$vcs_host}}"]
+    sslBackend = openssl
+    sslCert = {{ $accountAlias }}.crt
+    sslKey = {{ $accountAlias }}.key
+    sslVerify = false
+{{- end }}

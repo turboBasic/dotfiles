@@ -1,0 +1,14 @@
+{{ $account := get (.aliases | fromJson) ($.chezmoi.sourceFile | base | trimSuffix ".gitconfig.tmpl") -}}
+{{ $accountData := get (.accounts | fromJson) $account -}}
+{{ if $accountData -}}
+[user]
+    name = {{ dig "git_username" "value" (print $accountData.firstName " " $accountData.lastName) $accountData }}
+    email = {{ get $accountData "email" }}
+
+[core]
+    fsmonitor = false
+
+{{ $vcs_host := dig "gerrit_host" "value" "" $accountData -}}
+[url "https://{{$vcs_host}}/"]
+    insteadOf = ssh://{{$vcs_host}}/
+{{- end }}

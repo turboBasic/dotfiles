@@ -1,0 +1,7 @@
+{{ $account := get (.aliases | fromJson) "20-leuchtender-xenoceratops" -}}
+{{ $accountData := get (.accounts | fromJson) $account -}}
+{{ if $accountData -}}
+[user]
+    name = {{ dig "git_username" "value" (print $accountData.firstName " " $accountData.lastName) $accountData }}
+    email = {{ get $accountData "email" }}
+{{- end }}
