@@ -1,0 +1,98 @@
+#### Common configuration ####
+
+[advice]
+    skippedCherryPicks = false
+
+[alias]
+    rebase-on-default = "! \
+        currentBranch=$(git branch --show-current); \
+        mainBranch=$(\
+            git remote show origin 2>/dev/null \
+            |   grep --only-matching --perl-regexp '(?<=HEAD branch: )\\S+$'; \
+        ); \
+        git fetch origin; \
+        echo; \
+        echo git rebase --onto \"origin/$mainBranch\" \
+            '$('git merge-base \"origin/$mainBranch\" \"$currentBranch\"')' \
+            \"$currentBranch\"; \
+        git rebase --onto \"origin/$mainBranch\" \
+            $(git merge-base \"origin/$mainBranch\" \"$currentBranch\") \
+            \"$currentBranch\"; \
+    "
+
+[branch "main"]
+    rebase = true
+
+[color]
+    ui = auto
+
+[color "diff"]
+    meta = brightyellow
+    frag = magenta bold
+    func = 146 bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
+
+[core]
+    autocrlf = input
+    excludesFile = ~/.config/git/ignore
+    fsmonitor = true
+    pager = diff-so-fancy | LESS= less --no-init --tabs=4 --RAW-CONTROL-CHARS --quit-if-one-screen
+    untrackedcache = true
+
+[http]
+    cookiefile = cookies
+
+[interactive]
+    diffFilter = diff-so-fancy --patch
+
+[lfs]
+    # include and exclude file globs for Git LFS
+    fetchExclude = *.bin,*.iso,*.zip,*.pdf,*.xls*,*.tar,*.tar.gz
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+[format]
+    pretty = h-shortdate-n-s
+
+[init]
+    defaultBranch = main
+
+[log]
+    date = format-local:%Y-%m-%d %H:%M
+
+[pack]
+    threads = 0
+
+[pretty]
+    h-shortDate-n-s = format:%C(auto)%h %C(blue)%cs %C(green)%aN %C(auto)%s%d
+    h-date-n-s = format:%C(auto)%h %C(blue)%cd %C(green)%aN %C(auto)%s%d
+    parse = format:%H%x09%cd%x09%aN%x09%s%x09%d
+
+[pull]
+    ff = only
+
+[rebase]
+    autostash = true
+
+
+{{ if eq .chezmoi.os "darwin" -}}
+## Config for macOS
+
+[help]
+    format = html
+
+
+{{ end -}}

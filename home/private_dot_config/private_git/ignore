@@ -1,0 +1,7 @@
+# Global ignore file for Git
+
+# Git should be configured with `core.excludesFile` set to `~/.config/git` and
+# it will ignore any patterns listed there across all repositories on your machine
+
+.DS_Store
+# .idea/
