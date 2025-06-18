@@ -96,3 +96,9 @@
 
 
 {{ end -}}
+## Default user
+
+{{ $accounts := .accounts | fromJson -}}
+[user]
+    name = {{ $accounts | dig "accounts.personal" "git_username" "value" "" }}
+    email = {{ $accounts | dig "accounts.personal" "email" "" }}
