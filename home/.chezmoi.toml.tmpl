@@ -41,3 +41,24 @@ encryption = "age"
     {{- end }}
     aliases = {{ $aliases | toJson | quote }}
 {{- end }}
+
+[diff]
+    pager = "diff-so-fancy"
+    exclude = ["scripts"]
+
+    # Example of how to use VS Code for diff (remove "_disable" suffix to activate):
+    command_disable = "code"
+    args_disable = ["--new-window", "--diff", "{{ `{{.Destination}}` }}", "{{ `{{.Target}}` }}"]
+
+[merge]
+    command = "bash"
+    args = [
+        "-c",
+        """\
+        cp {{ `{{.Target}}` }} {{ `{{.Target}}.base` }} && \
+        code --new-window --wait --merge \
+            {{ `{{.Destination}}` }} \
+            {{ `{{.Target}}` }} \
+            {{ `{{.Target}}.base` }} \
+            {{ `{{.Source}}` }}""",
+    ]
