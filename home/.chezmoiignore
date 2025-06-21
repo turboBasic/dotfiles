@@ -2,6 +2,14 @@
 *.key.age
 
 # Project files which should not be tracked by chezmoi
+VS Code/
+
+{{ if ne .chezmoi.os "darwin" }}
+Library
+{{ end }}
+{{ if ne .chezmoi.os "linux" }}
+.config/Code
+{{ end }}
 
 # Generic macOS dirs and files
 **/.DS_Store
