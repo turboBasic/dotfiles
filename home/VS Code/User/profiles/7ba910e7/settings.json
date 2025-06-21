@@ -1,0 +1,212 @@
+{
+    "editor.fontSize": 13,
+    "editor.fontLigatures": false,
+    "editor.fontFamily": "FiraCode Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+    "redhat.telemetry.enabled": false,
+    "explorer.confirmDelete": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "terminal.external.osxExec": "iTerm.app",
+    "[toml]": {
+        "editor.defaultFormatter": "bodil.prettier-toml"
+    },
+    "git.autofetch": true,
+    "files.associations": {
+        "*.lock": "pip-requirements",
+        ".tflint.hcl": "terraform",
+        "*.tmpl": "gitconfig",
+        "symlink_dot_zshenv": "plaintext",
+        "create_dot_zsh_history": "plaintext",
+        "create_private_dot_zsh_history": "plaintext",
+        "symlink_dot_bashrc": "plaintext"
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "text.html.markdown.journal.task.open.bullet",
+                "settings": {
+                    "foreground": "#FFFF00"
+                }
+            },
+            {
+                "scope": "text.html.markdown.journal.task.open.marker",
+                "settings": {
+                    "foreground": "#FFFF00"
+                }
+            },
+            {
+                "scope": "text.html.markdown.journal.task.open.keyword",
+                "settings": {
+                    "fontStyle": "italic"
+                }
+            },
+            {
+                "scope": "text.html.markdown.journal.task.open.text",
+                "settings": {}
+            },
+            {
+                "scope": "text.html.markdown.journal.task.completed.keyword",
+                "settings": {
+                    "fontStyle": "italic"
+                }
+            },
+            {
+                "scope": "text.html.markdown.journal.task.completed.marker",
+                "settings": {
+                    "foreground": "#AAAAAA"
+                }
+            },
+            {
+                "scope": "text.html.markdown.journal.task.completed.text",
+                "settings": {
+                    "foreground": "#AAAAAA"
+                }
+            },
+            {
+                "scope": "text.html.markdown.journal.task.completed.bullet",
+                "settings": {
+                    "foreground": "#FFFF00"
+                }
+            },
+            {
+                "scope": "text.html.markdown.journal.memo.keyword",
+                "settings": {
+                    "fontStyle": "italic"
+                }
+            },
+            {
+                "scope": "text.html.markdown.journal.memo.bullet",
+                "settings": {
+                    "foreground": "#FFFF00"
+                }
+            },
+            {
+                "scope": "text.html.markdown.journal.scope",
+                "settings": {
+                    "foreground": "#FFFF00"
+                }
+            },
+            {
+                "scope": "text.html.markdown.journal.link.keyword",
+                "settings": {
+                    "fontStyle": "italic"
+                }
+            },
+            {
+                "scope": "text.html.markdown.journal.link.bullet",
+                "settings": {
+                    "foreground": "#FFFF00"
+                }
+            }
+        ]
+    },
+    "cmake.showOptionsMovedNotification": false,
+    "explorer.confirmDragAndDrop": false,
+    "githubPullRequests.pullBranch": "never",
+    "svg.preview.mode": "svg",
+    "files.exclude": {
+        "**/.git": false,
+        "**/.git disable exclusion of .git": true
+    },
+    "[svg]": {
+        "editor.defaultFormatter": "jock.svg"
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.renderWhitespace": "all",
+    "github.copilot.advanced": {
+        "authProvider": "github"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "git.openRepositoryInParentFolders": "never",
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "workspaceExplorer.workspaceStorageDirectory": "~/projects",
+    "[shellscript]": {
+
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "shellformat.useEditorConfig": true,
+    "cSpell.userWords": [
+        "CICD",
+        "Gerrit",
+        "Setuptools",
+        "tfstate",
+        "tfvars",
+        "venv",
+        "virtualenv"
+    ],
+    "print.folder.fileNames": true,
+    "print.folder.include": [],
+    "print.folder.exclude": [
+        "{bin,obj,out}",
+        "node_modules",
+        "data",
+        "**/*.{bin,exe,dll,hex,pdb,pdf,pfx,png,jpg,gif,bmp,suo,design}"
+    ],
+    "print.folder.maxLines": 1200,
+    "print.folder.maxFiles": 30,
+    "print.folder.includeFileList": false,
+    "projectManager.git.baseFolders": [
+        "~/projects",
+    ],
+    "aws.telemetry": false,
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "git.blame.editorDecoration.enabled": true,
+    "files.autoSave": "afterDelay",
+    "gitlens.changes.toggleMode": "window",
+    "gitlens.changes.locations": [
+        "gutter",
+        "overview"
+    ],
+    "gitlens.hovers.currentLine.over": "line",
+    "gitlens.hovers.annotations.enabled": false,
+    "gitlens.hovers.annotations.details": false,
+    "gitlens.hovers.annotations.changes": false,
+    "gitlens.hovers.currentLine.enabled": false,
+    "gitlens.views.scm.grouped.views": {
+        "commits": true,
+        "branches": true,
+        "remotes": true,
+        "stashes": true,
+        "tags": true,
+        "worktrees": true,
+        "contributors": true,
+        "fileHistory": true,
+        "repositories": true,
+        "searchAndCompare": false,
+        "launchpad": false
+    },
+    "shellcheck.disableVersionCheck": true,
+    "shellcheck.useWorkspaceRootAsCwd": true,
+    "shellformat.effectLanguages": [
+        
+        "shellscript",
+        "dockerfile",
+        "dotenv",
+        "hosts",
+        "jvmoptions",
+        "ignore",
+        "gitignore",
+        "properties",
+        "spring-boot-properties",
+        "azcli",
+        "bats"
+    ],
+    "workbench.editor.empty.hint": "hidden",
+    "github.copilot.chat.followUps": "firstOnly",
+    "github.copilot.chat.localeOverride": "en",
+    "github.copilot.chat.scopeSelection": true,
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false,
+        "toml": false,
+        "shellscript": false
+    }
+}
