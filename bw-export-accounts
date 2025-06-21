@@ -1,0 +1,35 @@
+#!/usr/bin/env zsh
+# shellcheck disable=SC1071
+
+# Convert accounts from Bitwarden to a data format used by Chezmoi
+# Usage:
+#   execute from the root of Chezmoi directory:
+#   $ bw-export-accounts [accounts.json]
+
+RESULT_FILE=${1:-accounts.json}
+RESULT_DIR_IN_VCS="home/.secrets"
+
+rbw sync
+accounts=( $(rbw get --raw accounts | jq --raw-output '.fields[].value' | sort) )
+for account in ${accounts}; do
+    rbw get --raw "$account" | jq --compact-output
+done \
+|   jq --slurp '[
+            .[]
+            | {
+                id,
+                name,
+                firstName: .data.first_name,
+                lastName: .data.last_name,
+                email: .data.email,
+                username: .data.username,
+                fields: .fields | map({key: .name, value: .}) | from_entries
+            }
+            | . + .fields
+            | del(.fields)
+        ]
+        | map({key: .name, value: .})
+        | from_entries
+    ' \
+|   tee "tmp/$RESULT_FILE" \
+|   chezmoi encrypt > "$RESULT_DIR_IN_VCS/${RESULT_FILE}.age"
