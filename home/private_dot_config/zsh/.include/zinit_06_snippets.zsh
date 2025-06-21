@@ -9,9 +9,9 @@
         --id-as='tb::locale-demo' \
         https://gist.githubusercontent.com/turboBasic/00d416619ed3fd8f20161c3449574c69/raw/locale-demo.zsh \
         --id-as='tb::ls-colors' \
-        --pick='colors.sh' \
         --nocompile='!' \
         --atclone='zsh --no-rcs tb::ls-colors molokai > colors.sh' \
+        --pick='colors.sh' \
         --atpull='%atclone' \
         --atload='zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"' \
         https://gist.githubusercontent.com/turboBasic/26d0b94957864767a07f18e7c689a0ce/raw/generate.sh \
@@ -24,7 +24,13 @@
         OMZL::clipboard.zsh \
         --atload='unfunction uninstall_oh_my_zsh upgrade_oh_my_zsh' \
         OMZL::functions.zsh \
-        OMZL::git.zsh
+        OMZL::git.zsh \
+        --wait \
+        OMZP::z \
+        --wait \
+        OMZP::zsh-interactive-cd \
+        \
+        # last line ;)
 }
 
 ### Zinit snippets script end
