@@ -2,11 +2,13 @@
 
 
 ##  Zsh vars and options
-# shellcheck disable=SC1036
 setopt interactive_comments
+zmodload zsh/datetime
 
-fpath=( $fpath $HOME/.zfunc(-N/) )
-fpath=( ${^fpath}(-N/) )
+fpath=(
+    ${^fpath}(-N/)
+    $HOME/.zfunc(-N/)
+)
 cdpath=(
     "$HOME/projects/personal"
 )
@@ -31,20 +33,22 @@ setopt  \
     hist_verify \
     inc_append_history \
     share_history \
-
-zstyle ':dotfiles:alias' builtin_ls false
+    \
+    # last line ;)
 
 
 {{ include "private_dot_config/zsh/.include/010-aliases.zsh" }}
 {{ include "private_dot_config/zsh/.include/015-functions.zsh" }}
 {{ include "private_dot_config/zsh/.include/020-async.zsh" }}
 {{ include "private_dot_config/zsh/.include/025-bitwarden.zsh" }}
+
 {{ if or (hasPrefix "work." .profile) (eq .chezmoi.hostname "mao-macbook-pro-14") }}
 {{-  include "private_dot_config/zsh/.include/040-work.zsh" -}}
 {{ end }}
 
 
 ## Zinit
+
 {{ include "private_dot_config/zsh/.include/zinit_00_install.zsh" }}
 
 {{ include "private_dot_config/zsh/.include/zinit_01_homebrew.zsh" }}
@@ -55,14 +59,21 @@ zstyle ':dotfiles:alias' builtin_ls false
 {{ include "private_dot_config/zsh/.include/zinit_05_light.zsh" }}
 {{ include "private_dot_config/zsh/.include/zinit_06_snippets.zsh" }}
 {{ include "private_dot_config/zsh/.include/zinit_80_heavy.zsh" }}
-
 {{ include "private_dot_config/zsh/.include/zinit_90_completions.zsh" }}
 {{ includeTemplate "private_dot_config/zsh/.include/zinit_99_last.zsh.tmpl" . }}
+
+
+## Put Zinit plugins' bin dir and local bin dir in front of all paths
+path=( $HOME/.local/bin ${ZPFX:+"$ZPFX/bin"} $path )
+path=( ${^path}(-N/) )
 
 
 ## Configure completion system
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+
+## Compile Zshrc file
+builtin zcompile ${ZDOTDIR:-$HOME}/.zshrc
 
 # vim: set fileformat=unix tabstop=4 shiftwidth=4 expandtab:
