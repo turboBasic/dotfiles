@@ -1,0 +1,10 @@
+# shellcheck disable=all
+
+command ls \
+    --color=auto \
+    --time-style=long-iso \
+    --group-directories-first \
+    --classify \
+    --format=long \
+    --almost-all \
+    ${ZINIT[PLUGINS_DIR]}/${1:-}
