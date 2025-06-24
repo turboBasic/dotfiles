@@ -1,0 +1,13 @@
+# shellcheck disable=all
+
+local msg="${1%%$'\n'}"
+local number_of_line_feeds=${2:-1}
+
+if (( number_of_line_feeds > 0 )); then
+    builtin printf "%.0s\n" {1..$(( number_of_line_feeds ))}  # Print the specified number of line feeds
+fi
+builtin printf "%s\n" "$msg"
+if (( number_of_line_feeds > 0 )); then
+    builtin printf "%.0s\n" {1..$(( number_of_line_feeds ))}
+fi
+builtin zle && builtin zle reset-prompt

@@ -1,5 +1,22 @@
 ### Functions template begin
 
+() {
+    # capture all files in functions/ dir including those starting with dot
+    typeset -a function_files=( $ZDOTDIR/functions/*(.D) )
+    typeset function_files_str=${(F)function_files}
+
+    # Leave only basenames
+    typeset -a function_names=( ${^function_files:t} )
+    typeset function_names_str=${(F)function_names}
+
+    # Remove existing functions which conflict with our function_names
+    typeset -a existing_functions=( ${${(k)functions}:*function_names} )
+    (( $#existing_functions )) && unfunction $existing_functions
+
+    # Now when all conflicting functiones are removed we can autoload our functions
+    builtin autoload -Uz $function_files
+}
+
 function cz-cd() {
     cd "$(command chezmoi source-path)"
 }
