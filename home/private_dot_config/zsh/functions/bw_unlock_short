@@ -1,0 +1,11 @@
+# shellcheck disable=all
+
+export BW_SESSION=$(
+    { [[ -n "$BW_SESSION" ]] && bw unlock --check &> /dev/null; } \
+    &&  echo $BW_SESSION \
+    ||  {
+            bw login --check &> /dev/null \
+            &&  bw unlock --raw \
+            ||  bw login --raw
+        }
+)

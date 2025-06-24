@@ -1,0 +1,5 @@
+# shellcheck disable=all
+
+local item=$1
+local field=$2
+rbw get --field "$field" "$item"

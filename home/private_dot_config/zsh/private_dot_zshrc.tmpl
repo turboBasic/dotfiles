@@ -39,7 +39,6 @@ setopt  \
 
 {{ include "private_dot_config/zsh/.include/010-aliases.zsh" }}
 {{ include "private_dot_config/zsh/.include/020-functions.zsh" }}
-{{ include "private_dot_config/zsh/.include/025-bitwarden.zsh" }}
 
 {{ if or (hasPrefix "work." .profile) (eq .chezmoi.hostname "mao-macbook-pro-14") }}
 {{-  include "private_dot_config/zsh/.include/040-work.zsh" -}}
