@@ -1,0 +1,19 @@
+# shellcheck disable=all
+
+local -r alias=$1
+local -r role=${2:-""}
+
+case $alias in
+    ui$'ci'-int|ui$'ci'-prod)
+        aws_set_credentials "$alias" "${role:-DhcFullAdmin}"
+        export AWS_PROFILE="$alias"
+        ;;
+    ci$'vi'c-dev|ci$'vi'c-int|ci$'vi'c-prod)
+        aws_set_credentials "$alias" "${role:-SwfDev}"
+        export AWS_PROFILE="$alias"
+        ;;
+    *)
+        echo "Invalid profile alias: $alias"
+        return 1
+        ;;
+esac

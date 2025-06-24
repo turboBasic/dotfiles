@@ -1,0 +1,10 @@
+# shellcheck disable=all
+
+local bw_tfe_uici_item_name=$(bw_get_field "$BW_ACCOUNT_MB_ITEM" bw_tfe_uici_item_name)
+local tfe_uici_uri=$(rbw get --raw "$bw_tfe_uici_item_name" | jq --raw-output '.data.uris[0].uri')
+
+# TFE_TOKEN is assigned asynchronously
+curl --silent \
+    --header "Authorization: Bearer $TFE_TOKEN" \
+    --header "Content-Type: application/vnd.api+json" \
+    "$tfe_uici_uri/api/v2/$1"

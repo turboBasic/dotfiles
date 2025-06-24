@@ -1,0 +1,5 @@
+# shellcheck disable=all
+
+# TODO: get item name indirectly instead of GUID
+local bw_tfe_uici_item_name=$(bw_get_field "$BW_ACCOUNT_MB_ITEM" bw_tfe_uici_item_name)
+bw_get_field "$bw_tfe_uici_item_name" 24-12-09-default-token

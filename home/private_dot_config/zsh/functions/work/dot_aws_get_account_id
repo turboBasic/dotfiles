@@ -1,0 +1,22 @@
+# shellcheck disable=all
+
+# Get AWS account ID by its alias
+
+local -r alias="$1"
+local -r bw_aws_item_name=$(bw_get_field "$BW_ACCOUNT_MB_ITEM" bw_aws_item_name)
+local -a account_aliases_raw
+local -A account_aliases
+
+# ${(f)"..."} splits text to strings by newlines
+# account_aliases_raw=( 'alias1 1111111' 'alias2 2222222' )
+account_aliases_raw=( ${(f)"$(
+    rbw get --raw "$bw_aws_item_name" \
+    |   jq --raw-output '.fields[] | (.name | ltrimstr("mb_") | rtrimstr("_account_id")) + " " + .value'
+)"} )
+
+# account_aliases=( [alias1]=1111111 [alias2]=2222222 )
+for item in $account_aliases_raw; do
+    account_aliases[${item%% *}]=${item#* }
+done
+
+echo "${account_aliases[$alias]}"

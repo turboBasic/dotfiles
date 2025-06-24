@@ -1,0 +1,22 @@
+# shellcheck disable=all
+
+local -r endpoint="${1?Endpoint is required}"
+local -r request="${2:-GET}"
+local -r json="$3"
+local -r gerrit_api_host=${GERRIT_API_HOST?Gerrit host is required}
+local -r gerrit_api_username=${GERRIT_API_USERNAME?Gerrit username is required}
+local -r gerrit_api_password=${GERRIT_API_PASSWORD?Gerrit password is required}
+
+local -a curl_args=( )
+if [[ "$request" == "POST" ]]; then
+    [[ -n "$json" ]] || json=$(cat)
+    [[ -z "$json" ]] && { echo "JSON data is required for POST request"; return 1; }
+    curl_args+=( --json "$json" )
+fi
+command curl \
+        --silent \
+        --user "$gerrit_api_username:$gerrit_api_password" \
+        --request "$request" \
+        $curl_args \
+        "https://$gerrit_api_host/a/$endpoint" \
+|   sed 1d

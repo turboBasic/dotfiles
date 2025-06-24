@@ -1,0 +1,7 @@
+# shellcheck disable=all
+
+# Logout from IdpCli, eg. in case if accidentally wrong SSO login was used
+
+local token_file="$HOME/Library/Application Support/idpcli/temp"
+echo "Removing ... $token_file"
+rm "$token_file"

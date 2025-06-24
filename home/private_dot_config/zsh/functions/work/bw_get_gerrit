@@ -1,0 +1,24 @@
+# shellcheck disable=all
+
+local -r gerrit_id_input=${1?Gerrit ID is required}
+# Split the gerrit_id into an array by "-" character
+local -ra gerrit=( ${(s:-:)gerrit_id_input})
+local -r gerrit_id=${gerrit[1]}
+local -r gerrit_suffix=${gerrit[2]:+"-${gerrit[2]}"}
+
+local -r gerrit_server_fields=$(rbw get --raw "$BW_ACCOUNT_MB_ITEM" | jq --compact-output '.fields[]')
+local -r gerrit_host=$(
+    jq --raw-output 'select(.name == "gerrit_'$gerrit_id$gerrit_suffix'_host") | .value' \
+    <<< "$gerrit_server_fields"
+)
+local -r gerrit_secret_id=$(
+    jq --raw-output 'select(.name == "bw_gerrit_'$gerrit_id$gerrit_suffix'_pass_item_name") | .value' \
+    <<< "$gerrit_server_fields"
+)
+
+local -r gerrit_account_fields=$(rbw get --raw "$gerrit_secret_id")
+local -r gerrit_username=$(jq --raw-output .data.username <<< "$gerrit_account_fields")
+local -r gerrit_password=$(jq --raw-output .data.password <<< "$gerrit_account_fields")
+
+[[ -z "$gerrit_host" ]] && return 1
+reply=( "$gerrit_host" "$gerrit_username" "$gerrit_password" )
