@@ -89,7 +89,10 @@ zinit --lucid --wait for \
     --atload='unfunction uninstall_oh_my_zsh upgrade_oh_my_zsh' \
     OMZL::functions.zsh \
     OMZL::git.zsh \
-    --atload='fpath=( ${fpath:#${ZINIT[SNIPPETS_DIR]}/OMZP::z} )' \
+    --atload='
+        fpath=( ${fpath:#${ZINIT[SNIPPETS_DIR]}/OMZP::z} )
+        ZSHZ_DATA=${XDG_STATE_HOME:-$HOME/.local/state}/zsh/.z
+    ' \
     OMZP::z \
     OMZP::zsh-interactive-cd \
     \
