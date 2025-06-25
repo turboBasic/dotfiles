@@ -49,14 +49,14 @@ setopt  \
 
 {{ include "private_dot_config/zsh/.include/zinit_00_install.zsh" }}
 
-{{ include "private_dot_config/zsh/.include/zinit_01_homebrew.zsh" }}
+{{ include "private_dot_config/zsh/.include/zinit_10_homebrew.zsh" }}
 {{ if eq .chezmoi.os "darwin" }}
-{{-  include "private_dot_config/zsh/.include/zinit_02_macos.zsh" -}}
+{{-  include "private_dot_config/zsh/.include/zinit_20_macos.zsh" -}}
+{{ else if eq .chezmoi.os "linux" }}
+{{-  include "private_dot_config/zsh/.include/zinit_20_linux.zsh" -}}
 {{ end }}
 
-{{ include "private_dot_config/zsh/.include/zinit_05_light.zsh" }}
-{{ include "private_dot_config/zsh/.include/zinit_06_snippets.zsh" }}
-{{ include "private_dot_config/zsh/.include/zinit_80_heavy.zsh" }}
+{{ include "private_dot_config/zsh/.include/zinit_50_plugins.zsh" }}
 {{ include "private_dot_config/zsh/.include/zinit_90_completions.zsh" }}
 {{ include "private_dot_config/zsh/.include/zinit_99_last.zsh" }}
 
