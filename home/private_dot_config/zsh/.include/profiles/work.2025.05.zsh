@@ -3,8 +3,6 @@
 # TODO: replace with dynamic template
 declare -rg BW_ACCOUNT_MB_ITEM=639b081e-c00d-433d-8a2c-b2da00fb3889
 
-typeset -gA reply_assoc=()
-
 () {
     # capture all files in functions/ dir including those starting with dot
     typeset -a function_files=( $ZDOTDIR/functions/work/*(.D) )

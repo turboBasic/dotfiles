@@ -40,10 +40,6 @@ setopt  \
 {{ include "private_dot_config/zsh/.include/010-aliases.zsh" }}
 {{ include "private_dot_config/zsh/.include/020-functions.zsh" }}
 
-{{ if or (hasPrefix "work." .profile) (eq .chezmoi.hostname "mao-macbook-pro-14") }}
-{{-  include "private_dot_config/zsh/.include/040-work.zsh" -}}
-{{ end }}
-
 
 ## Zinit
 
@@ -55,6 +51,8 @@ setopt  \
 {{ else if eq .chezmoi.os "linux" }}
 {{-  include "private_dot_config/zsh/.include/zinit_20_linux.zsh" -}}
 {{ end }}
+
+{{ includeTemplate "private_dot_config/zsh/.include/zinit_30_profiles.zsh.tmpl" . }}
 
 {{ include "private_dot_config/zsh/.include/zinit_50_plugins.zsh" }}
 {{ include "private_dot_config/zsh/.include/zinit_90_completions.zsh" }}

@@ -1,0 +1,5 @@
+{{ $profileFileName := list "private_dot_config/zsh/.include/profiles/" .profile ".zsh" | join "" -}}
+{{ $profileFileName = joinPath .chezmoi.sourceDir $profileFileName -}}
+{{ if (lstat $profileFileName) -}}
+{{   include $profileFileName }}
+{{ end -}}
