@@ -13,7 +13,7 @@
     typeset -a existing_functions=( ${${(k)functions}:*function_names} )
     (( $#existing_functions )) && unfunction $existing_functions
 
-    # Now when all conflicting functiones are removed we can autoload our functions
+    # Now when all conflicting functions are removed we can autoload our functions
     builtin autoload -Uz $function_files
 }
 
