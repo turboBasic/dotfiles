@@ -1,0 +1,54 @@
+version: "0.2"
+
+language: en,en-GB
+useGitignore: true
+
+import:
+  - ~/.config/cspell/cspell.config.yaml
+
+ignorePaths:
+  - ".git/**"
+  - "**/*.age"
+  - "**/*.crt"
+  - "**/*.key"
+  - "**/encrypted_*"
+
+dictionaryDefinitions:
+  - name: project-words
+    path: .cspell-project-words.txt
+    addWords: true
+
+dictionaries:
+  - aws
+  - bash
+  - git
+  - html
+  - java
+  - markdown
+  - project-words
+  - python
+  - shell
+  - softwareTerms
+
+words: []
+ignoreWords: []
+
+overrides:
+  # Treat chezmoi shell templates as shell scripts
+  - filename: "**/*zsh*.tmpl"
+    languageId: shellscript
+
+  - filename: "**/*bash*.tmpl"
+    languageId: shellscript
+
+  # Treat gitconfig templates as ini/properties
+  - filename: "**/*.gitconfig*"
+    languageId: properties
+
+  # Treat TOML templates as TOML
+  - filename: "**/*.toml.tmpl"
+    languageId: toml
+
+  # Treat JSON templates as JSON
+  - filename: "**/*.json.tmpl"
+    languageId: json
