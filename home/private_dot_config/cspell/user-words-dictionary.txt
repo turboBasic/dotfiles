@@ -1,0 +1,27 @@
+# Custom Dictionary Words
+aamelnyk
+auto*
+CICD
+*fetch
+Fira
+Gerrit
+keygen
+Menlo
+Monokai
+taskexplorer
+temurin
+
+# Chezmoi words
+chezmoi
+chezmoidata
+chezmoiignore
+tmpl
+
+# Shellcheck words
+*format
+shell*
+
+# Vim words
+expandtab
+fileformat
+shiftwidth

@@ -1,0 +1,27 @@
+version: "0.2"
+language: en,en-GB
+useGitignore: true
+
+dictionaryDefinitions:
+  - name: user-words
+    path: ~/.config/cspell/user-words-dictionary.txt
+    addWords: true
+
+dictionaries:
+  - aws
+  - bash
+  - git
+  - html
+  - java
+  - markdown
+  - python
+  - shell
+  - softwareTerms
+  - user-words
+
+words: []
+
+ignorePaths:
+  - node_modules/**
+  - dist/**
+  - .git/**
