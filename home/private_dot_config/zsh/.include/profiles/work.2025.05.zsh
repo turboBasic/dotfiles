@@ -16,7 +16,7 @@ declare -rg BW_ACCOUNT_MB_ITEM=639b081e-c00d-433d-8a2c-b2da00fb3889
     typeset -a existing_functions=( ${${(k)functions}:*function_names} )
     (( $#existing_functions )) && unfunction $existing_functions
 
-    # Now when all conflicting functiones are removed we can autoload our functions
+    # Now when all conflicting functions are removed we can autoload our functions
     builtin autoload -Uz $function_files
 }
 
