@@ -1,0 +1,9 @@
+# Custom Dictionary Words
+aamelnyk
+chezmoi
+keygen
+
+# Vim words
+expandtab
+fileformat
+shiftwidth
