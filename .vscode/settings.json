@@ -17,6 +17,29 @@
   "workbench.colorCustomizations": {
     "activityBar.background": "#293100",
     "titleBar.activeBackground": "#394501",
-    "titleBar.activeForeground": "#F6FFC8"
+    "titleBar.activeForeground": "#F6FFC8",
+    "titleBar.inactiveBackground": "#394400",
+    "titleBar.inactiveForeground": "#F6FFC8",
+    "statusBar.background": "#394400",
+    "statusBar.foreground": "#F6FFC8",
+    "statusBar.debuggingBackground": "#394400",
+    "statusBar.debuggingForeground": "#F6FFC8",
+    "statusBar.noFolderBackground": "#394400",
+    "statusBar.noFolderForeground": "#F6FFC8"
+  },
+  "cSpell.customDictionaries": {
+    "custom-dictionary-user": {
+        "name": "custom-dictionary-user",
+        "path": "~/.cspell/custom-dictionary-user.txt",
+        "addWords": true,
+        "scope": "user"
+    },
+    "project-words": {
+        "name": "project-words",
+        "path": "${workspaceRoot}/.cspell-project-words.txt",
+        "description": "Words used in this project",
+        "addWords": true
+    },
+    "custom": true // Enable the `custom` dictionary
   }
 }
