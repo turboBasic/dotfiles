@@ -31,11 +31,10 @@
 *.tar binary
 *.zip binary
 
-# Prevent Git from automatically converting line endings for specific files (e.g., Makefiles)
+# Prevent Git from automatically converting line endings for specific files (e.g., Makefile)
 Makefile -text
 
 # Handle UTF-8 encoding issues (ensure consistent text encoding across platforms)
 *.log text
 *.md text
 *.txt text
-
