@@ -1,10 +1,11 @@
 [tools]
 dotnet = "8"
 go = "latest"
+java = "temurin-21"
 node = "latest"
 pipx = "latest"
 python = "latest"
-terraform = "1.9.6"
+terraform = "1.14.8"
 uv = "latest"
 
 [settings]
