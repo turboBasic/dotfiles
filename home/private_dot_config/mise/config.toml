@@ -6,6 +6,7 @@ node = "latest"
 pipx = "latest"
 python = "latest"
 terraform = "1.14.8"
+usage = "latest"
 uv = "latest"
 
 [settings]
