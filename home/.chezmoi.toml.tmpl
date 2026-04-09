@@ -1,10 +1,11 @@
 {{ if and (empty (env "AGE_PASSPHRASE")) (empty (dig "profile" "" .)) -}}
-  {{ fail "Please set AGE_PASSPHRASE env var before the first run of chezmoiz init" }}
+  {{ fail "Please set AGE_PASSPHRASE env var before the first run of chezmoi init" }}
 {{ end -}}
 
 {{ $dotfiles_key_name := promptStringOnce . "dotfiles_key_name" "Enter main key name" "age-00-chezmoi.key" -}}
 {{ if (not $dotfiles_key_name) -}} {{ fail "dotfiles_key_name is missing" }} {{ end -}}
 
+# cspell:disable-next-line
 {{ $dotfiles_public_key := promptStringOnce . "dotfiles_public_key" "Enter main public key" "age1m4vlfsmhefw77rdm4m8y9fjfvy9ym794pfp7939r76myvfxjl33sv94f28" -}}
 {{ if (not $dotfiles_public_key) -}} {{ fail "dotfiles_public_key is missing" }} {{ end -}}
 
