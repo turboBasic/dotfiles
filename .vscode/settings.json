@@ -41,5 +41,10 @@
         "addWords": true
     },
     "custom": true // Enable the `custom` dictionary
+  },
+  "shellcheck.ignorePatterns": {
+    "**/_symlinks/**": true,
+    "**/symlink_*": true,
+    "**/create_private_dot_zsh_history": true
   }
 }
