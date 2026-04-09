@@ -118,7 +118,7 @@ function is_sourced() {
 
 function _jq_field() {
     grep '^\s*"'$1'":\s*' \
-    |   sed --regexp-extended '
+    |   sed -E '
             s/^[^:]+:\s*//
             s/,\s*$//
             s/^\s*"//
