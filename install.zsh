@@ -34,6 +34,7 @@ function main install_main () {
     install_bin_dir || { log "❌ Error: install_bin_dir failed."; return 1 }
     install_age || { log "❌ Error: install_age failed."; return 1 }
     install_chezmoi || { log "❌ Error: install_chezmoi failed."; return 1 }
+    install_rozetta || { log "❌ Error: install_rozetta failed."; return 1 }
     install_homebrew || { log "❌ Error: install_homebrew failed."; return 1 }
     install_pinentry || { log "❌ Error: install_pinentry failed."; return 1 }
     install_rbw || { log "❌ Error: install_rbw failed."; return 1 }
@@ -238,6 +239,19 @@ function install_pinentry() {
     else
         pinentry="pinentry-tty"
         log "▫️ Pinentry-tty is already installed."
+    fi
+}
+
+function install_rozetta() {
+    log "▫️ Installing Rosetta..."
+    if [[ "$CHEZMOI_OS" == "darwin" && "$CHEZMOI_ARCH" == "arm64" ]]; then
+        if ! /usr/bin/pgrep oahd &> /dev/null; then
+            log "▫️ Rosetta is not installed. Installing Rosetta..."
+            /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+            log "✅ Rosetta is installed."
+        else
+            log "▫️ Rosetta is already installed."
+        fi
     fi
 }
 
