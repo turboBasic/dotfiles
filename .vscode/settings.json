@@ -1,6 +1,7 @@
 {
   "files.associations": {
     ".chezmoiignore": "gitignore",
+    "**/.git/config": "gitconfig",
     "**/git/*ignore*": "gitignore",
     "**/git/*.tmpl": "gitconfig",
     "*.gitconfig.tmpl": "gitconfig",
@@ -13,6 +14,14 @@
     "*zshrc": "shellscript",
     ".zshrc_*": "shellscript",
     "*zshrc.tmpl": "shellscript"
+  },
+  "files.exclude": {
+    "**/.git": false,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/.git disable exclusion of .git": true
   },
   "workbench.colorCustomizations": {
     "activityBar.background": "#293100",
@@ -29,16 +38,16 @@
   },
   "cSpell.customDictionaries": {
     "custom-dictionary-user": {
-        "name": "custom-dictionary-user",
-        "path": "~/.cspell/custom-dictionary-user.txt",
-        "addWords": true,
-        "scope": "user"
+      "name": "custom-dictionary-user",
+      "path": "~/.cspell/custom-dictionary-user.txt",
+      "addWords": true,
+      "scope": "user"
     },
     "project-words": {
-        "name": "project-words",
-        "path": "${workspaceRoot}/.cspell-project-words.txt",
-        "description": "Words used in this project",
-        "addWords": true
+      "name": "project-words",
+      "path": "${workspaceRoot}/.cspell-project-words.txt",
+      "description": "Words used in this project",
+      "addWords": true
     },
     "custom": true // Enable the `custom` dictionary
   },
