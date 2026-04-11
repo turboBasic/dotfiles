@@ -22,10 +22,10 @@ chezmoi apply
 ### Dependencies
 
 - macOS or Ubuntu Linux
-- curl, expect, git, grep, sed, tar, uname, unzip, zsh
+- curl, expect, git, grep, sed, tar, uname, unzip
 
 ### Command
 
 ```shell
-zsh -c "$(curl -fsSL "https://raw.githubusercontent.com/turboBasic/dotfiles/refs/heads/main/install.zsh?$(date +%s)")" -- init turboBasic/dotfiles
+sh -c "$(curl -fsSL "https://raw.githubusercontent.com/turboBasic/dotfiles/refs/heads/main/install.sh?$(date +%s)")" -- init turboBasic/dotfiles
 ```

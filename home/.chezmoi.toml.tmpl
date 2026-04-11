@@ -23,7 +23,7 @@ encryption = "age"
     DOTFILES_KEY_NAME = {{ $dotfiles_key_name | quote }}
 
 [hooks.read-source-state.pre]
-    command = "{{ .chezmoi.workingTree }}/install.zsh"
+    command = "{{ .chezmoi.workingTree }}/install.sh"
 
 [data]
     dotfiles_id = "dotfiles-2025"
