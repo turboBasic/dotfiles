@@ -207,7 +207,7 @@ function install_homebrew() {
     log "▫️ Installing Homebrew..."
     brew=$(_path_to_homebrew)
     if [[ -z "$brew" ]]; then
-        NONINTERACTIVE=1 /bin/bash -c "$(
+        /bin/bash -c "$(
             curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
         )"
         brew=$(_path_to_homebrew)
