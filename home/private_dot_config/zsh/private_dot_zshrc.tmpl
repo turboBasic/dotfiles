@@ -17,6 +17,7 @@ cdpath=(
 ##  Zsh key bindings
 bindkey -e
 bindkey '^U' push-input
+bindkey ' ' magic-space
 
 
 ##  Zsh history
@@ -37,7 +38,7 @@ setopt  \
     # last line ;)
 
 
-{{ include "private_dot_config/zsh/.include/010-aliases.zsh" }}
+{{ includeTemplate "private_dot_config/zsh/.include/010-aliases.zsh.tmpl" . }}
 {{ include "private_dot_config/zsh/.include/020-functions.zsh" }}
 
 

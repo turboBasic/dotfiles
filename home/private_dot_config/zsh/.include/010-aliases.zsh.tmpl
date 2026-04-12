@@ -1,5 +1,7 @@
 ### Aliases template begin
 
+# chezmoi:template:left-delimiter=#{ right-delimiter=}#
+
 # Usage: docker image ls --image-short-format
 alias -g -- --image-short-format='--format="{{.ID}}・\
 {{if gt (len .Repository) 45}}…{{slice .Repository (slice .Repository 44|len)}}\
@@ -8,9 +10,14 @@ alias -g -- --image-short-format='--format="{{.ID}}・\
 
 alias cz='=chezmoi'
 alias history='builtin fc -il'
-alias ls='=ls --color=auto --time-style=long-iso --group-directories-first'
+#{ if eq .chezmoi.os "darwin" -}#
+  alias ls='=gls --color=auto --time-style=long-iso --group-directories-first'
+#{ else -}#
+  alias ls='=ls --color=auto --time-style=long-iso --group-directories-first'
+#{ end -}#
 alias  l='ls --classify --format=long --almost-all -v'
 alias ll='l --all'
+# Obfuscate `security` to prevent corporate monitoring tools from easily detecting it in process lists, while still allowing the alias to be used as intended.`
 alias se=$'s'$(echo ud)'o se'$(echo cur)$'it'$'y'
 
 alias -s jpg=open
