@@ -11,3 +11,6 @@ uv = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []
+{{if eq .chezmoi.os "linux" -}}
+  python.github_attestations = false    # TODO: for some reason this is causing issues in Linux
+{{ end }}
