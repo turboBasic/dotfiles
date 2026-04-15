@@ -1,0 +1,24 @@
+{
+    "VS Code snippet": {
+        "prefix": "snip",
+        "body": [
+            "\"VS Code snippet\": {",
+            "    \"prefix\": \"snip\",",
+            "    \"body\": [",
+            "        \"... line 1 ...\",",
+            "        \"... line 1 ...\",",
+            "        \"... line 1 ...\",",
+            "        \"... line 1 ...\",",
+            "        \"... line 1 ...\",",
+            "        \"if [ \\\"$AA\\\" == \\\"yes\\\" ]; then\",",
+            "        \"    printf '%s\\\\n' \\\"$AA\\\"\",",
+            "        \"else\",",
+            "        \"    return 1\",",
+            "        \"fi\",",
+            "    ],",
+            "    \"description\": \"Creates instance of VS Code snippet\",",
+            "}",
+        ],
+        "description": "Creates instance of VS Code snippet",
+    }
+}

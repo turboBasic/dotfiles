@@ -1,0 +1,11 @@
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "shift+cmd+8",
+        "command": "editor.action.toggleColumnSelection"
+    },
+    {
+        "key": "cmd+h",
+        "command": "workbench.action.closePanel"
+    }
+]

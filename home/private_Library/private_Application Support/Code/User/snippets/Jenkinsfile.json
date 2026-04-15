@@ -1,0 +1,376 @@
+{
+    // Author:  Andrii Melnyk
+    // ©️ 2019
+    //
+    // Place your snippets for groovy here. Each snippet is defined under a snippet name and has a prefix, body and
+    // description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+    // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the
+    // same ids are connected.
+    // Example:
+    // "Print to console": {
+    // 	"prefix": "log",
+    // 	"body": [
+    // 		"console.log('$1');",
+    // 		"$2"
+    // 	],
+    // 	"description": "Log output to console"
+    // }
+    //
+    // Snippet generator: https://snippet-generator.app/
+    //
+
+    "Pipeline": {
+        "prefix": "pipe",
+        "body": [
+            "pipeline {",
+            "    agent any",
+            "    options {",
+            "        ansiColor('xterm')",
+            "    }",
+            "    parameters {",
+            "        booleanParam(",
+            "            name: 'INVOKE_PARAMETERS',",
+            "            defaultValue: false, ",
+            "            description: \"Populate job parameters in web view from job's source\"",
+            "        )",
+            "    }",
+            "    stages {",
+            "        stage('Reconfigure Job parameters') {",
+            "            when {",
+            "                expression { shouldReconfigureParameters() }",
+            "            }",
+            "            steps {",
+            "                script {",
+            "                    currentBuild.displayName = \"reconfigure parameters\"",
+            "                    abortIf(true, 'Parameters in web configuration are updated')",
+            "                }",
+            "            }",
+            "        }",
+            "        stage('Initialization') {",
+            "            steps {",
+            "                echo \"\\u001B[31mColor in echo commands\\u001B[0m\\n\"",
+            "                sh '''set +x",
+            "                    printf \"\\u001B[31mColor in shell script\\u001B[0m\\n\"",
+            "                '''",
+            "                printEnvironment()",
+            "            }",
+            "        }",
+            "    }",
+            "    post {",
+            "        always {",
+            "            echo \"currentBuild.result = \\${currentBuild.result}\"",
+            "        }",
+            "        failure {",
+            "            echo ' '",
+            "        }",
+            "        success {",
+            "            echo ' '",
+            "        }",
+            "    }",
+            "}",
+            "",
+            "",
+            "void abortIf(boolean condition, String conditionDescription = 'UNSPECIFIED CONDITION') {",
+            "    if (condition) {",
+            "        echo \"INFO: [abortIf()]: Abort job by condition = ‘\\${conditionDescription}’\"",
+            "        timeout(time: 100, unit: 'MILLISECONDS') {",
+            "            sleep 1",
+            "        }",
+            "    }",
+            "}",
+            "",
+            "void printEnvironment() {",
+            "    sh '''",
+            "        printenv |",
+            "        sort |",
+            "        awk -F= '{ printf \"%-40s %s \\\\\\\\n\", \\\\\\$1, \\\\\\$2 }'",
+            "    '''",
+            "}",
+            "",
+            "boolean shouldReconfigureParameters() {",
+            "    !currentBuild.getPreviousBuild() ||",
+            "    params?.INVOKE_PARAMETERS",
+            "}"
+        ],
+        "description": "Creates declarative pipeline job file"
+    },
+
+
+    "Agent": {
+        "prefix": "agent",
+        "body": [
+            "agent {",
+            "    label $1'linux && test1 || test2'",
+            "}",
+            "// agent any"
+        ],
+        "description": "Scope: pipeline, stage"
+    },
+
+
+    "Environment": {
+        "prefix": "env",
+        "body": [
+            "environment { ",
+            "   ${1:VARIABLE1} = $2'some value' ",
+            "   ${3:VARIABLE2} = $4'some value' ",
+            "   ${5:JIRA} = credentials(\"\\${params.JIRA_USER_CREDENTIALS_ID}\")                     // JIRA = 'user:password', JIRA_USR = user, JIRA_PSW = password ",
+            "   ${6:JIRA_CERT} = credentials(\"\\${params.JIRA_USER_CERTIFICATE_CREDENTIALS_ID}\")    // JIRA_CERT = absolute path to .crt file ",
+            "   ${7:JIRA_KEY} = credentials(\"\\${params.JIRA_USER_KEY_CREDENTIALS_ID}\")             // JIRA_KEY = absolute path to .key file ",
+            "} ",
+        ],
+        "description": "Scope: pipeline, stage",
+    },
+
+    "GerritParameters": {
+        "prefix": "gerrit",
+        "body": [
+            "parameters {",
+            "    string(name: 'GERRIT_BRANCH',                  description: '', defaultValue: 'develop')",
+            "    string(name: 'GERRIT_CHANGE_COMMIT_MESSAGE',   description: '', defaultValue: \"[RainbowSlider] Fix font for textValue\\n\\nDescription of commit\\n\\nTask-number: UISWTOOLS-666\\nChange-Id: I484e12dbf475319e5ebde605142ceb756f3d15b2\")",
+            "    string(name: 'GERRIT_CHANGE_ID',               description: '', defaultValue: 'I484e12dbf475319e5ebde605142ceb756f3d15b2')",
+            "    string(name: 'GERRIT_CHANGE_NUMBER',           description: '', defaultValue: '39526')",
+            "    string(name: 'GERRIT_CHANGE_OWNER_EMAIL',      description: '', defaultValue: 'oriamushkina@luxoft.com')",
+            "    string(name: 'GERRIT_CHANGE_OWNER_NAME',       description: '', defaultValue: 'Oleksandra Riamushkina')",
+            "    string(name: 'GERRIT_CHANGE_OWNER',            description: '', defaultValue: '\"Oleksandra Riamushkina\" <oriamushkina@luxoft.com>')",
+            "    string(name: 'GERRIT_CHANGE_PRIVATE_STATE',    description: '', defaultValue: 'false')",
+            "    string(name: 'GERRIT_CHANGE_SUBJECT',          description: '', defaultValue: '[RainbowSlider] Fix font for textValue')",
+            "    string(name: 'GERRIT_CHANGE_URL',              description: '', defaultValue: 'https://gsep.app.corpintra.net/gerrit/39526')",
+            "    string(name: 'GERRIT_CHANGE_WIP_STATE',        description: '', defaultValue: 'false')",
+            "    string(name: 'GERRIT_EVENT_ACCOUNT_EMAIL',     description: '', defaultValue: 'oriamushkina@luxoft.com')",
+            "    string(name: 'GERRIT_EVENT_ACCOUNT_NAME',      description: '', defaultValue: 'Oleksandra Riamushkina')",
+            "    string(name: 'GERRIT_EVENT_ACCOUNT',           description: '', defaultValue: '\"Oleksandra Riamushkina\" <oriamushkina@luxoft.com>')",
+            "    string(name: 'GERRIT_EVENT_HASH',              description: '', defaultValue: '-296005108')",
+            "    string(name: 'GERRIT_EVENT_TYPE',              description: '', defaultValue: 'change-merged')",
+            "    string(name: 'GERRIT_HOST',                    description: '', defaultValue: 'sedcagse0170.emea.bg.corpintra.net')",
+            "    string(name: 'GERRIT_NAME',                    description: '', defaultValue: 'EDC-Gerrit')",
+            "    string(name: 'GERRIT_NEWREV',                  description: '', defaultValue: '887fd867160e9a42536750704a109e242ac3a92d')",
+            "    string(name: 'GERRIT_PATCHSET_NUMBER',         description: '', defaultValue: '2')",
+            "    string(name: 'GERRIT_PATCHSET_REVISION',       description: '', defaultValue: '887fd867160e9a42536750704a109e242ac3a92d')",
+            "    string(name: 'GERRIT_PATCHSET_UPLOADER_EMAIL', description: '', defaultValue: 'oriamushkina@luxoft.com')",
+            "    string(name: 'GERRIT_PATCHSET_UPLOADER_NAME',  description: '', defaultValue: 'Oleksandra Riamushkina')",
+            "    string(name: 'GERRIT_PATCHSET_UPLOADER',       description: '', defaultValue: '\"Oleksandra Riamushkina\" <oriamushkina@luxoft.com>')",
+            "    string(name: 'GERRIT_PORT',                    description: '', defaultValue: '29418')",
+            "    string(name: 'GERRIT_PROJECT',                 description: '', defaultValue: 'widget-library-ex')",
+            "    string(name: 'GERRIT_REFSPEC',                 description: '', defaultValue: 'refs/changes/26/39526/2')",
+            "    string(name: 'GERRIT_SCHEME',                  description: '', defaultValue: 'ssh')",
+            "    string(name: 'GERRIT_VERSION',                 description: '', defaultValue: '2.13.7')",
+            "}",
+        ],
+        "description": "Full list of Gerrit trigger parameters with sample data",
+    },
+
+    "Options": {
+        "prefix": "opt",
+        "body": [
+            "options {",
+            "    buildDiscarder( ",
+            "        logRotator( ",
+            "            daysToKeepStr: '3', ",
+            "            numToKeepStr: '30'  ",
+            "        ) ",
+            "    ) ",
+            "    disableConcurrentBuilds()",
+            "    timestamps()",
+            "    timeout(time: 15, unit: 'MINUTES')",
+            "}"
+        ],
+        "description": "Scope: pipeline",
+    },
+
+
+    "Parameters": {
+        "prefix": "param",
+        "body": [
+            "parameters {",
+            "    string(name: '${1:TAG}', defaultValue: 'v2.100.1', description: 'Tag for build')",
+            "    booleanParam(name: '${2:SKIP_COMPILE}', defaultValue: false, description: 'Skip Compile stage')",
+            "    choice(name: '${3:CHOICE_PARAM}', choices: \"No\\nYes\", description: 'Choices separated by new lines, the first one is default value')",
+            "    booleanParam(name: '${4:DRY_RUN}', defaultValue: true, description: 'Output information instead of executing commands')",
+            "        booleanParam(",
+            "            name: '${5:INVOKE_PARAMETERS}',",
+            "            defaultValue: false, ",
+            "            description: 'Populate job parameters in web view from job\\'s source' ",
+            "        )",
+            "}",
+        ],
+        "description": "Scope: pipeline",
+    },
+
+
+    "Post": {
+        "prefix": "post",
+        "body": [
+            "post {",
+            "    always {",
+            "        ${1}echo 'post action'",
+            "    }",
+            "    aborted {",
+            "        ${2}echo 'aborted post action'",
+            "    }",
+            "    failure {",
+            "        ${3}echo 'failure post action'",
+            "    }",
+            "    success {",
+            "        ${4}echo 'success post action'",
+            "    }",
+            "}"
+        ],
+        "description": "Scope: pipeline, stage",
+    },
+
+
+    "RecipeParallel": {
+        "prefix": "recipeParallel",
+        "body": [
+            "List getNodes() {",
+            "    String allNodes = (params.LIST_OF_NODES ?: '') ",
+            "    (allNodes.trim() ?: 'vm2-linux,vm4-linux,vm8-linux') ",
+            "    .split(',') ",
+            "    .collect { it.trim() } ",
+            "} ",
+            "",
+            "",
+            "Closure newStep(String theNode) { ",
+            "    { -> stage(theNode) { ",
+            "            node(theNode) { ",
+            "                sh ''' ",
+            "                    hostname   # and other commands ",
+            "                ''' ",
+            "            }",
+            "        }",
+            "    }",
+            "} ",
+            "",
+            "",
+            "Map nodeScripts = getNodes().collectEntries { ",
+            "    [ (it): newStep(it) ] ",
+            "} ",
+            "nodeScripts << [ failFast: false ] ",
+            "",
+            "",
+            "pipeline { ",
+            "    agent none",
+            "    parameters { ",
+            "        string( ",
+            "            name: 'LIST_OF_NODES', ",
+            "            defaultValue: 'vm2-linux,vm4-linux,vm8-linux', ",
+            "            description: 'Comma-separated list of nodes.' ",
+            "        )",
+            "    }",
+            "",
+            "    stages {",
+            "        stage('Initialization') {",
+            "            steps {",
+            "                script {",
+            "                    parallel nodeScripts ",
+            "                }",
+            "            }",
+            "        }",
+            "    }",
+            "}",
+        ],
+        "description": "Recipe for running similar stages in parallel",
+    },
+
+
+    "Triggers": {
+        "prefix": "triggers",
+        "body": [
+            "triggers {",
+            "    cron('H */4 * * 1-5') ",
+            "    gerrit( ",
+            "        serverName: 'EDC-Gerrit', ",
+            "        gerritProjects: [[ ",
+            "            compareType: 'PLAIN', ",
+            "            pattern: 'widget-library-ex', ",
+            "            branches: [[",
+            "                compareType: 'PLAIN', ",
+            "                pattern: 'junk/submodule-integration', ",
+            "            ]], ",
+            "            filePaths: [ ",
+            "                [ ",
+            "                    pattern: 'uisdk/framework/**', ",
+            "                    compareType: 'ANT', ",
+            "                ], ",
+            "                [ ",
+            "                    pattern: 'uisdk/widget-library/**', ",
+            "                    compareType: 'ANT', ",
+            "                ], ",
+            "            ], ",
+            "        ]], ",
+            "        triggerOnEvents: [ ",
+            "            changeMerged(), ",
+            "            patchsetCreated( excludeDrafts: true ), ",
+            "            commentAddedContains('Test-Verified\\+1'), ",
+            "        ] ",
+            "        commentTextParameterMode: 'PLAIN',",
+            "        commitMessageParameterMode: 'PLAIN',",
+            "        silentMode: true",
+            "    ) ",
+            "} ",
+        ],
+        "description": "Scope: pipeline",
+    },
+
+
+    "When": {
+        "prefix": "when",
+        "body": [
+            "when {",
+            "    expression { ${1:!params.INVOKE_PARAMETERS} }",
+            "}"
+        ],
+        "description": "Scope: stage",
+    },
+
+
+    "WithCredentials": {
+        "prefix": "withCred",
+        "body": [
+            "withCredentials([ ",
+            "    sshUserPrivateKey( ",
+            "        credentialsId: 'id-ssh', ",
+            "        keyFileVariable: 'CRED_SSHUSERPRIVATEKEY_KEYFILE', ",
+            "        usernameVariable: 'CRED_SSHUSERPRIVATEKEY_USERNAME', ",
+            "        passphraseVariable: 'CRED_SSHUSERPRIVATEKEY_PASSPHRASE' ",
+            "    ), ",
+            "    usernameColonPassword( credentialsId: 'id-user-password', variable: 'CRED_USERNAMECOLONPASSWORD' ), ",
+            "    string( credentialsId: 'id-string', variable: 'CRED_STRING' ), ",
+            "    file( credentialsId: 'id-file', variable: 'CRED_FILE'), ",
+            "]) { ",
+            "    sh ''' ",
+            "        echo \\${CRED_SSHUSERPRIVATEKEY_KEYFILE} \\${CRED_SSHUSERPRIVATEKEY_USERNAME} \\${CRED_SSHUSERPRIVATEKEY_PASSPHRASE} ",
+            "        echo \\${CRED_USERNAMECOLONPASSWORD} ",
+            "        echo \\${CRED_STRING} ",
+            "        echo \\${CRED_FILE} ",
+            "    ''' ",
+            "}",
+        ],
+        "description": "Scope: steps, script",
+    },
+
+
+    "Abort Job if parameters changed": {
+        "prefix": "abortJobIfParametersChanged",
+        "body": [
+            "stage('1') {",
+            "    steps {",
+            "        sh 'env | sort'",
+            "        abortIfParametersChanged()",
+            "    }",
+            "}",
+            "",
+            "void abortIfParametersChanged() {",
+            "    if (params.INVOKE_PARAMETERS) {",
+            "        echo 'Parameters in web configuration are updated from the Job source code'",
+            "        timeout(time: 100, unit: 'MILLISECONDS') {",
+            "            sleep 1",
+            "        }",
+            "    }",
+            "}"
+        ],
+        "description": "Abort Job if parameters changed"
+    }
+
+}

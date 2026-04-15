@@ -1,0 +1,147 @@
+// Profile: Default
+// Profile path: ~/Library/Application Support/Code/User/settings.json
+{
+  // General settings
+  "files.associations": {},
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "files.exclude": {
+    "**/.git": false,
+    "**/.git disable exclusion of .git": true
+  },
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  // Git settings
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  // Editor settings
+  "editor.detectIndentation": true,
+  "editor.fontFamily": "FiraCode Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontLigatures": false,
+  "editor.fontSize": 13,
+  "editor.formatOnSave": true,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "all",
+  "editor.stickyScroll.enabled": false,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  // UI settings
+  "breadcrumbs.enabled": false,
+  "window.commandCenter": false,
+  "window.newWindowProfile": "Default",
+  "workbench.startupEditor": "none",
+  "workbench.colorTheme": "Monokai Pro",
+  "workbench.editor.enablePreview": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.statusBar.visible": true,
+  "workbench.activityBar.location": "default",
+  "workspaceExplorer.workspaceStorageDirectory": "~/00-projects",
+  // Search settings
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/dist": true,
+    "**/build": true,
+  },
+  "search.followSymlinks": false,
+  "search.smartCase": true,
+  "search.useIgnoreFiles": true,
+  "search.useGlobalIgnoreFiles": true,
+  // Terminal settings
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.scrollback": 5000,
+  "terminal.integrated.tabs.enabled": false,
+  "terminal.integrated.confirmOnExit": "hasChildProcesses",
+  "terminal.integrated.enableMultiLinePasteWarning": "never",
+  // Print settings
+  "print.folder.exclude": [
+    "{bin,obj,out}",
+    "node_modules",
+    "data",
+    "**/*.{bin,exe,dll,hex,pdb,pdf,pfx,png,jpg,gif,bmp,suo,design}"
+  ],
+  "print.folder.fileNames": true,
+  "print.folder.include": [],
+  "print.folder.includeFileList": false,
+  "print.folder.maxFiles": 30,
+  "print.folder.maxLines": 1200,
+  // Shellcheck settings
+  "shellcheck.disableVersionCheck": true,
+  "shellcheck.useWorkspaceRootAsCwd": true,
+  "shellformat.effectLanguages": [
+    "shellscript",
+    "bats"
+  ],
+  "shellformat.useEditorConfig": true,
+  // Language-specific settings
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[svg]": {
+    "editor.defaultFormatter": "jock.svg"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "bodil.prettier-toml"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  // CSpell settings
+  "cSpell.validateDirectives": true,
+  // "cSpell.import": [ "~/.config/cspell/cspell.config.yaml" ],
+  // Other settings
+  "aws.telemetry": false,
+  "claudeCode.preferredLocation": "panel",
+  "redhat.telemetry.enabled": false,
+  "settingsSync.ignoredExtensions": [],
+  "svg.preview.mode": "svg",
+  "projectManager.git.baseFolders": [
+    "~/00-projects"
+  ],
+}
+/*
+
+❯ code --list-extensions --profile Default | sort | clipcopy
+
+alefragnani.bookmarks
+alefragnani.project-manager
+anthropic.claude-code
+bodil.prettier-toml
+codezombiech.gitignore
+donjayamanne.githistory
+editorconfig.editorconfig
+emmanuelbeziat.vscode-great-icons
+fabiospampinato.vscode-open-in-github
+foxundermoon.shell-format
+github.remotehub
+github.vscode-github-actions
+github.vscode-pull-request-github
+gruntfuggly.todo-tree
+hashhar.gitattributes
+howardzuo.vscode-favorites
+jock.svg
+ldez.ignore-files
+mhutchie.git-graph
+monokai.theme-monokai-pro-vscode
+ms-vscode.azure-repos
+ms-vscode.remote-repositories
+pkief.material-icon-theme
+redhat.vscode-yaml
+roonie007.hide-files
+streetsidesoftware.code-spell-checker
+streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
+swellaby.workspace-config-plus
+tamasfe.even-better-toml
+vivaxy.vscode-conventional-commits
+vscode-icons-team.vscode-icons
+vsls-contrib.gistfs
+yy0931.gitconfig-lsp
+
+*/
