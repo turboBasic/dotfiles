@@ -35,6 +35,8 @@ rozetta
 softwareupdate
 stty
 tzdata
+xnviewmp
+zbar
 zman
 zstd
 
