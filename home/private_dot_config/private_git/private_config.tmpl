@@ -48,6 +48,16 @@
     pager = diff-so-fancy | LESS= less --no-init --tabs=4 --RAW-CONTROL-CHARS --quit-if-one-screen
     untrackedcache = true
 
+[credential "https://github.com"]
+        helper =
+        helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+        helper =
+        helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://github.*.com"]
+        helper =
+        helper = !/opt/homebrew/bin/gh auth git-credential
+
 [http]
     cookiefile = cookies
 
@@ -112,7 +122,7 @@
 
 ## Config for {{$accountName}}
 
-[includeIf "gitdir:~/projects/{{$accountName}}/"]
+[includeIf "gitdir:~/00-projects/{{$accountName}}/"]
     path = {{$accountAlias}}.gitconfig
 {{-   $remote_override := dig "git_remote_override" "value" "{}" $accountData | fromJson }}
 {{    range $url, $git_config_name := $remote_override }}
