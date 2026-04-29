@@ -1,0 +1,5 @@
+[submodule "docs/chezmoi"]
+	path = docs/chezmoi
+	url = https://github.com/turboBasic/chezmoi-doc.git
+	branch = main
+	update = merge
