@@ -15,7 +15,7 @@ ignorePaths:
 
 dictionaryDefinitions:
   - name: project-words
-    path: .cspell-project-words.txt
+    path: .cspell/project-words.txt
     addWords: true
 
 dictionaries:
