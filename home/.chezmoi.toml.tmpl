@@ -32,7 +32,7 @@ encryption = "age"
 {{- $profile := promptChoiceOnce . "profile" "Please select profile" (list "personal" "work.2025.05") "work.2025.05" }}
     profile = {{ $profile | quote }}
 
-{{- $script := joinPath .chezmoi.sourceDir ".chezmoiscripts/run_onchange_before_decrypt-chezmoi-secrets.sh" }}
+{{- $script := joinPath .chezmoi.sourceDir ".chezmoiscripts/run_onchange_before_decrypt-chezmoi-secrets.sh.tmpl" }}
 {{- $command := print "export DOTFILES_KEY_NAME=" $dotfiles_key_name "; zsh " $script }}
 {{- $_ := output "zsh" "-c" $command }}
 

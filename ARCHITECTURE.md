@@ -6,7 +6,7 @@ This repository is a [chezmoi](https://www.chezmoi.io)-managed dotfiles setup. T
 
 ## Repository layout
 
-```
+```plaintext
 dotfiles/
 ├── home/                        ← chezmoi source dir (--source flag target)
 │   ├── .chezmoi.toml.tmpl       ← config template, runs on init
@@ -83,7 +83,7 @@ AGE_PASSPHRASE=... zsh -c "$(curl -fsSL 'https://raw.githubusercontent.com/turbo
 
 **`_install_dotfiles`:**
 
-```
+```bash
 AGE_PASSPHRASE=... chezmoi init turboBasic/dotfiles
 AGE_PASSPHRASE=... chezmoi init --apply
 ```
@@ -113,6 +113,7 @@ Executed during `chezmoi init`. Steps in template order:
 ### Secret decryption (`run_onchange_before_decrypt-chezmoi-secrets.sh`)
 
 This script runs both:
+
 - **During config template rendering** (via `output` call in `.chezmoi.toml.tmpl`)
 - **On every `chezmoi apply`** when `.secrets/*.age` content changes (the `run_onchange_` prefix re-triggers on hash change; the hash is embedded as a comment in line 3)
 
@@ -199,6 +200,71 @@ Linux-only: apt-get package installation, `.config/Code/` path.
 ```
 
 This ensures bootstrap dependencies (age, chezmoi, homebrew, rbw) remain present and up to date on every `chezmoi apply`, not just on initial install.
+
+---
+
+## Updating accounts data
+
+When Bitwarden account entries change, run this sequence from the repo root:
+
+```sh
+./bw-export-accounts
+```
+
+This script:
+
+1. Syncs the local rbw cache (`rbw sync`).
+2. Fetches account entries listed in the `accounts` Bitwarden item.
+3. Transforms them into chezmoi data format (JSON).
+4. Writes plaintext to `tmp/accounts.json` (for inspection, not committed).
+5. Encrypts and writes to `home/.secrets/accounts.json.age`.
+
+After running it:
+
+```sh
+git add home/.secrets/accounts.json.age
+git commit -m "feat(secrets): update accounts data"
+AGE_PASSPHRASE=... chezmoi init --apply
+```
+
+### Why `chezmoi init --apply` (not just `chezmoi apply`)
+
+`chezmoi apply` only re-decrypts `accounts.json` into `~/.config/chezmoi/` (via the `run_onchange_` script). However, `.accounts` and `.aliases` in template data live in `chezmoi.toml` — a static file generated from `.chezmoi.toml.tmpl` **only during `chezmoi init`**. A plain `chezmoi apply` does not re-render the config, so templates referencing new accounts (e.g. a new gitconfig) will render empty.
+
+`chezmoi init --apply` re-renders `chezmoi.toml` (picking up the new accounts/aliases) and then applies all targets in one step.
+
+### How the change propagates
+
+```plaintext
+bw-export-accounts
+  └─► home/.secrets/accounts.json.age (encrypted, committed)
+
+chezmoi init --apply
+  ├─► .chezmoi.toml.tmpl (line 36-37): executes decrypt script inline via `output`
+  │     └─► decrypts accounts.json into ~/.config/chezmoi/
+  ├─► .chezmoi.toml.tmpl (line 39-48): reads decrypted accounts.json
+  │     └─► populates [data] accounts + aliases in chezmoi.toml
+  └─► apply phase: templates resolve .accounts/.aliases with fresh data
+        └─► e.g. 60-vergnügte-wanze.gitconfig.tmpl renders correctly
+```
+
+The decrypt script (`run_onchange_before_decrypt-chezmoi-secrets.sh.tmpl`) is a **template** — the `.tmpl` suffix is critical. Line 3 contains:
+
+```go
+# accounts.json.age hash: {{ include ".secrets/accounts.json.age" | sha256sum }}
+```
+
+Because the script is a template, chezmoi evaluates this directive on every apply. When `accounts.json.age` changes, the rendered script content changes, and `run_onchange_` fires. The script then:
+
+1. Renames existing `~/.config/chezmoi/accounts.json` to `.old`.
+2. Decrypts `accounts.json.age` using the main age key (falls back to `AGE_PASSPHRASE` for symmetric decryption).
+3. Writes the result to `~/.config/chezmoi/accounts.json`.
+
+### Important notes
+
+- The `AGE_PASSPHRASE` env var is needed because the script decrypts the main age key (`age-00-chezmoi.key.age`) first, which uses symmetric encryption. Without it (and without an interactive terminal), decryption fails silently and chezmoi still marks the script as executed — requiring `chezmoi state delete-bucket --bucket=entryState` to re-trigger.
+- If decryption fails (no passphrase, no terminal), chezmoi records the script hash in `entryState` regardless of exit code. A subsequent `chezmoi apply` will not re-run the script. To force a re-run: `chezmoi state delete-bucket --bucket=entryState` (this also resets state for `run_onchange_01-install-packages.sh`).
+- The config template (`.chezmoi.toml.tmpl` line 35-37) calls the decrypt script by its **literal filesystem path** (including `.tmpl` suffix), not by its chezmoi target name.
 
 ---
 
