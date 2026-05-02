@@ -1,29 +1,25 @@
-# Dotfiles (chezmoi)
+# Claude Code instructions
 
-This project is managed by [chezmoi](https://www.chezmoi.io). The source directory is `home/`.
+@docs/ai-instructions.md
+@README.md
 
-For architecture details (install flow, encryption, hooks, test suite), see `ARCHITECTURE.md`.
+---
 
-## Chezmoi reference
+## Claude Code — Additional Instructions
 
-For any chezmoi question, read `docs/chezmoi/CLAUDE.md` first to orient, then read specific files as needed. Use that corpus as the primary source of truth — do not rely solely on training knowledge.
+The shared instructions above apply to all AI tools. The notes below are Claude Code-specific.
 
-Key lookups:
+### Memory & context
 
-- File naming / source attributes: `reference/source-state-attributes.md`
-- Template functions: `reference/templates/functions/<function>.md`
-- Config file options: `reference/configuration-file/`
-- CLI commands: `reference/commands/<command>.md`
-- Special dirs/files: `reference/special-directories/`, `reference/special-files/`
+- Project memory is stored in `~/.claude/projects/…/memory/`. Update it when discovering
+  new stable patterns.
+- For code-change behavior and repository conventions, follow `docs/ai-instructions.md`.
 
-## Source directory conventions
+### Tool preferences
 
-Files under `home/` follow standard chezmoi naming:
+- Use the built-in Read/Edit/Glob/Grep tools over shell equivalents (cat, grep, find).
 
-- `dot_` → `.` prefix in target
-- `private_` → mode 0600
-- `symlink_` → symlink in target
-- `executable_` → mode +x
-- `*.tmpl` → processed as Go template
-- `modify_` → modify script
-- `run_` / `run_once_` / `run_onchange_` → scripts in `.chezmoiscripts/`
+### Commits & PRs
+
+- Do not commit or push unless explicitly asked.
+- For commit message format, follow `docs/ai-instructions.md` (Conventional Commits).

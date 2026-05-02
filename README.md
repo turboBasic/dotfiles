@@ -38,4 +38,4 @@ When account data changes in Bitwarden (new account added, email updated, etc.),
 ./bw-update-accounts
 ```
 
-This exports accounts from Bitwarden, encrypts and commits the result, then runs `chezmoi init --apply` to propagate changes to all templated files (gitconfigs, etc.). See [ARCHITECTURE.md](ARCHITECTURE.md#updating-accounts-data) for details.
+This exports accounts from Bitwarden, encrypts and commits the result, then runs `chezmoi init --apply` to propagate changes to all templated files (gitconfigs, etc.). See [ARCHITECTURE.md](docs/ARCHITECTURE.md#updating-accounts-data) for details.
