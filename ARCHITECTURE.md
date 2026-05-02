@@ -38,7 +38,8 @@ dotfiles/
 ├── install.zsh                  ← Zsh bootstrap (preferred entry point)
 ├── tests/                       ← integration test suite (7 scripts)
 ├── _symlinks/                   ← convenience symlinks to ~/.config dirs
-└── bw-export-accounts           ← Bitwarden account export helper
+├── bw-export-accounts           ← Bitwarden account export helper
+└── bw-update-accounts           ← Full pipeline: export → commit → chezmoi init --apply
 ```
 
 ---
@@ -205,27 +206,21 @@ This ensures bootstrap dependencies (age, chezmoi, homebrew, rbw) remain present
 
 ## Updating accounts data
 
-When Bitwarden account entries change, run this sequence from the repo root:
+When Bitwarden account entries change, run from the repo root:
 
 ```sh
-./bw-export-accounts
+./bw-update-accounts
 ```
 
-This script:
+This wrapper script runs the full pipeline: exports accounts from Bitwarden, encrypts, commits the change, and runs `chezmoi init --apply`. It prompts for `AGE_PASSPHRASE` if not already set and unlocks `rbw` if needed.
+
+Under the hood it calls `bw-export-accounts`, which:
 
 1. Syncs the local rbw cache (`rbw sync`).
 2. Fetches account entries listed in the `accounts` Bitwarden item.
 3. Transforms them into chezmoi data format (JSON).
 4. Writes plaintext to `tmp/accounts.json` (for inspection, not committed).
 5. Encrypts and writes to `home/.secrets/accounts.json.age`.
-
-After running it:
-
-```sh
-git add home/.secrets/accounts.json.age
-git commit -m "feat(secrets): update accounts data"
-AGE_PASSPHRASE=... chezmoi init --apply
-```
 
 ### Why `chezmoi init --apply` (not just `chezmoi apply`)
 

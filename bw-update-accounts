@@ -1,0 +1,59 @@
+#!/usr/bin/env zsh
+# shellcheck disable=SC1071
+
+# Update accounts data from Bitwarden and apply to chezmoi.
+# Runs the full pipeline: export → encrypt → commit → init --apply.
+#
+# Usage:
+#   ./bw-update-accounts
+
+set -euo pipefail
+
+SCRIPT_DIR="${0:a:h}"
+cd "$SCRIPT_DIR"
+
+function main() {
+    check_prerequisites
+    export_accounts
+    commit_if_changed
+    apply_chezmoi
+}
+
+function check_prerequisites() {
+    if ! rbw unlocked 2>/dev/null; then
+        echo "rbw is locked. Unlocking..."
+        rbw unlock
+    fi
+
+    if [[ -z "${AGE_PASSPHRASE:-}" ]]; then
+        read -r -s "AGE_PASSPHRASE?Enter AGE_PASSPHRASE: "
+        echo
+        export AGE_PASSPHRASE
+    fi
+}
+
+function export_accounts() {
+    echo "Exporting accounts from Bitwarden..."
+    ./bw-export-accounts
+    echo "Done. Encrypted file updated: home/.secrets/accounts.json.age"
+}
+
+function commit_if_changed() {
+    if git diff --quiet home/.secrets/accounts.json.age 2>/dev/null; then
+        echo "No changes in accounts data."
+        return
+    fi
+
+    echo "Committing updated accounts.json.age..."
+    git add home/.secrets/accounts.json.age
+    git commit -m "feat(secrets): update accounts data"
+}
+
+function apply_chezmoi() {
+    echo "Running chezmoi init --apply..."
+    chezmoi init --apply
+    echo "Done. Accounts data applied."
+}
+
+
+main "$@"

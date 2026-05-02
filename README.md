@@ -29,3 +29,13 @@ chezmoi apply
 ```shell
 sh -c "$(curl -fsSL "https://raw.githubusercontent.com/turboBasic/dotfiles/refs/heads/main/install.sh?$(date +%s)")" -- init turboBasic/dotfiles
 ```
+
+## Updating accounts
+
+When account data changes in Bitwarden (new account added, email updated, etc.), run:
+
+```shell
+./bw-update-accounts
+```
+
+This exports accounts from Bitwarden, encrypts and commits the result, then runs `chezmoi init --apply` to propagate changes to all templated files (gitconfigs, etc.). See [ARCHITECTURE.md](ARCHITECTURE.md#updating-accounts-data) for details.
