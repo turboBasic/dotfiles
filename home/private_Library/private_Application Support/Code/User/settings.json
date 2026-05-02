@@ -51,7 +51,6 @@
   // Terminal settings
   "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.scrollback": 5000,
-  "terminal.integrated.tabs.enabled": false,
   "terminal.integrated.confirmOnExit": "hasChildProcesses",
   "terminal.integrated.enableMultiLinePasteWarning": "never",
   // Print settings
