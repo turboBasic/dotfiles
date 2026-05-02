@@ -41,7 +41,6 @@ main() {
     install_homebrew || { log "❌ Error: install_homebrew failed."; return 1; }
     install_pinentry || { log "❌ Error: install_pinentry failed."; return 1; }
     install_rbw || { log "❌ Error: install_rbw failed."; return 1; }
-    unlock_rbw || { log "❌ Error: unlock_rbw failed."; return 1; }
 
     if [ "${1:-}" = "--cleanup" ]; then
         shift
@@ -50,6 +49,7 @@ main() {
     fi
     if [ "${1:-}" = "init" ]; then
         shift
+        unlock_rbw || { log "❌ Error: unlock_rbw failed."; return 1; }
         log "🔹 Dotfiles will be installed..."
         _install_dotfiles "$@"
     fi
@@ -296,7 +296,7 @@ install_rbw() {
                 | sed 's/_//g'
             )
             current_version=$(dpkg-query --showformat='${Version}' --show rbw 2>/dev/null || echo 0.0.0)
-            if dpkg --compare-versions "$latest_version" lt "$current_version"; then
+            if dpkg --compare-versions "$latest_version" gt "$current_version"; then
                 curl --location --output "$latest_rbw" "$url_prefix/$latest_rbw"
                 sudo apt-get install --yes ./"$latest_rbw"
                 rm -f "$latest_rbw"

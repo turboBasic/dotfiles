@@ -34,8 +34,7 @@ dotfiles/
 │   ├── symlink_dot_bashrc        ← ~/.bashrc → .config/bash/bashrc
 │   ├── symlink_dot_zshenv        ← ~/.zshenv → .config/zsh/.zshenv
 │   └── README.md.tmpl
-├── install.sh                   ← POSIX bootstrap (also called as chezmoi hook)
-├── install.zsh                  ← Zsh bootstrap (preferred entry point)
+├── install.sh                   ← POSIX bootstrap (single source of truth; also chezmoi hook)
 ├── tests/                       ← integration test suite (7 scripts)
 ├── _symlinks/                   ← convenience symlinks to ~/.config dirs
 ├── bw-export-accounts           ← Bitwarden account export helper
@@ -50,18 +49,15 @@ dotfiles/
 
 `AGE_PASSPHRASE` must be set in the environment before the first run. This passphrase decrypts the main age key (`age-00-chezmoi.key.age`) and — as a fallback — `accounts.json.age`.
 
-### Bootstrap (install.sh / install.zsh)
+### Bootstrap (install.sh)
 
-Both scripts are functionally equivalent; `install.zsh` uses Zsh idioms and is the preferred entry point. `install.sh` is POSIX sh and also serves as the chezmoi `read-source-state.pre` hook (see below).
+`install.sh` is the single source of truth for bootstrap behavior. `install.sh` also serves as the chezmoi `read-source-state.pre` hook (see below).
 
 **Invocation for a fresh machine:**
 
 ```sh
 # POSIX sh (curl bootstrap)
 AGE_PASSPHRASE=... sh -c "$(curl -fsSL 'https://raw.githubusercontent.com/turboBasic/dotfiles/refs/heads/main/install.sh')" -- init turboBasic/dotfiles
-
-# Zsh
-AGE_PASSPHRASE=... zsh -c "$(curl -fsSL 'https://raw.githubusercontent.com/turboBasic/dotfiles/refs/heads/main/install.zsh')" -- init turboBasic/dotfiles
 
 # With cleanup of existing chezmoi dirs:
 ... -- --cleanup init turboBasic/dotfiles
@@ -78,7 +74,7 @@ AGE_PASSPHRASE=... zsh -c "$(curl -fsSL 'https://raw.githubusercontent.com/turbo
 7. `install_homebrew` — install Homebrew if absent; run `eval "$(brew shellenv)"`.
 8. `install_pinentry` — install `pinentry-tty` (apt on Linux, brew on macOS).
 9. `install_rbw` — install rbw (latest .deb on Linux, brew on macOS).
-10. `unlock_rbw` — configure rbw email, lock_timeout (86400 s), pinentry; run `rbw unlock`.
+10. If subcommand is `init`, `unlock_rbw` runs — configures rbw email, lock_timeout (86400 s), pinentry; runs `rbw unlock`.
 11. If `--cleanup` flag: wipe contents of `~/.cache/chezmoi`, `~/.config/chezmoi`, `~/.local/share/chezmoi`, `~/.local/state/chezmoi`.
 12. If `init` subcommand: call `_install_dotfiles` with the repo argument.
 

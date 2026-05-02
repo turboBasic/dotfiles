@@ -57,7 +57,6 @@ home/                            ← chezmoi source dir (declared via .chezmoiro
 ├── symlink_dot_zshenv
 └── README.md.tmpl
 install.sh                       ← POSIX bootstrap (also chezmoi hook)
-install.zsh                      ← Zsh bootstrap (preferred entry point)
 tests/                           ← integration test suite
 bw-export-accounts               ← Bitwarden account export helper
 bw-update-accounts               ← Full pipeline: export → commit → chezmoi init --apply

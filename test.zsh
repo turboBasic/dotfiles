@@ -53,11 +53,11 @@ function set_global_vars() {
 
 function install_dotfiles() {
     if [[ "$FLAG_LOCAL" != "true" ]]; then
-        source <(curl -fsSL "$REPO_TEST_URL/install.zsh?$(date +%s)")
+        source <(curl -fsSL "$REPO_TEST_URL/install.sh?$(date +%s)")
         log "▫️ install_main() init $REPO_URL.git"
         install_main --cleanup init $REPO_URL.git
     else
-        source "$CHEZMOI_DATA_DIR"/install.zsh
+        source "$CHEZMOI_DATA_DIR"/install.sh
         log "▫️ install_main() init"
         install_main init
     fi
