@@ -5,7 +5,7 @@
 ### Dependencies
 
 - macOS or Ubuntu Linux
-- age, curl, expect, git, grep, sed, tar, uname, unzip, zsh
+- age, curl, git, grep, sed, tar, uname, unzip, zsh
 
 ### Command
 
@@ -22,7 +22,7 @@ chezmoi apply
 ### Dependencies
 
 - macOS or Ubuntu Linux
-- curl, expect, git, grep, sed, tar, uname, unzip
+- curl, git, grep, sed, tar, uname, unzip
 
 ### Command
 

@@ -1,27 +1,11 @@
 #!/bin/sh
 
 decrypt() {
-    expect <<EOF
-        log_user 0
-        spawn age --decrypt --output "$output_file" "$input_file"
-        send -- "$passphrase\n"
-        expect -- "\n"
-        log_user 1
-        expect eof
-EOF
+    AGE_PASSPHRASE="$passphrase" age -d -j batchpass --output "$output_file" "$input_file"
 }
 
 encrypt() {
-    expect <<EOF
-        log_user 0
-        spawn age --encrypt --armor --passphrase --output "$output_file" "$input_file"
-        send -- "$passphrase\n"
-        # confirmation
-        send -- "$passphrase\n"
-        expect -- "\n"
-        log_user 1
-        expect eof
-EOF
+    AGE_PASSPHRASE="$passphrase" age -e -j batchpass --armor --output "$output_file" "$input_file"
 }
 
 

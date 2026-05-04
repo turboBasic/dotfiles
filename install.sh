@@ -145,7 +145,10 @@ log() {
 }
 
 check_utils() {
-    for util in curl expect git grep sed tar uname unzip zsh; do
+    if [ "$CHEZMOI_OS" = "linux" ]; then
+        sudo apt-get update || { log "❌ Error: apt-get update failed."; return 1; }
+    fi
+    for util in curl git grep sed tar uname unzip zsh; do
         if ! command -v "$util" >/dev/null 2>&1; then
             if [ "$CHEZMOI_OS" = "linux" ]; then
                 sudo apt-get install --yes "$util" || {
@@ -158,13 +161,6 @@ check_utils() {
             fi
         fi
     done
-    # We also need rbw in Linux before installing Chezmoi and dotfiles
-    if [ "$CHEZMOI_OS" = "linux" ]; then
-        sudo apt-get install --yes rbw || {
-            log "❌ Error: Failed to install rbw using apt-get."
-            return 1
-        }
-    fi
 }
 
 install_bin_dir() {
@@ -184,7 +180,7 @@ install_chezmoi() {
     log "▫️ Installing Chezmoi..."
     if ! command -v chezmoi >/dev/null 2>&1; then
         if [ ! -x "$bin_dir/chezmoi" ]; then
-            sh -c "$(curl -fsLS get.chezmoi.io/lb)"
+            BINDIR="$bin_dir" sh -c "$(curl -fsLS get.chezmoi.io/lb)"
         fi
         chezmoi="$bin_dir/chezmoi"
         log "✅ Chezmoi is installed as $chezmoi."
@@ -199,9 +195,9 @@ install_age() {
     if ! command -v age >/dev/null 2>&1; then
         if [ ! -x "$bin_dir/age" ]; then
             curl --location --output age.tar.gz \
-                "https://dl.filippo.io/age/v1.1.1?for=$CHEZMOI_OS/$CHEZMOI_ARCH"
-            tar --strip-components=1 -xvf age.tar.gz age/age age/age-keygen
-            mv age age-keygen "$bin_dir"
+                "https://dl.filippo.io/age/latest?for=$CHEZMOI_OS/$CHEZMOI_ARCH"
+            tar --strip-components=1 -xvf age.tar.gz age/age age/age-keygen age/age-plugin-batchpass
+            mv age age-keygen age-plugin-batchpass "$bin_dir"
             rm -f age.tar.gz
         fi
         age="$bin_dir/age"
@@ -249,7 +245,7 @@ install_pinentry() {
     log "▫️ Installing pinentry-tty..."
     if ! command -v pinentry-tty >/dev/null 2>&1; then
         if [ "$CHEZMOI_OS" = "linux" ]; then
-            sudo apt-get install --yes pinentry-tty
+            sudo apt-get install --yes pinentry-tty || { log "❌ Error: Failed to install pinentry-tty."; return 1; }
             pinentry="pinentry-tty"
         elif [ "$CHEZMOI_OS" = "darwin" ]; then
             $brew install pinentry
@@ -282,10 +278,15 @@ install_rbw() {
     log "▫️ Installing Rbw..."
     if ! command -v rbw >/dev/null 2>&1; then
         if [ "$CHEZMOI_OS" = "linux" ]; then
+            case "$CHEZMOI_ARCH" in
+                amd64) deb_arch="amd64" ;;
+                arm64) deb_arch="arm64" ;;
+                *)     deb_arch="$CHEZMOI_ARCH" ;;
+            esac
             url_prefix="https://git.tozt.net/rbw/releases/deb/"
             latest_rbw=$(
                 curl --silent --location "$url_prefix" \
-                | grep -oE 'href="rbw_[^"]+_amd64\.deb"' \
+                | grep -oE "href=\"rbw_[^\"]+_${deb_arch}\.deb\"" \
                 | sed 's/href="//; s/"$//' \
                 | sort --version-sort \
                 | tail -n 1

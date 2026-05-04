@@ -1,0 +1,13 @@
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y software-properties-common \
+    && add-apt-repository universe \
+    && apt-get update && apt-get install -y \
+    curl git grep sed tar unzip zsh sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m -s /bin/zsh tester && echo "tester ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+USER tester
+RUN mkdir -p /home/tester/.local/bin /home/tester/.local/share
+WORKDIR /home/tester
