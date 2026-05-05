@@ -32,9 +32,8 @@ sudo apt-get update
 sudo apt-get install --yes #{ .packages.linux.apts | join " " }#
 
 if [ -f /.dockerenv ]; then
-    # We are in Ubuntu Docker container in macOS, brew is not working properly there
-    # so we are just exiting
-    exit
+    # We are in Ubuntu Docker container in macOS
+    echo It looks like Homebrew in Ubuntu Docker container in macOS is fixed, we will try to install packages with Homebrew
 fi
 
 brew bundle --file=/dev/stdin <<EOF

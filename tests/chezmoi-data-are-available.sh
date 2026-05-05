@@ -1,8 +1,9 @@
 #!/bin/sh
 
 # shellcheck disable=SC2154
-[   "true" = "$(
-        chezmoi data \
-        |   jq --raw-output 'any(.packages.darwin.bootstrap.formulae[]; . == "yq")'
-    )" \
-]
+
+os=$(chezmoi data | jq --raw-output '.chezmoi.os')
+[ "true" = "$(
+    chezmoi data \
+    | jq --raw-output --arg os "$os" 'any(.packages[$os].bootstrap.formulae[]; . == "jq")'
+)" ]

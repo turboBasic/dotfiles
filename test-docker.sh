@@ -1,10 +1,18 @@
 #!/bin/sh
 set -eu
 
-ARCH="${1:-amd64}"
+ARCH="${1:-arm64}"
 IMAGE_NAME="dotfiles-test-${ARCH}"
 PLATFORM="linux/${ARCH}"
 DOCKERFILE="Dockerfile.test"
+LOG_FILE="docker.log"
+RBW_DIR="tests/rbw-linux-${ARCH}"
+
+if [ ! -f "$RBW_DIR/rbw" ] || [ ! -f "$RBW_DIR/rbw-agent" ]; then
+    echo "Error: rbw binaries not found in $RBW_DIR. Build them first:" >&2
+    echo "  make -C $RBW_DIR" >&2
+    exit 1
+fi
 
 if [ -z "${AGE_PASSPHRASE:-}" ]; then
     printf 'Enter AGE_PASSPHRASE: '
@@ -16,7 +24,12 @@ if [ -z "${AGE_PASSPHRASE:-}" ]; then
 fi
 
 echo "Building $IMAGE_NAME for $PLATFORM..."
-docker buildx build --platform "$PLATFORM" --load -t "$IMAGE_NAME" -f "$DOCKERFILE" .
+docker buildx build \
+    --platform "$PLATFORM" \
+    --load \
+    --tag "$IMAGE_NAME" \
+    --file "$DOCKERFILE" \
+    --build-arg "RBW_DIR=$RBW_DIR" .
 
 echo "Running test.zsh --local..."
 ENV_FILE=$(mktemp)
@@ -27,5 +40,6 @@ docker run -it --rm \
     -e NONINTERACTIVE=1 \
     -v "$PWD":/repo \
     "$IMAGE_NAME" \
-    zsh -c "cp -a /repo ~/.local/share/chezmoi && cd ~/.local/share/chezmoi && zsh test.zsh --local"
+    zsh -c "cp -a /repo ~/.local/share/chezmoi && cd ~/.local/share/chezmoi && zsh test.zsh --local" 2>&1 \
+| tee "$LOG_FILE"
 rm -f "$ENV_FILE"

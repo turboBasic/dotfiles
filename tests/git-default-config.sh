@@ -8,7 +8,7 @@ chezmoi_account_username=$(
     chezmoi data |   jq --raw-output '.accounts | fromjson | ."accounts.personal".git_username.value'
 )
 
-if [ "$(git -C "$dummy_repo" config get user.name)" = "$chezmoi_account_username" ]; then
+if [ "$(git -C "$dummy_repo" config --get user.name)" = "$chezmoi_account_username" ]; then
     rm -rf "$dummy_repo"
     true
 else

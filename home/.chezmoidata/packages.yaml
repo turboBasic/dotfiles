@@ -12,6 +12,7 @@ packages:
         - gnu-sed
         - gnu-tar
         - grep
+        - jq
         - pinentry
         - pkg-config
         - rbw
@@ -40,7 +41,6 @@ packages:
         - git-lfs
         - graphviz
         - hatch
-        - jq
         - less
         - midnight-commander
         - neovim
@@ -86,6 +86,7 @@ packages:
       formulae:
         - age
         - chezmoi
+        - jq
         - rbw
         - tree
 
@@ -130,7 +131,6 @@ packages:
         - gh
         - git
         - hatch
-        - jq
         - less
         - midnight-commander
         - neovim

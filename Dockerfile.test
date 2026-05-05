@@ -7,6 +7,10 @@ RUN apt-get update && apt-get install -y software-properties-common \
     curl git grep sed tar unzip zsh sudo \
     && rm -rf /var/lib/apt/lists/*
 
+ARG RBW_DIR=tests/rbw-linux-arm64
+COPY ${RBW_DIR}/rbw ${RBW_DIR}/rbw-agent /usr/local/bin/
+RUN chmod +x /usr/local/bin/rbw /usr/local/bin/rbw-agent
+
 RUN useradd -m -s /bin/zsh tester && echo "tester ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER tester
 RUN mkdir -p /home/tester/.local/bin /home/tester/.local/share

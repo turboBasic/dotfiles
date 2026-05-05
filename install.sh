@@ -145,22 +145,27 @@ log() {
 }
 
 check_utils() {
-    if [ "$CHEZMOI_OS" = "linux" ]; then
-        sudo apt-get update || { log "❌ Error: apt-get update failed."; return 1; }
-    fi
+    _missing_utils=""
     for util in curl git grep sed tar uname unzip zsh; do
         if ! command -v "$util" >/dev/null 2>&1; then
-            if [ "$CHEZMOI_OS" = "linux" ]; then
+            _missing_utils="$_missing_utils $util"
+        fi
+    done
+
+    if [ -n "$_missing_utils" ]; then
+        if [ "$CHEZMOI_OS" = "linux" ]; then
+            sudo apt-get update || { log "❌ Error: apt-get update failed."; return 1; }
+            for util in $_missing_utils; do
                 sudo apt-get install --yes "$util" || {
                     log "❌ Error: Failed to install $util using apt-get."
                     return 1
                 }
-            else
-                log "❌ Error: $util is not installed."
-                return 1
-            fi
+            done
+        else
+            log "❌ Error: missing utilities:$_missing_utils"
+            return 1
         fi
-    done
+    fi
 }
 
 install_bin_dir() {
@@ -245,6 +250,7 @@ install_pinentry() {
     log "▫️ Installing pinentry-tty..."
     if ! command -v pinentry-tty >/dev/null 2>&1; then
         if [ "$CHEZMOI_OS" = "linux" ]; then
+            sudo apt-get update -qq || { log "❌ Error: apt-get update failed."; return 1; }
             sudo apt-get install --yes pinentry-tty || { log "❌ Error: Failed to install pinentry-tty."; return 1; }
             pinentry="pinentry-tty"
         elif [ "$CHEZMOI_OS" = "darwin" ]; then
