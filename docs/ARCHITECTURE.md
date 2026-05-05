@@ -34,8 +34,14 @@ dotfiles/
 │   ├── symlink_dot_bashrc        ← ~/.bashrc → .config/bash/bashrc
 │   ├── symlink_dot_zshenv        ← ~/.zshenv → .config/zsh/.zshenv
 │   └── README.md.tmpl
+├── Makefile                     ← development tasks (test, rbw, clean)
 ├── install.sh                   ← POSIX bootstrap (single source of truth; also chezmoi hook)
-├── tests/                       ← integration test suite (7 scripts)
+├── tests/
+│   ├── integration/             ← 7 integration test scripts (*.sh)
+│   ├── integration-tests-runner.zsh  ← test runner (install + execute tests in Docker)
+│   ├── bin/<arch>/              ← pre-built rbw binaries per platform
+│   ├── Dockerfile.ubuntu        ← test container image
+│   └── Dockerfile.rbw-ubuntu    ← builds rbw binaries for linux/<arch>
 ├── _symlinks/                   ← convenience symlinks to ~/.config dirs
 ├── bw-export-accounts           ← Bitwarden account export helper
 └── bw-update-accounts           ← Full pipeline: export → commit → chezmoi init --apply
@@ -261,7 +267,14 @@ Because the script is a template, chezmoi evaluates this directive on every appl
 
 ## Test suite
 
-Seven integration tests in `tests/`, run via `test.zsh`:
+Seven integration tests in `tests/integration/`, run via `make test` (or `make test-ubuntu` for Ubuntu only):
+
+```sh
+make test              # runs test-ubuntu + test-macos
+make test-ubuntu       # Docker-based Ubuntu tests (requires AGE_PASSPHRASE)
+make rbw               # build rbw binaries (default: arm64)
+make rbw ARCH=amd64    # build rbw binaries for amd64
+```
 
 | Test                                  | What it checks                                 |
 | ------------------------------------- | ---------------------------------------------- |

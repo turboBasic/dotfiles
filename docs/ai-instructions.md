@@ -56,8 +56,14 @@ home/                            ← chezmoi source dir (declared via .chezmoiro
 ├── symlink_dot_bashrc
 ├── symlink_dot_zshenv
 └── README.md.tmpl
+Makefile                         ← development tasks (test, rbw, clean)
 install.sh                       ← POSIX bootstrap (also chezmoi hook)
 tests/                           ← integration test suite
+├── integration/                 ← individual test scripts (*.sh)
+├── integration-tests-runner.zsh ← test runner (install + execute tests in Docker)
+├── bin/<arch>/                  ← pre-built rbw binaries per platform
+├── Dockerfile.ubuntu            ← test container image
+└── Dockerfile.rbw-ubuntu        ← builds rbw binaries for linux/<arch>
 bw-export-accounts               ← Bitwarden account export helper
 bw-update-accounts               ← Full pipeline: export → commit → chezmoi init --apply
 docs/
