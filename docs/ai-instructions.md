@@ -60,7 +60,9 @@ Makefile                         ← development tasks (test, rbw, clean)
 install.sh                       ← POSIX bootstrap (also chezmoi hook)
 tests/                           ← integration test suite
 ├── integration/                 ← individual test scripts (*.sh)
-├── integration-tests-runner.zsh ← test runner (install + execute tests in Docker)
+├── integration-tests-runner.zsh ← test runner (install + execute tests)
+├── test-macos.sh                ← macOS test driver (UTM VM over SSH)
+├── README-macos.md              ← macOS VM setup instructions
 ├── bin/<arch>/                  ← pre-built rbw binaries per platform
 ├── Dockerfile.ubuntu            ← test container image
 └── Dockerfile.rbw-ubuntu        ← builds rbw binaries for linux/<arch>

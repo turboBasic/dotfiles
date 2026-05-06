@@ -39,7 +39,19 @@ endif
 	| tee $(LOG_FILE)
 
 test-macos:
-	@echo "test-macos: not implemented yet"
+ifndef AGE_PASSPHRASE
+	$(error AGE_PASSPHRASE must be set)
+endif
+ifndef RBW_EMAIL
+	$(error RBW_EMAIL must be set)
+endif
+ifndef RBW_PASSWORD
+	$(error RBW_PASSWORD must be set)
+endif
+ifndef RBW_TOTP_SEED
+	$(error RBW_TOTP_SEED must be set)
+endif
+	zsh tests/test-macos.sh
 
 rbw: $(BINARIES)
 

@@ -41,6 +41,7 @@ main() {
     install_homebrew || { log "❌ Error: install_homebrew failed."; return 1; }
     install_pinentry || { log "❌ Error: install_pinentry failed."; return 1; }
     install_rbw || { log "❌ Error: install_rbw failed."; return 1; }
+    install_oathtool || { log "❌ Error: install_oathtool failed."; return 1; }
 
     if [ "${1:-}" = "--cleanup" ]; then
         shift
@@ -321,6 +322,23 @@ install_rbw() {
         rbw="rbw"
         log "▫️ Rbw is already installed."
     fi
+}
+
+install_oathtool() {
+    log "▫️ Installing oath-toolkit..."
+    if command -v oathtool >/dev/null 2>&1; then
+        log "▫️ oath-toolkit is already installed."
+        return 0
+    fi
+    if [ "$CHEZMOI_OS" = "darwin" ]; then
+        $brew install oath-toolkit
+    elif [ "$CHEZMOI_OS" = "linux" ]; then
+        sudo apt-get install --yes oathtool
+    else
+        log "❌ Unsupported OS: $CHEZMOI_OS"
+        return 1
+    fi
+    log "✅ oath-toolkit is installed."
 }
 
 # shellcheck disable=SC2015

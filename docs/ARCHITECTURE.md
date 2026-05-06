@@ -6,46 +6,13 @@ This repository is a [chezmoi](https://www.chezmoi.io)-managed dotfiles setup. T
 
 ## Repository layout
 
-```plaintext
-dotfiles/
-├── home/                        ← chezmoi source dir (--source flag target)
-│   ├── .chezmoi.toml.tmpl       ← config template, runs on init
-│   ├── .chezmoidata/
-│   │   └── packages.yaml        ← package manifest for macOS/Linux
-│   ├── .chezmoiignore
-│   ├── .chezmoiscripts/
-│   │   ├── run_onchange_before_decrypt-chezmoi-secrets.sh  ← decrypts secrets
-│   │   └── run_onchange_01-install-packages.sh.tmpl        ← installs packages
-│   ├── .chezmoitemplates/       ← reusable template snippets (empty)
-│   ├── .chezmoiexternals/       ← external resources (empty)
-│   ├── .secrets/
-│   │   ├── accounts.json.age    ← encrypted accounts (passphrase or key)
-│   │   └── age-00-chezmoi.key.age  ← encrypted main age private key (passphrase)
-│   ├── dot_local/bin/
-│   │   ├── executable_age-passphrase          ← age wrapper for passphrase ops
-│   │   └── executable_install-heavy-packages.tmpl
-│   ├── private_dot_config/
-│   │   ├── private_git/         ← per-account gitconfigs (templated, some encrypted)
-│   │   ├── zsh/                 ← zsh config, zinit, functions, profiles
-│   │   ├── mise/config.toml.tmpl
-│   │   ├── atuin/, bat/, cspell/, ripgrep/, tmux/
-│   │   └── private_Code/        ← VS Code config (Linux path, macOS-excluded via .chezmoiignore)
-│   ├── private_Library/         ← macOS Library/Application Support (ignored on Linux)
-│   ├── symlink_dot_bashrc        ← ~/.bashrc → .config/bash/bashrc
-│   ├── symlink_dot_zshenv        ← ~/.zshenv → .config/zsh/.zshenv
-│   └── README.md.tmpl
-├── Makefile                     ← development tasks (test, rbw, clean)
-├── install.sh                   ← POSIX bootstrap (single source of truth; also chezmoi hook)
-├── tests/
-│   ├── integration/             ← 7 integration test scripts (*.sh)
-│   ├── integration-tests-runner.zsh  ← test runner (install + execute tests in Docker)
-│   ├── bin/<arch>/              ← pre-built rbw binaries per platform
-│   ├── Dockerfile.ubuntu        ← test container image
-│   └── Dockerfile.rbw-ubuntu    ← builds rbw binaries for linux/<arch>
-├── _symlinks/                   ← convenience symlinks to ~/.config dirs
-├── bw-export-accounts           ← Bitwarden account export helper
-└── bw-update-accounts           ← Full pipeline: export → commit → chezmoi init --apply
-```
+See [docs/ai-instructions.md § "Project Structure"](ai-instructions.md#project-structure) for the full directory tree.
+Key top-level paths relevant to this document:
+
+- `home/` — chezmoi source dir (declared via `.chezmoiroot`)
+- `install.sh` — POSIX bootstrap (single source of truth; also chezmoi hook)
+- `Makefile` — development tasks (test, rbw, clean)
+- `tests/` — integration test suite (Docker for Linux, UTM VM for macOS)
 
 ---
 
@@ -80,9 +47,10 @@ AGE_PASSPHRASE=... sh -c "$(curl -fsSL 'https://raw.githubusercontent.com/turboB
 7. `install_homebrew` — install Homebrew if absent; run `eval "$(brew shellenv)"`.
 8. `install_pinentry` — install `pinentry-tty` (apt on Linux, brew on macOS).
 9. `install_rbw` — install rbw (latest .deb on Linux, brew on macOS).
-10. If subcommand is `init`, `unlock_rbw` runs — configures rbw email, lock_timeout (86400 s), pinentry; runs `rbw unlock`.
-11. If `--cleanup` flag: wipe contents of `~/.cache/chezmoi`, `~/.config/chezmoi`, `~/.local/share/chezmoi`, `~/.local/state/chezmoi`.
-12. If `init` subcommand: call `_install_dotfiles` with the repo argument.
+10. `install_oathtool` — install oath-toolkit (brew on macOS, apt on Linux).
+11. If subcommand is `init`, `unlock_rbw` runs — configures rbw email, lock_timeout (86400 s), pinentry; runs `rbw unlock`.
+12. If `--cleanup` flag: wipe contents of `~/.cache/chezmoi`, `~/.config/chezmoi`, `~/.local/share/chezmoi`, `~/.local/state/chezmoi`.
+13. If `init` subcommand: call `_install_dotfiles` with the repo argument.
 
 **`_install_dotfiles`:**
 
@@ -172,6 +140,29 @@ All `.tmpl` files have access to chezmoi's standard variables plus the `[data]` 
 | `.packages`            | entire `packages.yaml` tree             |
 
 Profile-conditional logic (e.g. `zsh/.include/zinit_30_profiles.zsh.tmpl`, `zsh/private_dot_zshrc.tmpl`, git configs) uses `{{ if eq .profile "personal" }}` / `{{ if eq .profile "work.2025.05" }}`.
+
+### Profiles
+
+Available profiles: `personal`, `work.2025.05`.
+
+The profile is selected once during `chezmoi init` (via `promptChoiceOnce`) and stored in
+`~/.config/chezmoi/chezmoi.toml` under `[data] profile = "..."`.
+
+**What the profile affects:**
+
+- Zsh plugin sets and shell aliases (zinit profile-specific configs)
+- Default git identity (which account is used for `user.name`/`user.email`)
+- Which optional packages are installed
+
+**Switching profiles:**
+
+```shell
+chezmoi init
+```
+
+Since the value is stored via `promptChoiceOnce`, re-running `chezmoi init` will
+re-prompt for the profile. Alternatively, edit `~/.config/chezmoi/chezmoi.toml`
+directly and change the `profile` value, then run `chezmoi apply`.
 
 ---
 
@@ -267,14 +258,22 @@ Because the script is a template, chezmoi evaluates this directive on every appl
 
 ## Test suite
 
-Seven integration tests in `tests/integration/`, run via `make test` (or `make test-ubuntu` for Ubuntu only):
+Seven integration tests in `tests/integration/`, run via `make test`:
 
 ```sh
 make test              # runs test-ubuntu + test-macos
 make test-ubuntu       # Docker-based Ubuntu tests (requires AGE_PASSPHRASE)
+make test-macos        # macOS tests via UTM VM (requires AGE_PASSPHRASE, RBW_EMAIL, RBW_PASSWORD, RBW_TOTP_SEED)
 make rbw               # build rbw binaries (default: arm64)
 make rbw ARCH=amd64    # build rbw binaries for amd64
 ```
+
+### macOS tests
+
+The `test-macos` target clones a base UTM VM, connects over SSH, and runs
+the full install + test suite non-interactively. A custom `pinentry-env` script
+provides Bitwarden credentials, and `oathtool` generates fresh TOTP codes
+at unlock time. See `tests/README-macos.md` for base VM setup instructions.
 
 | Test                                  | What it checks                                 |
 | ------------------------------------- | ---------------------------------------------- |
