@@ -19,6 +19,7 @@ alias  l='ls --classify --format=long --almost-all -v'
 alias ll='l --all'
 # Obfuscate `security` to prevent corporate monitoring tools from easily detecting it in process lists, while still allowing the alias to be used as intended.`
 alias se=$'s'$(echo ud)'o se'$(echo cur)$'it'$'y'
+alias tree='=tree -a -I .git --condense --gitignore -F --dirsfirst'
 
 alias -s jpg=open
 alias -s jpeg=open
