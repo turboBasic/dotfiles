@@ -6,13 +6,13 @@ region = eu-central-1
 # Cargonautica
 {{- $CARGONAUTICA_ACCOUNT_ID := onepasswordRead "op://Personal/aws__cargonautica__s3-user/account-id" }}
 
-[sso-session Cargonautica]
+[sso-session cargonautica]
 sso_start_url = https://cargonautica.awsapps.com/start
 sso_region = eu-central-1
 sso_registration_scopes = sso:account:access
 
-[profile Cargonautica]
-sso_session = Cargonautica
+[profile cargonautica-admin]
+sso_session = cargonautica
 sso_account_id = {{ $CARGONAUTICA_ACCOUNT_ID }}
 sso_role_name = AdministratorAccess
 region = eu-central-1
