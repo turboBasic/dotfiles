@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+
+# Claude Code status line command.
+# Reads JSON input from Claude Code, which provides session stats.
+main() {
+  local input
+  input=$(cat)  # stdin is provided by Claude Code CLI
+
+  local endpoint model_display effort thinking_enabled model_id
+
+  endpoint=$(determine_endpoint)
+  model_display=$(extract_input_data "$input" '.model.display_name')
+  effort=$(extract_input_data "$input" '.effort.level')
+  thinking_enabled=$(extract_input_data "$input" '.thinking.enabled' 'false')
+  model_id=$(extract_input_data "$input" '.model.id')
+
+  local cost
+  cost=$(calculate_cost "$input" "$model_id")
+
+  local model_segment
+  model_segment=$(build_display_segment "$model_display" "$effort" "$thinking_enabled")
+
+  printf '\033[00;33m[%s]\033[00m \033[00;32m%s\033[00m \033[00;35m$%s\033[00m' \
+    "$endpoint" "$model_segment" "$cost"
+}
+
+determine_endpoint() {
+  if [ -n "$CLAUDE_CODE_USE_BEDROCK" ] && [ "$CLAUDE_CODE_USE_BEDROCK" != "0" ]; then
+    echo "bedrock/${AWS_REGION:-us-east-1}"
+  elif [ -n "$CLAUDE_CODE_USE_VERTEX" ] && [ "$CLAUDE_CODE_USE_VERTEX" != "0" ]; then
+    echo "vertex/${CLOUD_ML_REGION:-us-east5}"
+  else
+    local base="${ANTHROPIC_BASE_URL:-${ANTHROPIC_API_URL:-api.anthropic.com}}"
+    echo "$base" | sed 's|https\?://||' | sed 's|/$||'
+  fi
+}
+
+extract_input_data() {
+  local input="$1"
+  local key="$2"
+  local default="${3:-empty}"
+  echo "$input" | jq -r "$key // $default"
+}
+
+# input, output, cache write, cache read (all in micro-dollars per token)
+get_pricing_rates() {
+  local model_id="$1"
+
+  case "$model_id" in
+    *claude-opus-4-7*|*claude-opus-4-6*|*claude-opus-4-5*|*claude-opus-4*)
+      echo "15 75 18.75 1.50" ;;
+    *claude-sonnet-4-6*|*claude-sonnet-4-5*|*claude-sonnet-4*)
+      echo "3 15 3.75 0.30" ;;
+    *claude-haiku-4-5*|*claude-haiku-3-5*|*claude-haiku-3.5*)
+      echo "0.80 4 1 0.08" ;;
+    *claude-haiku*)
+      echo "0.25 1.25 0.30 0.03" ;;
+    *claude-sonnet*)
+      echo "3 15 3.75 0.30" ;;
+    *claude-opus*)
+      echo "15 75 18.75 1.50" ;;
+    *)
+      echo "3 15 3.75 0.30" ;;
+  esac
+}
+
+calculate_cost() {
+  local input="$1" model_id="$2"
+
+  local total_input total_output cache_write cache_read
+  total_input=$(extract_input_data "$input" '.context_window.total_input_tokens' '0')
+  total_output=$(extract_input_data "$input" '.context_window.total_output_tokens' '0')
+  cache_write=$(extract_input_data "$input" '.context_window.current_usage.cache_creation_input_tokens' '0')
+  cache_read=$(extract_input_data "$input" '.context_window.current_usage.cache_read_input_tokens' '0')
+
+  read -r in_rate out_rate cw_rate cr_rate <<< "$(get_pricing_rates "$model_id")"
+
+  awk -v i="$total_input" -v o="$total_output" -v cw="$cache_write" -v cr="$cache_read" \
+      -v ir="$in_rate" -v or_="$out_rate" -v cwr="$cw_rate" -v crr="$cr_rate" \
+    'BEGIN { printf "%.4f", (i*ir + o*or_ + cw*cwr + cr*crr) / 1000000 }'
+}
+
+build_display_segment() {
+  local model_display="$1" effort="$2" thinking_enabled="$3"
+
+  local segment="$model_display"
+  [ -n "$effort" ] && segment="$segment/$effort"
+  [ "$thinking_enabled" = "true" ] && segment="$segment/think"
+
+  echo "$segment"
+}
+
+main
