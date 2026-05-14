@@ -1,0 +1,63 @@
+# Default configuration
+
+[default]
+region = eu-central-1
+
+# Cargonautica
+{{- $CARGONAUTICA_ACCOUNT_ID := onepasswordRead "op://Personal/aws__cargonautica__s3-user/account-id" }}
+
+[sso-session Cargonautica]
+sso_start_url = https://cargonautica.awsapps.com/start
+sso_region = eu-central-1
+sso_registration_scopes = sso:account:access
+
+[profile Cargonautica]
+sso_session = Cargonautica
+sso_account_id = {{ $CARGONAUTICA_ACCOUNT_ID }}
+sso_role_name = AdministratorAccess
+region = eu-central-1
+
+# User for accessing S3 folder for file share
+[profile cargonautica.s3-user-mfa]
+mfa_serial = arn:aws:iam::{{ $CARGONAUTICA_ACCOUNT_ID }}:mfa/s3-user-mfa
+role_arn = arn:aws:iam::{{ $CARGONAUTICA_ACCOUNT_ID }}:role/S3AccessRole-generic-storage-s3-user
+source_profile = cargonautica.s3-user
+
+[profile cargonautica.s3-user]
+region = eu-central-1
+aws_access_key_id = {{ onepasswordRead "op://Personal/aws__cargonautica__s3-user/Security/access-key-id" }}
+aws_secret_access_key = {{ onepasswordRead "op://Personal/aws__cargonautica__s3-user/Security/secret-access-key"}}
+
+
+{{ $ACCOUNT_NAME := (list "mo" "ia" | join "") -}}
+{{ $ACCOUNT_ROLE := (list "ad" "mt-" "data-platform-engineer" | join "") -}}
+# {{ $ACCOUNT_NAME | upper }}
+
+[sso-session {{ $ACCOUNT_NAME }}]
+sso_start_url = https://{{ $ACCOUNT_NAME }}-dev.awsapps.com/start
+sso_region = eu-central-1
+sso_registration_scopes = sso:account:access
+
+[profile ai] # ai-coding.tools
+sso_session = {{ $ACCOUNT_NAME }}
+sso_account_id = 224874703410
+sso_role_name = {{ $ACCOUNT_ROLE }}
+region = eu-central-1
+
+[profile data-bridge-backend-dev] # data-bridge-backend.dev.eu-central-1
+sso_session = {{ $ACCOUNT_NAME }}
+sso_account_id = 681892816202
+sso_role_name = {{ $ACCOUNT_ROLE }}
+region = eu-central-1
+
+[profile data-bridge-backend-int] # data-bridge-backend.int.eu-central-1
+sso_session = {{ $ACCOUNT_NAME }}
+sso_account_id = 738838464417
+sso_role_name = {{ $ACCOUNT_ROLE }}
+region = eu-central-1
+
+[profile data-bridge-backend-prd] # data-bridge-backend.prd.eu-central-1
+sso_session = {{ $ACCOUNT_NAME }}
+sso_account_id = 272673290021
+sso_role_name = {{ $ACCOUNT_ROLE }}
+region = eu-central-1

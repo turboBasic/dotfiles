@@ -1,5 +1,8 @@
 # Custom Dictionary Words
+admt
+awsapps
 basenames
+cargonautica
 cputime
 HILITE
 linuxbrew
@@ -8,6 +11,7 @@ MANPREFIX
 MANROFFOPT
 mbadolato
 mbegin
+moia
 shellenv
 showformat
 temurin
@@ -45,6 +49,7 @@ apts
 chezmoidata
 chezmoiscripts
 onchange
+onepassword
 
 # Zinit words
 atclone
