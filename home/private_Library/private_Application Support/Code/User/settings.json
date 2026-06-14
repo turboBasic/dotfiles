@@ -104,6 +104,9 @@
   "projectManager.git.baseFolders": [
     "~/00-projects"
   ],
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+  },
 }
 /*
 
