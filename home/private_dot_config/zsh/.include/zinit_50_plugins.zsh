@@ -136,6 +136,9 @@ zinit --lucid --wait for \
     jarun/nnn \
     mattmc3/zman \
     --from='gh-r' \
+    --ver='v2026.6.6' `# TODO: remove` \
+    --bpick='mise-*-macos-arm64' \
+    --extract='!' \
     --mv='mise-v* -> mise' \
     --cp='mise -> $ZPFX/bin/mise' \
     --sbin='mise -> mise' \
