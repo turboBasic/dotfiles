@@ -70,8 +70,16 @@ bw-export-accounts               ← Bitwarden account export helper
 bw-update-accounts               ← Full pipeline: export → commit → chezmoi init --apply
 docs/
 ├── ai-instructions.md           ← you are here
+├── ZINIT.md                     ← Zinit plugin manager conventions and reference
 └── chezmoi/                     ← chezmoi reference documentation corpus
 ```
+
+## Zinit Reference
+
+For any Zinit question (plugin management, ice modifiers, turbo mode, adding plugins),
+read `docs/ZINIT.md` first. It documents this project's conventions, file architecture,
+and common patterns. Before generating Zinit code, also run `zinit help` in a Zsh shell
+to verify available ices and commands — do not rely solely on training knowledge.
 
 ## Chezmoi Reference
 
