@@ -3,3 +3,8 @@
 	url = https://github.com/turboBasic/chezmoi-doc.git
 	branch = main
 	update = merge
+[submodule "docs/zinit"]
+	path = docs/zinit
+	url = https://github.com/turboBasic/zinit-doc.git
+	branch = main
+	update = merge
