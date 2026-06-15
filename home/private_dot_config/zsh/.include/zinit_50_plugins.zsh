@@ -29,7 +29,6 @@ zinit --light-mode --lucid for \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-submods \
     zdharma-continuum/zinit-annex-bin-gem-node \
-    @sharkdp \
     --compile='(pure|async).zsh' pick='async.zsh' src='pure.zsh' \
     sindresorhus/pure \
     --as='null' \
@@ -101,6 +100,7 @@ zinit --lucid --wait for \
 
 ##  Heavy Zinit plugins, loaded asynchronously in Turbo mode
 zinit --lucid --wait for \
+    @sharkdp \
     --from='gh-r' \
     --dl='
         https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh -> _fzf_completion;
@@ -136,7 +136,6 @@ zinit --lucid --wait for \
     jarun/nnn \
     mattmc3/zman \
     --from='gh-r' \
-    --ver='v2026.6.6' `# TODO: remove` \
     --bpick='mise-*-macos-arm64' \
     --extract='!' \
     --mv='mise-v* -> mise' \

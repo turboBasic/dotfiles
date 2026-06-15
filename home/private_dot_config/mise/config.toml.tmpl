@@ -20,6 +20,7 @@ idiomatic_version_file_enable_tools = []
 
 [tasks.claude-default]
 description = "Execute Claude with its default settings"
+dir = "{{"{{"}}cwd{{"}}"}}"
 run = '''
     unset AWS_PROFILE CLAUDE_CODE_USE_BEDROCK ANTHROPIC_DEFAULT_OPUS_MODEL ANTHROPIC_DEFAULT_SONNET_MODEL ANTHROPIC_DEFAULT_HAIKU_MODEL
     claude $@
@@ -28,6 +29,7 @@ run = '''
 {{- $TASK_CLAUDE_COMPANY := (list "mo" "ia" | join "") }}
 [tasks.claude-{{ $TASK_CLAUDE_COMPANY }}]
 description = "Execute Claude Code with the AWS Bedrock backend in {{ $TASK_CLAUDE_COMPANY }} AWS account"
+dir = "{{"{{"}}cwd{{"}}"}}"
 run = '''
   # Execute Claude with {{ $TASK_CLAUDE_COMPANY }} ai AWS profile
   if ! aws sts get-caller-identity --profile ai >/dev/null 2>&1; then
