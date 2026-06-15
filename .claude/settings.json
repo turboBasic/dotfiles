@@ -1,8 +1,14 @@
 {
+  "enabledMcpjsonServers": [
+    "zinit-kb"
+  ],
   "permissions": {
     "allow": [
       "Bash(perl *)",
-      "Bash(shasum *)"
+      "Bash(shasum *)",
+      "mcp__zinit-kb__get_card",
+      "mcp__zinit-kb__list_cards",
+      "mcp__zinit-kb__search_cards"
     ]
   }
 }

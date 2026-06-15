@@ -71,15 +71,32 @@ bw-update-accounts               ← Full pipeline: export → commit → chezmo
 docs/
 ├── ai-instructions.md           ← you are here
 ├── ZINIT.md                     ← Zinit plugin manager conventions and reference
+├── zinit/                       ← Zinit Knowledge Base submodule
+│   ├── cards/                   ← ~500 KB cards (ices, commands, concepts, annexes, packages, recipes, troubleshooting, installation, migration)
+│   └── mcp/                     ← MCP server exposing search_cards / get_card / list_cards tools
 └── chezmoi/                     ← chezmoi reference documentation corpus
 ```
 
 ## Zinit Reference
 
-For any Zinit question (plugin management, ice modifiers, turbo mode, adding plugins),
-read `docs/ZINIT.md` first. It documents this project's conventions, file architecture,
-and common patterns. Before generating Zinit code, also run `zinit help` in a Zsh shell
-to verify available ices and commands — do not rely solely on training knowledge.
+**Use the `zinit-kb` MCP server as the primary source for all Zinit questions.** It is
+registered in `.mcp.json` and available as the `zinit-kb` server. Prefer it over reading
+raw files or relying on training knowledge — Zinit has had forks and breaking changes.
+
+MCP tools available:
+
+- `search_cards` — keyword/tag/concept search across all KB cards; start here
+- `get_card` — fetch a full card by id (e.g. `wait`, `lucid`, `cmd-load`)
+- `list_cards` — list cards in a category or show category counts
+
+Typical lookup flow:
+
+1. Call `search_cards` with relevant terms (e.g. `"wait turbo"`, `"from'gh-r'"`, `"annex rust"`)
+2. Call `get_card` on the most relevant result(s) for full details
+3. For convention and file-architecture questions specific to this repo, also read `docs/ZINIT.md`
+
+Before generating any Zinit config, confirm ices and commands via the MCP server — do not
+rely solely on training knowledge.
 
 ## Chezmoi Reference
 
