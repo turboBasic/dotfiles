@@ -1,0 +1,67 @@
+SSOConfig:
+  moia:
+    SSORegion: eu-central-1
+    StartUrl: https://moia-dev.awsapps.com/start
+    DefaultRegion: eu-central-1
+    Accounts:
+      224874703410:
+        Roles:
+          admt-data-platform-engineer:
+            Profile: sso-ai
+      681892816202:
+        Roles:
+          admt-data-platform-engineer:
+            Profile: sso-data-bridge-backend.dev
+      738838464417:
+        Roles:
+          admt-data-platform-engineer:
+            Profile: sso-data-bridge-backend.int
+      272673290021:
+        Roles:
+          admt-data-platform-engineer:
+            Profile: sso-data-bridge-backend.prd.eu
+      991270168310:
+        Roles:
+          admt-data-platform-engineer:
+            Profile: sso-data-bridge-backend.prd.us
+            DefaultRegion: us-east-1
+DefaultSSO: moia
+DefaultRegion: eu-central-1
+ConsoleDuration: 60
+CacheRefresh: 8
+Threads: 5
+AutoConfigCheck: true
+AutoLogin: true
+UrlAction: open
+ConfigProfilesUrlAction: open
+LogLevel: error
+HistoryLimit: 100
+HistoryMinutes: 1440
+ProfileFormat: '{{ regexReplaceAll "eu-central-1" (regexReplaceAll "us-east-1" (regexReplaceAll "^admt-(\\w+)-(\\w+)-dataplatform-(.+)$" .AccountAlias "data-platform-${3}.${2}.${1}") "us") "eu" }}:{{ trimPrefix "admt-" .RoleName }}'
+AccountPrimaryTag:
+  - AccountName
+  - AccountAlias
+  - Email
+PromptColors:
+  descriptionbgcolor: Turquoise
+  descriptiontextcolor: Black
+  inputbgcolor: DefaultColor
+  inputtextcolor: DefaultColor
+  prefixbackgroundcolor: DefaultColor
+  prefixtextcolor: Blue
+  previewsuggestionbgcolor: DefaultColor
+  previewsuggestiontextcolor: Green
+  scrollbarbbgcolor: Cyan
+  scrollbarthumcbbolor: LightGrey
+  selecteddescriptionbgcolor: DarkGray
+  selecteddescriptiontextcolor: White
+  selectedsuggestionbgcolor: DarkGray
+  selectedsuggestiontextcolor: White
+  suggestionbgcolor: Cyan
+  suggestiontextcolor: White
+ListFields:
+  - AccountId
+  - AccountAlias
+  - RoleName
+  - Profile
+  - ExpiresStr

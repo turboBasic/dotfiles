@@ -156,7 +156,7 @@ Project-level instructions override global ones where they conflict. Per-project
 
 Every project should converge on:
 
-```
+```text
 CLAUDE.md                      ← entry point, references docs/ai-instructions.md
 docs/ai-instructions.md        ← single source of truth for ALL AI tools
 .github/copilot-instructions.md ← thin pointer to docs/ai-instructions.md
@@ -177,6 +177,7 @@ docs/ai-instructions.md        ← single source of truth for ALL AI tools
 
 **When creating a new project, begin by gathering context and writing AI instructions
 before writing code.** Ask about:
+
 - Project purpose, domain, and key constraints
 - Tech stack choices (language, framework, infrastructure)
 - Team context (solo? shared? open-source?)

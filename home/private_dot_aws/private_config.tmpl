@@ -67,3 +67,43 @@ sso_session = {{ $ACCOUNT_NAME }}
 sso_account_id = 991270168310
 sso_role_name = {{ $ACCOUNT_ROLE }}
 region = us-east-1
+
+# BEGIN_AWS_SSO_CLI_moia
+
+[profile data-bridge-backend.dev.eu:data-platform-engineer-ro]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::681892816202:role/admt-data-platform-engineer-ro
+region = eu-central-1
+
+[profile data-bridge-backend.int.eu:data-platform-engineer-ro]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::738838464417:role/admt-data-platform-engineer-ro
+region = eu-central-1
+
+[profile data-bridge-backend.prd.eu:data-platform-engineer-ro]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::272673290021:role/admt-data-platform-engineer-ro
+region = eu-central-1
+
+[profile data-bridge-backend.prd.us:data-platform-engineer-ro]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::991270168310:role/admt-data-platform-engineer-ro
+region = eu-central-1
+
+[profile sso-ai]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::224874703410:role/admt-data-platform-engineer
+region = eu-central-1
+
+[profile sso-data-bridge-backend.dev]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::681892816202:role/admt-data-platform-engineer
+region = eu-central-1
+
+[profile sso-data-bridge-backend.int]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::738838464417:role/admt-data-platform-engineer
+region = eu-central-1
+
+[profile sso-data-bridge-backend.prd.eu]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::272673290021:role/admt-data-platform-engineer
+region = eu-central-1
+
+[profile sso-data-bridge-backend.prd.us]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::991270168310:role/admt-data-platform-engineer
+region = us-east-1
+
+# END_AWS_SSO_CLI_moia
