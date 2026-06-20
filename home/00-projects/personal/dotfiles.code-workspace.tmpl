@@ -1,0 +1,82 @@
+{
+    "folders": [
+        {
+            "name": "dotfiles",
+            "path": "turboBasic/dotfiles"
+        },
+        {
+            "name": "zsh-homebrew",
+            "path": "turboBasic/zsh-homebrew"
+        },
+        {
+            "name": "User",
+            "path": "../../Library/Application Support/Code/User"
+        }
+    ],
+    "settings": {
+        "files.associations": {
+            ".chezmoiignore": "gitignore",
+            "**/.git/config": "gitconfig",
+            "**/git/*ignore*": "gitignore",
+            "**/git/*.tmpl": "gitconfig",
+            "*.gitconfig.tmpl": "gitconfig",
+            "*.md.tmpl": "markdown",
+            "*.sh.tmpl": "shellscript",
+            "*.toml.tmpl": "toml",
+            "*.zsh.tmpl": "shellscript",
+            "*zprofile": "shellscript",
+            "*zshenv": "shellscript",
+            "*zshrc": "shellscript",
+            ".zshrc_*": "shellscript",
+            "*zshrc.tmpl": "shellscript"
+        },
+        "search.exclude": {
+            "**/User": true,
+            "**/User/**": true,
+            "User/**": true
+        },
+        "workbench.colorCustomizations": {
+            "activityBar.background": "#293100",
+            "titleBar.activeBackground": "#394501",
+            "titleBar.activeForeground": "#F6FFC8",
+            "titleBar.inactiveBackground": "#394400",
+            "titleBar.inactiveForeground": "#F6FFC8",
+            "statusBar.background": "#394400",
+            "statusBar.foreground": "#F6FFC8",
+            "statusBar.debuggingBackground": "#394400",
+            "statusBar.debuggingForeground": "#F6FFC8",
+            "statusBar.noFolderBackground": "#394400",
+            "statusBar.noFolderForeground": "#F6FFC8"
+        },
+        "favorites.resources": [
+            {
+                "filePath": "{{ .chezmoi.homeDir }}/Library/Application Support/Code/User/settings.json",
+                "group": "VS Code Global"
+            },
+            {
+                "filePath": "{{ .chezmoi.homeDir }}/Library/Application Support/Code/User/profiles/-48dfce3f/extensions.json",
+                "group": "VS Code Global"
+            },
+            {
+                "filePath": "{{ .chezmoi.homeDir }}/Library/Application Support/Code/User/profiles/-48dfce3f/settings.json",
+                "group": "VS Code Global"
+            },
+            {
+                "filePath": "{{ .projectDir }}/personal/turboBasic/dotfiles/home/.chezmoidata/packages.yaml",
+                "group": "Default"
+            }
+        ],
+        "favorites.groups": [
+            "Default",
+            "VS Code Global"
+        ],
+        "favorites.currentGroup": "Default",
+        "favorites.sortOrder": "MANUAL",
+        "hide-files.files": [
+            "{{ .chezmoi.homeDir }}/Library/Application Support/Code/User/sync"
+        ]
+    },
+    "extensions": {
+        "recommendations": []
+    }
+}

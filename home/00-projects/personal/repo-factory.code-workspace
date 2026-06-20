@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"path": "turboBasic/repo-factory"
+		}
+	],
+	"settings": {
+		"workbench.colorCustomizations": {
+			"activityBar.background": "#1F321F",
+			"titleBar.activeBackground": "#2B472B",
+			"titleBar.activeForeground": "#F9FBF9",
+			"titleBar.inactiveBackground": "#1F321F",
+			"titleBar.inactiveForeground": "#F9FBF9",
+			"statusBar.background": "#1F321F",
+			"statusBar.foreground": "#F9FBF9",
+			"statusBar.debuggingBackground": "#1F321F",
+			"statusBar.debuggingForeground": "#F9FBF9",
+			"statusBar.noFolderBackground": "#1F321F",
+			"statusBar.noFolderForeground": "#F9FBF9"
+		},
+		"files.associations": {
+			"*.tfvars.example": "terraform",
+			"*.pymarkdown": "yaml",
+			"uv.lock": "toml"
+		},
+		"makefile.configureOnOpen": false,
+		"hide-files.files": []
+	}
+}

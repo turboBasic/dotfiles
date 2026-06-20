@@ -52,6 +52,9 @@ home/                            ← chezmoi source dir (declared via .chezmoiro
 │   ├── mise/config.toml.tmpl
 │   ├── atuin/, bat/, cspell/, ripgrep/, tmux/
 │   └── private_Code/            ← VS Code config (Linux path)
+├── 00-projects/personal/        ← VS Code workspace files for ~/00-projects/personal
+│   ├── *.code-workspace         ← plain (relative paths only)
+│   └── *.code-workspace.tmpl   ← templated (contain absolute paths via .chezmoi.homeDir / .projectDir)
 ├── private_Library/             ← macOS ~/Library (ignored on Linux)
 ├── symlink_dot_bashrc
 ├── symlink_dot_zshenv

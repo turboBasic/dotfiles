@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "turboBasic/aws-certification-badges"
+		},
+		{
+			"path": "turboBasic/turboBasic"
+		},
+		{
+			"path": "turboBasic/.github"
+		}
+	],
+	"settings": {
+		"hide-files.files": []
+	}
+}

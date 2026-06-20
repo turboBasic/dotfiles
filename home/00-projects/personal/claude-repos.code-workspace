@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"name": "aws-sso-cli-docs",
+			"path": "turboBasic/aws-sso-cli-docs"
+		},
+		{
+			"name": "chezmoi-doc",
+			"path": "turboBasic/chezmoi-doc"
+		},
+		{
+			"name": "zinit-doc",
+			"path": "turboBasic/zinit-doc"
+		}
+	],
+	"settings": {
+		"hide-files.files": []
+	}
+}
