@@ -27,6 +27,7 @@ encryption = "age"
 
 [data]
     dotfiles_id = "dotfiles-2025"
+    projectDir = {{ joinPath .chezmoi.homeDir "00-projects" | quote }}
     dotfiles_key_name = {{ $dotfiles_key_name | quote }}
     dotfiles_public_key = {{ $dotfiles_public_key | quote }}
 {{- $profile := promptChoiceOnce . "profile" "Please select profile" (list "personal" "work.2025.05") "work.2025.05" }}

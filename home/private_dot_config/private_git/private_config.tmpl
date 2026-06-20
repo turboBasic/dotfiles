@@ -122,7 +122,7 @@
 
 ## Config for {{$accountName}}
 
-[includeIf "gitdir:~/00-projects/{{$accountName}}/"]
+[includeIf "gitdir:{{ $.projectDir }}/{{$accountName}}/"]
     path = {{$accountAlias}}.gitconfig
 {{-   $remote_override := dig "git_remote_override" "value" "{}" $accountData | fromJson }}
 {{    range $url, $git_config_name := $remote_override }}
