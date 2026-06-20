@@ -107,6 +107,7 @@
   "[markdown]": {
     "editor.defaultFormatter": "yzhang.markdown-all-in-one",
   },
+  "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
 }
 /*
 
