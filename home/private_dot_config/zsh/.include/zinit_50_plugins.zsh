@@ -151,7 +151,14 @@ zinit --lucid --wait for \
     --src='mise.zsh' \
     --run-atpull \
     --atpull='%atclone' \
-    --atload='path=( ${path:#$ZINIT[PLUGINS_DIR]/jdx---mise} )' \
+    --atload='
+        path=( ${path:#$ZINIT[PLUGINS_DIR]/jdx---mise} )
+        # TODO: mise activate only emits `unalias` cleanup but never sets [shell_alias] entries;
+        # hook-env also skips them — aliases never land in the session.
+        # Workaround: eval them explicitly on load. Remove once upstream is fixed.
+        # Ref: https://github.com/jdx/mise/discussions/3260
+        eval "$(mise shell-alias ls --no-header | awk '"'"'{n=$1; sub(/^[[:space:]]*[^[:space:]]+[[:space:]]+/,""); print "alias " n "=\47" $0 "\47"}'"'"')"
+    ' \
     jdx/mise \
     --as='null' \
     --from='gh-r' \
