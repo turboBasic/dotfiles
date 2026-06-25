@@ -9,6 +9,14 @@
 			"path": "turboBasic/chezmoi-doc"
 		},
 		{
+			"name": "mise-doc",
+			"path": "turboBasic/mise-doc"
+		},
+		{
+			"name": "uv-doc",
+			"path": "turboBasic/uv-doc"
+		},
+		{
 			"name": "zinit-doc",
 			"path": "turboBasic/zinit-doc"
 		}

@@ -222,3 +222,5 @@ When starting a new project or asked to scaffold one, include by default:
 - **Scope to the request.** Don't refactor adjacent code, add features, or "improve"
   things that weren't asked about.
 - **When ambiguous, ask.** One clarifying question is cheaper than a wrong implementation.
+
+@RTK.md
