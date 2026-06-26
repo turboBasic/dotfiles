@@ -1,5 +1,7 @@
 # AI Instructions
 
+@ARCHITECTURE.md
+
 > **Single source of truth for AI coding instructions.**
 >
 > - **Claude Code** reads this via `CLAUDE.md` (`@docs/ai-instructions.md`).
@@ -103,9 +105,11 @@ rely solely on training knowledge.
 
 ## Chezmoi Reference
 
-For any chezmoi question, read `docs/chezmoi/CLAUDE.md` first to orient, then read specific files as needed. Use that corpus as the primary source of truth — do not rely solely on training knowledge.
+**Use the `chezmoi` skill (Claude Code global skill) as the primary source for all chezmoi questions.** Invoke it with the `/chezmoi` skill or via the `chezmoi` skill tool. Prefer it over reading raw files or relying on training knowledge.
 
-Key lookups:
+The local corpus at `docs/chezmoi/` is available as a fallback for offline or deeper lookups. If you use it directly, read `docs/chezmoi/CLAUDE.md` first to orient, then read specific files as needed.
+
+Key lookups in the local corpus:
 
 - File naming / source attributes: `docs/chezmoi/src/reference/source-state-attributes.md`
 - Template functions: `docs/chezmoi/src/reference/templates/functions/<function>.md`
