@@ -22,7 +22,7 @@
     "gopls-lsp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "skipWorkflowUsageWarning": true,
   "editorMode": "vim"
 }
