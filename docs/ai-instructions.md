@@ -76,6 +76,7 @@ bw-update-accounts               ← Full pipeline: export → commit → chezmo
 docs/
 ├── ai-instructions.md           ← you are here
 ├── ZINIT.md                     ← Zinit plugin manager conventions and reference
+├── adr/                         ← Architecture Decision Records (NNNN-title.md + template.md)
 ├── zinit/                       ← Zinit Knowledge Base submodule
 │   ├── cards/                   ← ~500 KB cards (ices, commands, concepts, annexes, packages, recipes, troubleshooting, installation, migration)
 │   └── mcp/                     ← MCP server exposing search_cards / get_card / list_cards tools
