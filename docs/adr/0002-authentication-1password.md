@@ -141,6 +141,25 @@ Placement notes for implementation: the async/sourcing step must run **after** z
 `set_env_var_async` helper is a fit if an async path is wanted. Do **not** put the export in
 `private_dot_zshenv` (it is sourced for all shells, including chezmoi's own invocations).
 
+### Security ranking of the candidate mechanisms
+
+Before settling on a delivery, the five candidate mechanisms were ranked by
+credential exposure (most → least secure). This is the security lens behind the
+"service account" decision above:
+
+| Rank | Mechanism | Credential at rest | Exposure while active | Exposure ends when |
+| ---- | --------- | ------------------ | --------------------- | ------------------ |
+| 1 | Desktop app-integration tuning | none new | single terminal, single account, 10-min refreshing session | app locks / 12 h hard cap |
+| 2 | Mounted `.env` (1Password Environments, beta) | none (FIFO, never on disk) | every local process can read the file after one authorization | app locks / destination disabled |
+| 3 | Shell-cached env var | none on disk | plaintext in shell env/memory; visible to same-user processes; survives app lock | shell exits |
+| 4 | **Service-account token (chosen)** | long-lived bearer token on machine | any holder reads the vault from anywhere, no device binding | token revoked manually |
+| 5 | Connect server | `1password-credentials.json` + access tokens | vault cache served over local REST to any token holder | server torn down |
+
+Convenience ranks roughly inverse. The service-account token (rank 4) is the
+only mechanism that removes per-tool-call prompts entirely *and* works headless;
+the rank-4 theft risk is accepted and mitigated by read-only single-vault scope,
+Keychain/1Password storage, and never exporting the token globally.
+
 ## Considered Options
 
 - **A — Desktop auto-lock tuning only.** Rejected — does not stop per-tool-call prompts.
@@ -171,3 +190,10 @@ Placement notes for implementation: the async/sourcing step must run **after** z
 - **−** SA vault scope is fixed at creation — adding vaults later means a new SA and token rotation.
 - **−** A globally activated SA token would shadow `Personal` reads (landmine #1); scoped
   activation or an `op-personal` passthrough helper is required to avoid surprise failures.
+
+## Implementation
+
+The operational runbook for the chosen approach — creating the scoped
+`shell-work-vw` service account, the authenticate-once-per-shell flow for
+Claude Code, the ad-hoc `opw` Keychain wrapper, and the verification probes —
+lives in [../guide-work-vw-service-account.md](../guide-work-vw-service-account.md).
