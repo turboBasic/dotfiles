@@ -1,6 +1,10 @@
 {
 	"folders": [
 		{
+			"name": "1password-doc",
+			"path": "turboBasic/1password-doc"
+		},
+		{
 			"name": "aws-sso-cli-docs",
 			"path": "turboBasic/aws-sso-cli-docs"
 		},
@@ -19,6 +23,9 @@
 		{
 			"name": "zinit-doc",
 			"path": "turboBasic/zinit-doc"
+		},
+		{
+			"path": "../../.claude"
 		}
 	],
 	"settings": {
