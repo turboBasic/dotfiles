@@ -1,5 +1,5 @@
-{{ if and (empty (env "AGE_PASSPHRASE")) (empty (dig "profile" "" .)) -}}
-  {{ fail "Please set AGE_PASSPHRASE env var before the first run of chezmoi init" }}
+{{ if empty (env "AGE_PASSPHRASE") -}}
+  {{ fail "Please set AGE_PASSPHRASE env var before running chezmoi init" }}
 {{ end -}}
 
 {{ $dotfiles_key_name := promptStringOnce . "dotfiles_key_name" "Enter main key name" "age-00-chezmoi.key" -}}
