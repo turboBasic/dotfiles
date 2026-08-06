@@ -108,6 +108,20 @@
     "editor.defaultFormatter": "yzhang.markdown-all-in-one",
   },
   "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
+  "explorer.confirmDragAndDrop": false,
+  "security.promptForLocalFileProtocolHandling": false,
+  "yaml.disableSchemaDetection": [
+    "**/.github/workflows/*.yml",
+    "**/.github/workflows/*.yaml",
+    "**/.gitea/workflows/*.yml",
+    "**/.gitea/workflows/*.yaml",
+    "**/.forgejo/workflows/*.yml",
+    "**/.forgejo/workflows/*.yaml"
+  ],
+  "chat.viewSessions.orientation": "stacked",
+  "cSpell.userWords": [
+    "aamelnyk"
+  ],
 }
 /*
 
