@@ -1,0 +1,86 @@
+#!/usr/bin/env zsh
+
+# Update Homebrew and upgrade everything except the packages listed below.
+# Run daily by ~/Library/LaunchAgents/local.brew-upgrade.plist.
+
+set -euo pipefail
+
+# docker-desktop bundles its own CLI and manages its own updates; the docker
+# formula is version-coupled to it. docker-buildx is deliberately not excluded.
+# sbx (docker/tap) is excluded by its bare name because that is what
+# `brew outdated --cask --quiet` prints; its upgrade kills the running daemon
+# and then fails.
+typeset -a excluded
+excluded=(docker-desktop docker sbx)
+
+log() {
+    print -r -- "$(date '+%Y-%m-%dT%H:%M:%S%z') $*"
+}
+
+for candidate in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+    [[ -x "$candidate" ]] && { brew_bin="$candidate"; break }
+done
+if [[ -z "${brew_bin:-}" ]]; then
+    log "error: brew not found"
+    exit 1
+fi
+eval "$("$brew_bin" shellenv)"
+
+# Pinning survives this script: brew upgrade skips pinned formulae, so an
+# interrupted run cannot leave an excluded package upgradeable. Only pins this
+# script added are removed again, so a manual pin outlives the run.
+typeset -a already_pinned
+already_pinned=("${(@f)$(brew list --pinned 2>/dev/null)}")
+typeset -a to_pin
+to_pin=()
+for package in "${excluded[@]}"; do
+    (( ${already_pinned[(Ie)$package]} )) && continue
+    if brew list --formula --versions -- "$package" >/dev/null 2>&1; then
+        to_pin+=("$package")
+    fi
+done
+
+restore_pins() {
+    (( ${#to_pin} )) && brew unpin -- "${to_pin[@]}" >/dev/null 2>&1 || true
+}
+trap restore_pins EXIT INT TERM
+
+if (( ${#to_pin} )); then
+    log "pinning: ${to_pin[*]}"
+    brew pin -- "${to_pin[@]}"
+fi
+
+log "brew update"
+brew update
+
+# Casks ignore pinning, so they are filtered by name instead.
+typeset -a outdated_casks
+outdated_casks=("${(@f)$(brew outdated --cask --quiet 2>/dev/null)}")
+typeset -a casks
+casks=()
+for cask in "${outdated_casks[@]}"; do
+    [[ -z "$cask" ]] && continue
+    if (( ${excluded[(Ie)$cask]} )); then
+        log "skipping cask: $cask"
+        continue
+    fi
+    casks+=("$cask")
+done
+
+log "brew upgrade --formula"
+brew upgrade --formula --yes
+
+if (( ${#casks} )); then
+    log "brew upgrade --cask: ${casks[*]}"
+    brew upgrade --cask --yes -- "${casks[@]}"
+else
+    log "no casks to upgrade"
+fi
+
+log "brew autoremove"
+brew autoremove
+
+log "brew cleanup"
+brew cleanup --prune=30
+
+log "done"
