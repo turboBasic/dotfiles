@@ -1,10 +1,12 @@
 [tools]
+actionlint = "latest"
 chezmoi = "latest"
 claude = "latest"
 go = "latest"
 java = "temurin-21"
 just = "latest"
 node = "latest"
+"npm:wrangler" = "latest"
 pipx = "latest"
 python = "latest"
 terraform = "latest"
@@ -22,7 +24,7 @@ idiomatic_version_file_enable_tools = []
 description = "Execute Claude with its default settings"
 dir = "{{"{{"}}cwd{{"}}"}}"
 run = '''
-    unset AWS_PROFILE CLAUDE_CODE_USE_BEDROCK ANTHROPIC_DEFAULT_OPUS_MODEL ANTHROPIC_DEFAULT_SONNET_MODEL ANTHROPIC_DEFAULT_HAIKU_MODEL
+    unset AWS_PROFILE CLAUDE_CODE_USE_BEDROCK ANTHROPIC_DEFAULT_FABLE_MODEL ANTHROPIC_DEFAULT_OPUS_MODEL ANTHROPIC_DEFAULT_SONNET_MODEL ANTHROPIC_DEFAULT_HAIKU_MODEL
     claude $@
 '''
 
@@ -39,9 +41,9 @@ run = '''
 AWS_PROFILE = "sso-ai"
 # AWS_REGION = "eu-central-1"
 CLAUDE_CODE_USE_BEDROCK = 1
-# ANTHROPIC_DEFAULT_OPUS_MODEL = "eu.anthropic.claude-opus-4-6-v1"
-ANTHROPIC_DEFAULT_OPUS_MODEL = "eu.anthropic.claude-opus-4-8"
-ANTHROPIC_DEFAULT_SONNET_MODEL = "eu.anthropic.claude-sonnet-4-6"
+ANTHROPIC_DEFAULT_FABLE_MODEL = "global.anthropic.claude-fable-5"
+ANTHROPIC_DEFAULT_OPUS_MODEL = "eu.anthropic.claude-opus-5[1m]"
+ANTHROPIC_DEFAULT_SONNET_MODEL = "eu.anthropic.claude-sonnet-5"
 ANTHROPIC_DEFAULT_HAIKU_MODEL = "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
 
 # aliases for Claude Code tasks
