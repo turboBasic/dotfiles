@@ -17,7 +17,7 @@ sso_account_id = {{ $CARGONAUTICA_ACCOUNT_ID }}
 sso_role_name = AdministratorAccess
 region = eu-central-1
 
-# User for accessing S3 folder for file share
+## User for accessing S3 folder for file share
 [profile cargonautica.s3-user-mfa]
 mfa_serial = arn:aws:iam::{{ $CARGONAUTICA_ACCOUNT_ID }}:mfa/s3-user-mfa
 role_arn = arn:aws:iam::{{ $CARGONAUTICA_ACCOUNT_ID }}:role/S3AccessRole-generic-storage-s3-user
@@ -38,53 +38,7 @@ sso_start_url = https://{{ $ACCOUNT_NAME }}-dev.awsapps.com/start
 sso_region = eu-central-1
 sso_registration_scopes = sso:account:access
 
-[profile ai] # ai-coding.tools
-sso_session = {{ $ACCOUNT_NAME }}
-sso_account_id = 224874703410
-sso_role_name = {{ $ACCOUNT_ROLE }}
-region = eu-central-1
-
-[profile data-bridge-backend.dev] # data-bridge-backend.dev.eu-central-1
-sso_session = {{ $ACCOUNT_NAME }}
-sso_account_id = 681892816202
-sso_role_name = {{ $ACCOUNT_ROLE }}
-region = eu-central-1
-
-[profile data-bridge-backend.int] # data-bridge-backend.int.eu-central-1
-sso_session = {{ $ACCOUNT_NAME }}
-sso_account_id = 738838464417
-sso_role_name = {{ $ACCOUNT_ROLE }}
-region = eu-central-1
-
-[profile data-bridge-backend.prd.eu] # data-bridge-backend.prd.eu-central-1
-sso_session = {{ $ACCOUNT_NAME }}
-sso_account_id = 272673290021
-sso_role_name = {{ $ACCOUNT_ROLE }}
-region = eu-central-1
-
-[profile data-bridge-backend.prd.us] # data-bridge-backend.prd.us-east-1
-sso_session = {{ $ACCOUNT_NAME }}
-sso_account_id = 991270168310
-sso_role_name = {{ $ACCOUNT_ROLE }}
-region = us-east-1
-
 # BEGIN_AWS_SSO_CLI_moia
-
-[profile data-bridge-backend.dev.eu:data-platform-engineer-ro]
-credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::681892816202:role/admt-data-platform-engineer-ro
-region = eu-central-1
-
-[profile data-bridge-backend.int.eu:data-platform-engineer-ro]
-credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::738838464417:role/admt-data-platform-engineer-ro
-region = eu-central-1
-
-[profile data-bridge-backend.prd.eu:data-platform-engineer-ro]
-credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::272673290021:role/admt-data-platform-engineer-ro
-region = eu-central-1
-
-[profile data-bridge-backend.prd.us:data-platform-engineer-ro]
-credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::991270168310:role/admt-data-platform-engineer-ro
-region = eu-central-1
 
 [profile sso-ai]
 credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::224874703410:role/admt-data-platform-engineer
@@ -104,6 +58,22 @@ region = eu-central-1
 
 [profile sso-data-bridge-backend.prd.us]
 credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::991270168310:role/admt-data-platform-engineer
+region = us-east-1
+
+[profile sso-data-bridge-backend.dev.eu:read-only]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::681892816202:role/admt-data-platform-engineer-ro
+region = eu-central-1
+
+[profile sso-data-bridge-backend.int.eu:read-only]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::738838464417:role/admt-data-platform-engineer-ro
+region = eu-central-1
+
+[profile sso-data-bridge-backend.prd.eu:read-only]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::272673290021:role/admt-data-platform-engineer-ro
+region = eu-central-1
+
+[profile sso-data-bridge-backend.prd.us:read-only]
+credential_process = /opt/homebrew/bin/aws-sso process --sso {{ $ACCOUNT_NAME }} --arn arn:aws:iam::991270168310:role/admt-data-platform-engineer-ro
 region = us-east-1
 
 # END_AWS_SSO_CLI_moia

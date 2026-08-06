@@ -12,18 +12,27 @@ SSOConfig:
         Roles:
           admt-data-platform-engineer:
             Profile: sso-data-bridge-backend.dev
+          admt-data-platform-engineer-ro:
+            Profile: 'sso-data-bridge-backend.dev.eu:read-only'
       738838464417:
         Roles:
           admt-data-platform-engineer:
             Profile: sso-data-bridge-backend.int
+          admt-data-platform-engineer-ro:
+            Profile: 'sso-data-bridge-backend.int.eu:read-only'
       272673290021:
         Roles:
           admt-data-platform-engineer:
             Profile: sso-data-bridge-backend.prd.eu
+          admt-data-platform-engineer-ro:
+            Profile: 'sso-data-bridge-backend.prd.eu:read-only'
       991270168310:
         Roles:
           admt-data-platform-engineer:
             Profile: sso-data-bridge-backend.prd.us
+            DefaultRegion: us-east-1
+          admt-data-platform-engineer-ro:
+            Profile: 'sso-data-bridge-backend.prd.us:read-only'
             DefaultRegion: us-east-1
 DefaultSSO: moia
 DefaultRegion: eu-central-1
