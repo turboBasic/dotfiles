@@ -10,7 +10,7 @@ web:*.{htm,html,css,js}*
 --hidden
 
 # Using glob patterns to include/exclude files or folders
---glob=!.git/*
+--glob=!**/.git/**
 
 # Set the colors.
 --colors=line:none
