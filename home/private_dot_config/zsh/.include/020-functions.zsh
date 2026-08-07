@@ -21,6 +21,12 @@ function cz-cd() {
     cd "$(command chezmoi source-path)"
 }
 
+# chezmoi's default onepassword.mode ("account") errors if OP_SERVICE_ACCOUNT_TOKEN
+# is set; strip it so a session-scoped export for other op calls doesn't break chezmoi.
+function chezmoi() {
+    env -u OP_SERVICE_ACCOUNT_TOKEN command chezmoi "$@"
+}
+
 function dotfiles-debug() {
     local timeOfDay=$(strftime -r %Y-%m-%d $(strftime %Y-%m-%d $EPOCHSECONDS))
     if [[ -n "$DOTFILES_DEBUG" ]]; then
