@@ -71,8 +71,8 @@ tests/                           ← integration test suite
 ├── bin/<arch>/                  ← pre-built rbw binaries per platform
 ├── Dockerfile.ubuntu            ← test container image
 └── Dockerfile.rbw-ubuntu        ← builds rbw binaries for linux/<arch>
-bw-export-accounts               ← Bitwarden account export helper
-bw-update-accounts               ← Full pipeline: export → commit → chezmoi init --apply
+op-export-accounts               ← 1Password account export helper
+op-update-accounts               ← Full pipeline: export → commit → chezmoi init --apply
 docs/
 ├── ai-instructions.md           ← you are here
 ├── ZINIT.md                     ← Zinit plugin manager conventions and reference

@@ -1,11 +1,15 @@
 #!/usr/bin/env zsh
 # shellcheck disable=SC1071
 
-# Update accounts data from Bitwarden and apply to chezmoi.
+# Update accounts data from 1Password and apply to chezmoi.
 # Runs the full pipeline: export → encrypt → commit → init --apply.
 #
 # Usage:
-#   ./bw-update-accounts
+#   ./op-update-accounts
+#
+# Auth: OP_SERVICE_ACCOUNT_TOKEN (recommended for agent-driven shells) or an
+# authorized 1Password desktop-app session. chezmoi runs with the token
+# stripped: it errors in its default `account` mode when the token is set.
 
 set -euo pipefail
 
@@ -20,9 +24,10 @@ function main() {
 }
 
 function check_prerequisites() {
-    if ! rbw unlocked 2>/dev/null; then
-        echo "rbw is locked. Unlocking..."
-        rbw unlock
+    if ! op whoami &>/dev/null; then
+        echo "1Password CLI is not authenticated." >&2
+        echo "Export OP_SERVICE_ACCOUNT_TOKEN or sign in to the 1Password app." >&2
+        return 1
     fi
 
     if [[ -z "${AGE_PASSPHRASE:-}" ]]; then
@@ -33,8 +38,8 @@ function check_prerequisites() {
 }
 
 function export_accounts() {
-    echo "Exporting accounts from Bitwarden..."
-    ./bw-export-accounts
+    echo "Exporting accounts from 1Password..."
+    ./op-export-accounts
     echo "Done. Encrypted file updated: home/.secrets/accounts.json.age"
 }
 
@@ -51,7 +56,7 @@ function commit_if_changed() {
 
 function apply_chezmoi() {
     echo "Running chezmoi init --apply..."
-    chezmoi init --apply
+    env -u OP_SERVICE_ACCOUNT_TOKEN chezmoi init --apply
     echo "Done. Accounts data applied."
 }
 

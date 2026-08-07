@@ -1,0 +1,60 @@
+#!/usr/bin/env zsh
+# shellcheck disable=SC1071
+
+# Convert accounts from 1Password to a data format used by Chezmoi
+# Usage:
+#   execute from the root of Chezmoi directory:
+#   $ op-export-accounts [accounts.json]
+#
+# Auth: OP_SERVICE_ACCOUNT_TOKEN (the `chezmoi` vault is service-account-readable)
+# or an authorized 1Password desktop-app session. `chezmoi encrypt` runs with the
+# token stripped: chezmoi errors in its default `account` mode when
+# OP_SERVICE_ACCOUNT_TOKEN is set.
+
+set -euo pipefail
+
+RESULT_FILE=${1:-accounts.json}
+RESULT_DIR_IN_VCS="home/.secrets"
+VAULT="chezmoi"
+
+accounts=( $(
+    op item get accounts --vault "$VAULT" --format json \
+    | jq --raw-output '.fields[] | select(.section.label == "profiles") | .value' \
+    | sort --unique
+) )
+for account in ${accounts}; do
+    op item get "$account" --vault "$VAULT" --format json | jq --compact-output
+done \
+|   jq --slurp '[
+            .[]
+            | . as $item
+            | ($item.fields | map(select(.section.label == "Identification" or .section.label == "Internet Details"))
+                | map({key: .id, value: .value}) | from_entries) as $identity
+            | {
+                id,
+                name: .title,
+                firstName: $identity.firstname,
+                lastName: $identity.lastname,
+                email: $identity.email,
+                username: $identity.username,
+            }
+            + ( $item.fields
+                | map(select(.purpose != "NOTES"
+                        and ((.section.label // "") | IN("Identification", "Address", "Internet Details") | not)))
+                | map(
+                    if .label == "data"
+                    then {key: .label, value: (.value | fromjson)}
+                    else {key: .label, value: {
+                            name: .label,
+                            value: .value,
+                            type: (if .type == "CONCEALED" then "hidden" else "text" end)
+                        }}
+                    end
+                  )
+                | from_entries )
+        ]
+        | map({key: .name, value: .})
+        | from_entries
+    ' \
+|   tee "tmp/$RESULT_FILE" \
+|   env -u OP_SERVICE_ACCOUNT_TOKEN chezmoi encrypt > "$RESULT_DIR_IN_VCS/${RESULT_FILE}.age"
