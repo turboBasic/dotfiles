@@ -4,7 +4,7 @@
 region = eu-central-1
 
 # Cargonautica
-{{- $CARGONAUTICA_ACCOUNT_ID := onepasswordRead "op://Personal/aws__cargonautica__s3-user/account-id" }}
+{{- $CARGONAUTICA_ACCOUNT_ID := onepasswordRead "op://chezmoi/aws__cargonautica__s3-user/account-id" }}
 
 [sso-session cargonautica]
 sso_start_url = https://cargonautica.awsapps.com/start
@@ -25,8 +25,8 @@ source_profile = cargonautica.s3-user
 
 [profile cargonautica.s3-user]
 region = eu-central-1
-aws_access_key_id = {{ onepasswordRead "op://Personal/aws__cargonautica__s3-user/Security/access-key-id" }}
-aws_secret_access_key = {{ onepasswordRead "op://Personal/aws__cargonautica__s3-user/Security/secret-access-key"}}
+aws_access_key_id = {{ onepasswordRead "op://chezmoi/aws__cargonautica__s3-user/Security/access-key-id" }}
+aws_secret_access_key = {{ onepasswordRead "op://chezmoi/aws__cargonautica__s3-user/Security/secret-access-key"}}
 
 
 {{ $ACCOUNT_NAME := (list "mo" "ia" | join "") -}}
