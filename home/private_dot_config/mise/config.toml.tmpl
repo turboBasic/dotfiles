@@ -7,6 +7,7 @@ java = "temurin-21"
 just = "latest"
 node = "latest"
 "npm:wrangler" = "latest"
+opencode = "latest"
 pipx = "latest"
 python = "latest"
 terraform = "latest"
@@ -34,7 +35,7 @@ description = "Execute Claude Code with the AWS Bedrock backend in {{ $TASK_CLAU
 dir = "{{"{{"}}cwd{{"}}"}}"
 run = '''
   # Execute Claude with {{ $TASK_CLAUDE_COMPANY }} ai AWS profile
-  claude $@
+  OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/shell-work-vw") claude $@
 '''
 
 [tasks.claude-{{ $TASK_CLAUDE_COMPANY }}.env]
