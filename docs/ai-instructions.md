@@ -118,6 +118,34 @@ Key lookups in the local corpus:
 - CLI commands: `docs/chezmoi/src/reference/commands/<command>.md`
 - Special dirs/files: `docs/chezmoi/src/reference/special-directories/`, `docs/chezmoi/src/reference/special-files/`
 
+### Applying chezmoi while skipping conflicted files
+
+`chezmoi apply` is non-interactive in this environment (no `/dev/tty`), so any target
+with local drift (e.g. `~/.claude/settings.json` edited outside chezmoi) aborts the
+whole run with `could not open a new TTY` instead of prompting.
+
+To apply everything except known-conflicting targets:
+
+1. List every managed target, NUL-delimited (handles paths with spaces, e.g. under
+   `~/Library/Application Support/`):
+   `chezmoi managed -0 --path-style=absolute`
+2. Filter out the conflicting file **and its parent directory**. The parent directory
+   is itself a managed target, and applying it recurses into all children — so
+   excluding only the file is not enough; the directory entry re-triggers the same
+   conflict.
+3. Pipe the filtered list into `xargs -0 chezmoi apply -v`.
+
+```sh
+chezmoi managed -0 --path-style=absolute \
+  | tr '\0' '\n' \
+  | grep -vE '^/Users/aamelnyk/\.claude$|^/Users/aamelnyk/\.claude/settings\.json$' \
+  | tr '\n' '\0' \
+  | xargs -0 chezmoi apply -v
+```
+
+Skipped files stay diverged from the repo until the user resolves them explicitly —
+do not use `--force` to silently overwrite local changes.
+
 ## Source Directory Conventions
 
 Files under `home/` follow standard chezmoi naming:
