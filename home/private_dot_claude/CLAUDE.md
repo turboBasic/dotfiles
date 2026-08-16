@@ -46,6 +46,21 @@ Never assume mise is present in foreign or unfamiliar projects — look first.
 
 ---
 
+## Subagents and Background Tasks
+
+- **Never `sleep` to wait for a background agent or task.** Completion is push-notified,
+  and a notification cannot interrupt a running Bash call — so every second of sleep past
+  the task's actual duration is guaranteed idle time, and the guess is usually wrong by
+  minutes. Launch, then do unrelated work or end the turn.
+- Where a result is genuinely blocking, `TaskOutput` with `block: true` returns the instant
+  the task completes. Prefer just letting the notification arrive.
+- **Launch independent agents in one message** so they run concurrently, and launch each one
+  as soon as its input is known rather than at the step that consumes its output.
+- Never predict a pending agent's result. If asked before its notification arrives, say it
+  is still running.
+
+---
+
 ## Editor and Formatting
 
 - Vim mode is active (`editorMode: vim` in settings).
