@@ -24,6 +24,12 @@ ignoreRegExpList:
   - "/age1[0-9a-z]{55,}/g"
   # 1Password account, vault and integration IDs are always 26-char base32.
   - "/\\b[A-Za-z0-9]{26}\\b/g"
+  # Two client/internal identifiers that appear in docs and work shell functions. A couple
+  # of letters are wrapped in character classes so a plain `grep -ri <word>` does not
+  # surface them from here — still readable, but not a literal match. Obfuscation only:
+  # these are not secrets, and this stops nothing past a literal search.
+  - "/\\blu[x]o[f]t\\b/gi"
+  - "/\\bde[v]st[a]ck\\b/gi"
 
 dictionaryDefinitions:
   - name: project-words

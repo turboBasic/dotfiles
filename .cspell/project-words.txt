@@ -189,7 +189,5 @@ SETDESC
 TOTP
 
 # Work-specific identifiers
-devstack
 idpcli
-luxoft
 uici
