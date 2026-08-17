@@ -19,7 +19,7 @@
   "editor.detectIndentation": true,
   "editor.fontFamily": "FiraCode Nerd Font, Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": false,
-  "editor.fontSize": 13,
+  "editor.fontSize": 15,
   "editor.formatOnSave": true,
   "editor.minimap.enabled": false,
   "editor.renderWhitespace": "all",
@@ -118,10 +118,15 @@
     "**/.forgejo/workflows/*.yml",
     "**/.forgejo/workflows/*.yaml"
   ],
-  "chat.viewSessions.orientation": "stacked",
   "cSpell.userWords": [
     "aamelnyk"
   ],
+  "extensions.supportAgentsWindow": {
+    "monokai.theme-monokai-pro-vscode": true
+  },
+  "chat.mcp.gallery.enabled": true,
+  "chat.viewSessions.orientation": "stacked",
+  "rust-analyzer.cargo.buildScripts.overrideCommand": null,
 }
 /*
 
