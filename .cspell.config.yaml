@@ -12,6 +12,18 @@ ignorePaths:
   - "**/*.crt"
   - "**/*.key"
   - "**/encrypted_*"
+  # VS Code user config: generated settings across profiles (~150 marketplace publisher
+  # IDs), snippets, keybindings. Config and identifiers, no prose.
+  - "**/Code/User/**"
+  - ".vscode/extensions.json"
+  # Upstream aws-sso theme key names (one is misspelled upstream and cannot be fixed here).
+  - "**/private_aws-sso/private_config.yaml"
+
+ignoreRegExpList:
+  # age recipient keys are public but not words.
+  - "/age1[0-9a-z]{55,}/g"
+  # 1Password account, vault and integration IDs are always 26-char base32.
+  - "/\\b[A-Za-z0-9]{26}\\b/g"
 
 dictionaryDefinitions:
   - name: project-words

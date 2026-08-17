@@ -121,6 +121,7 @@ echo "OK Pleased to meet you"
 while IFS= read -r cmd; do
     echo "\$cmd" >> "\$debug_log"
     case "\$cmd" in
+        # cspell:ignore oken uthenticator -- case-glob brackets split these words
         SETDESC*[Cc]ode*|SETDESC*[Tt]oken*|SETDESC*[Tt]wo*|SETDESC*TOTP*|SETDESC*2FA*|SETDESC*[Aa]uthenticator*)
             is_totp=1
             echo "OK"

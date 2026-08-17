@@ -19,16 +19,16 @@ For typical user workflows (installation, account updates), see `README.md`.
 
 ## Tech Stack
 
-| Tool                  | Notes                            |
-| --------------------- | -------------------------------- |
-| Configuration manager | chezmoi                          |
-| Shell                 | Zsh                              |
-| Templating            | Go templates (chezmoi)           |
-| Encryption            | age (symmetric + asymmetric)     |
-| Package management    | Homebrew, apt-get                |
-| Secret management     | rbw (Bitwarden CLI)              |
-| Task runner           | just (Makefile for rbw only)     |
-| Linting               | prek (markdownlint, shellcheck)  |
+| Tool                  | Notes                                   |
+| --------------------- | --------------------------------------- |
+| Configuration manager | chezmoi                                 |
+| Shell                 | Zsh                                     |
+| Templating            | Go templates (chezmoi)                  |
+| Encryption            | age (symmetric + asymmetric)            |
+| Package management    | Homebrew, apt-get                       |
+| Secret management     | rbw (Bitwarden CLI)                     |
+| Task runner           | just (Makefile for rbw only)            |
+| Linting               | prek (markdownlint, shellcheck, cspell) |
 
 ## Project Structure
 

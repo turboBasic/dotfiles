@@ -1,11 +1,6 @@
-# Chezmoi templates are Go-template source, not valid shell/markdown/JSON, so no
-# linter may see them. Every template in this repo carries a .tmpl final extension
-# (`.chezmoitemplates/` is the only other template location and holds no code), so
-# excluding .tmpl globally is sufficient — do not lint a template by any hook.
 # docs/chezmoi and docs/zinit are vendored submodules.
 exclude: |
   (?x)(
-    \.tmpl$|
     ^docs/chezmoi/|
     ^docs/zinit/
   )
@@ -15,13 +10,23 @@ repos:
     rev: v0.45.0
     hooks:
       - id: markdownlint
+        # Chezmoi templates are Go-template source, not markdown.
+        exclude: \.tmpl$
 
-  # shellcheck has no zsh dialect, and chezmoi templates are not valid shell, so
-  # this covers only real sh/bash scripts. tests/test-macos.sh is zsh despite the
-  # extension.
+  # shellcheck has no zsh dialect, so this covers only real sh/bash scripts:
+  # tests/test-macos.sh is zsh despite the extension, and `files` already excludes
+  # both *.zsh and the *.sh.tmpl chezmoi scripts.
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:
       - id: shellcheck
         files: \.sh$
         exclude: ^tests/test-macos\.sh$
+
+  # Unlike the linters above, cspell DOES check templates: .cspell.config.yaml maps
+  # *.toml.tmpl, *zsh*.tmpl and friends to their real syntax via `overrides`, and
+  # ignores binary and encrypted files via `ignorePaths`.
+  - repo: https://github.com/streetsidesoftware/cspell-cli
+    rev: v10.0.1
+    hooks:
+      - id: cspell

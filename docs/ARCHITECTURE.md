@@ -265,20 +265,31 @@ just lint markdownlint # a single hook
 just lint-install      # install prek as the git pre-commit hook
 ```
 
-| Hook         | Scope                                              |
-| ------------ | -------------------------------------------------- |
-| markdownlint | tracked `*.md`, rule set in `.markdownlint.yaml`   |
-| shellcheck   | `*.sh` with an `sh`/`bash` shebang                 |
+| Hook         | Scope                                                          |
+| ------------ | -------------------------------------------------------------- |
+| markdownlint | tracked `*.md`, rule set in `.markdownlint.yaml`               |
+| shellcheck   | `*.sh` with an `sh`/`bash` shebang                             |
+| cspell       | all tracked text, config in `.cspell.config.yaml`              |
 
-Two exclusions are deliberate and must be preserved:
+Exclusions that are deliberate and must be preserved:
 
-- **`*.tmpl` is excluded globally.** Chezmoi templates are Go-template source, not valid
-  shell, markdown, or JSON, and every template in this repo carries a `.tmpl` final
-  extension. No linter may be pointed at a template.
+- **`*.tmpl` is hidden from markdownlint and shellcheck, but not from cspell.** Templates
+  are Go-template source, so they are neither valid markdown nor valid shell — but
+  `.cspell.config.yaml` has `overrides` mapping `*.toml.tmpl`, `*zsh*.tmpl` and friends to
+  their real syntax, so cspell reads them correctly and should keep seeing them.
 - **Zsh is out of shellcheck's reach.** shellcheck has no zsh dialect, so `*.zsh` and
   `tests/test-macos.sh` (zsh despite the extension) are not checked.
+- **VS Code user config is excluded from cspell** (`**/Code/User/**`,
+  `.vscode/extensions.json`) — generated settings across profiles contribute roughly 150
+  marketplace publisher IDs and no prose.
+- **age recipient keys and 1Password 26-char IDs** are dropped by `ignoreRegExpList`
+  rather than being listed word by word.
 
-`docs/chezmoi/` and `docs/zinit/` are vendored submodules and are excluded as well.
+`docs/chezmoi/` and `docs/zinit/` are vendored submodules and are excluded from every hook.
+
+Project vocabulary lives in `.cspell/project-words.txt`, grouped by origin. A term that
+recurs across every repo belongs in the user dictionary
+(`~/.config/cspell/user-words-dictionary.txt`) instead.
 
 ## Test suite
 

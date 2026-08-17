@@ -2,43 +2,73 @@
 admt
 awsapps
 basenames
+batchpass
 cargonautica
 cputime
+docstrings
+firstname
+frontmatter
+fulltext
+heredocs
 HILITE
+lastname
 linuxbrew
 manpath
 MANPREFIX
 MANROFFOPT
 mbadolato
 mbegin
+Mcpjson
 moia
+NOPASSWD
+passwordless
 shellenv
 showformat
 temurin
 tmpl
+toolname
 
 # Utilities
 atuin
 awscli
 bitwarden
+buildx
 cookiecutter
 coreutils
+direnv
+dlink
 findutils
 fira
 gmkdir
 gnubin
 inkscape
 iterm
+lefthook
+libdbus
 libexec
 libreadline
+nmcli
+oathtool
+opencode
+pecl
+peco
 pinentry
+prek
+pymarkdown
 quitcd
 raindropio
+reachingforthejack
 ripgreprc
 rozetta
+rxvt
+setremotelogin
+setsid
 softwareupdate
 stty
+systemsetup
 tzdata
+utmctl
+vdir
 xnviewmp
 zbar
 zman
@@ -47,7 +77,10 @@ zstd
 # Chezmoi words
 apts
 chezmoidata
+chezmoiexternals
+chezmoiroot
 chezmoiscripts
+chezmoitemplates
 onchange
 onepassword
 
@@ -83,13 +116,80 @@ ZPFX
 ZSHZ_DATA
 
 # Zsh words
+BINDIR
+brightyellow
 cdpath
+compinit
+dircolors
+dirsfirst
 dups
 EPOCHSECONDS
+fgrep
 fpath
+ignoreboth
+lesspipe
+MANPAGER
+nomatch
 SAVEHIST
+setaf
+setf
+shortdate
 unfunction
+USERPROFILE
 zcompile
+ZDOTDIR
 zfunc
 zmodload
 ZSH_ARGZERO
+
+# Names
+Andrii
+Melnyk
+
+# Account aliases (German)
+chamäleon
+gerade
+leuchtender
+noch
+pekingente
+vergnügte
+wanze
+xenoceratops
+xerxischer
+
+# Git config keys and terms
+autostash
+cookiefile
+gitconfigs
+gitdir
+hasconfig
+untrackedcache
+worktree
+
+# Go, Rust, Terraform
+clippy
+Errorf
+gofmt
+goimports
+golangci
+gopls
+goroot
+tfstate
+tfvars
+
+# awk and jq builtins
+asorti
+gsub
+ltrimstr
+rtrimstr
+
+# pinentry and 2FA protocol
+GETPIN
+SETDESC
+TOTP
+
+# Work-specific identifiers
+devstack
+idpcli
+luxoft
+uici
