@@ -12,7 +12,7 @@ trim_trailing_whitespace = true
 [*.{bash,sh,profile,zsh,zshenv,zshrc,zprofile}]
 indent_size = 4
 
-[*.json]
+[*.{json,jsonc}]
 indent_size = 2
 
 [Makefile]

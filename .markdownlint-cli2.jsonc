@@ -1,0 +1,29 @@
+{
+  // Chezmoi templates are Go-template source, not markdown.
+  "ignores": ["**/*.tmpl"],
+
+  "config": {
+    "default": true,
+
+    // Line length is declared once, in .editorconfig (max_line_length = 120). Several docs
+    // here deliberately keep prose unwrapped, so enforcing it as a lint gate would mean
+    // rewrapping ~30 pre-existing lines across unrelated files.
+    "MD013": false
+  },
+
+  // Claude Code skill files open with YAML frontmatter and a prose summary rather than an H1
+  // (MD041), and one interleaves fenced code blocks between numbered items, which restarts
+  // markdownlint's numbering while the rendered output stays correct (MD029). These are the
+  // only files in the repo that need either exception, so it is scoped to them rather than
+  // disabled project-wide.
+  "overrides": [
+    {
+      "filter": [".claude/skills/**/*.md"],
+      "config": {
+        "MD029": false,
+        "MD041": false
+      },
+      "combine": "merge"
+    }
+  ]
+}

@@ -6,12 +6,13 @@ exclude: |
   )
 
 repos:
-  - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.45.0
+  # cli2 rather than markdownlint-cli: `.markdownlint-cli2.jsonc` owns both which files and
+  # which rules apply, and its `overrides` scope MD029/MD041 to the two skill files that
+  # need them instead of switching those rules off repo-wide. No args here for that reason.
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.23.2
     hooks:
-      - id: markdownlint
-        # Chezmoi templates are Go-template source, not markdown.
-        exclude: \.tmpl$
+      - id: markdownlint-cli2
 
   # shellcheck has no zsh dialect, so this covers only real sh/bash scripts:
   # tests/test-macos.sh is zsh despite the extension, and `files` already excludes

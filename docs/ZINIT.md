@@ -16,15 +16,15 @@
 
 ## Authoritative Sources
 
-| Source                  | How to access                                                                    | Reliability            |
-| ----------------------- | -------------------------------------------------------------------------------- | ---------------------- |
-| `zinit help`            | Lists commands + available ice modifiers                                         | Can be stale (see #670)|
-| `zinit man`             | Opens the manpage (`doc/zinit.1`)                                                | Can be stale           |
-| Shell completions       | `~/.local/share/zinit/zinit.git/_zinit` or `zinit completions`                   | Most up-to-date        |
-| Zinit source code       | `~/.local/share/zinit/zinit.git/zinit*.zsh`                                      | Ground truth           |
-| Zinit README            | `~/.local/share/zinit/zinit.git/README.md` (local copy)                          | Good for ice reference |
-| Zinit Wiki              | <https://zdharma-continuum.github.io/zinit/wiki/>                                | Good for examples      |
-| Annexes                 | <https://github.com/zdharma-continuum> (org repos starting with `zinit-annex-*`) | Per-annex READMEs      |
+| Source            | How to access                                                                    | Reliability             |
+| ----------------- | -------------------------------------------------------------------------------- | ----------------------- |
+| `zinit help`      | Lists commands + available ice modifiers                                         | Can be stale (see #670) |
+| `zinit man`       | Opens the manpage (`doc/zinit.1`)                                                | Can be stale            |
+| Shell completions | `~/.local/share/zinit/zinit.git/_zinit` or `zinit completions`                   | Most up-to-date         |
+| Zinit source code | `~/.local/share/zinit/zinit.git/zinit*.zsh`                                      | Ground truth            |
+| Zinit README      | `~/.local/share/zinit/zinit.git/README.md` (local copy)                          | Good for ice reference  |
+| Zinit Wiki        | <https://zdharma-continuum.github.io/zinit/wiki/>                                | Good for examples       |
+| Annexes           | <https://github.com/zdharma-continuum> (org repos starting with `zinit-annex-*`) | Per-annex READMEs       |
 
 **When in doubt, read the local README first** — it contains the full ice modifier
 table with descriptions, the order of execution, and usage examples. If `zinit help`
@@ -220,20 +220,20 @@ atclone/atpull → make → (plugin script loading) →
 src → multisrc → atload
 ```
 
-| Step | Ice                    | When it fires                                     |
-| ---- | ---------------------- | ------------------------------------------------- |
-| 1    | `atinit`               | After directory setup, before anything else        |
-| 2    | `atpull'!'`            | Early pull hook (only the `!`-prefixed variant)    |
-| 3    | `make'!!'`             | Earliest make (double-`!` prefix)                  |
-| 4    | `mv`                   | File move/rename operations                        |
-| 5    | `cp`                   | File copy operations                               |
-| 6    | `make'!'`              | Early make (single-`!` prefix)                     |
-| 7    | `atclone` / `atpull`   | Standard clone/pull hooks (without `!` prefix)     |
-| 8    | `make`                 | Final make (no prefix)                             |
-| 9    | *(loading)*            | Main `.plugin.zsh` / `init.zsh` sourcing           |
-| 10   | `src`                  | Additional single file to source                   |
-| 11   | `multisrc`             | Multiple additional files to source                |
-| 12   | `atload`               | Post-load commands                                 |
+| Step | Ice                  | When it fires                                   |
+| ---- | -------------------- | ----------------------------------------------- |
+| 1    | `atinit`             | After directory setup, before anything else     |
+| 2    | `atpull'!'`          | Early pull hook (only the `!`-prefixed variant) |
+| 3    | `make'!!'`           | Earliest make (double-`!` prefix)               |
+| 4    | `mv`                 | File move/rename operations                     |
+| 5    | `cp`                 | File copy operations                            |
+| 6    | `make'!'`            | Early make (single-`!` prefix)                  |
+| 7    | `atclone` / `atpull` | Standard clone/pull hooks (without `!` prefix)  |
+| 8    | `make`               | Final make (no prefix)                          |
+| 9    | *(loading)*          | Main `.plugin.zsh` / `init.zsh` sourcing        |
+| 10   | `src`                | Additional single file to source                |
+| 11   | `multisrc`           | Multiple additional files to source             |
+| 12   | `atload`             | Post-load commands                              |
 
 This sequence matters when `atclone` generates files that `pick`/`src` need to find,
 or when `make` installs binaries that `sbin` shims need to wrap.
@@ -247,57 +247,57 @@ or when `make` installs binaries that `sbin` shims need to wrap.
 
 ### Loading mode
 
-| Ice                             | Description                                                |
-| ------------------------------- | ---------------------------------------------------------- |
-| `as"program"` / `as"command"`   | Treat as binary; add plugin dir to `$PATH`                 |
-| `as"completion"`                | Treat as a completion file                                 |
-| `as"null"`                      | Disable sourcing and completion detection entirely         |
-| `id-as"name"`                   | Assign a custom identifier (overrides repo-derived name)   |
-| `light-mode`                    | Equivalent to `zinit light` (no tracking/reporting)        |
-| `depth`                         | Limits `git clone --depth`                                 |
+| Ice                           | Description                                              |
+| ----------------------------- | -------------------------------------------------------- |
+| `as"program"` / `as"command"` | Treat as binary; add plugin dir to `$PATH`               |
+| `as"completion"`              | Treat as a completion file                               |
+| `as"null"`                    | Disable sourcing and completion detection entirely       |
+| `id-as"name"`                 | Assign a custom identifier (overrides repo-derived name) |
+| `light-mode`                  | Equivalent to `zinit light` (no tracking/reporting)      |
+| `depth`                       | Limits `git clone --depth`                               |
 
 ### Conditional loading
 
-| Ice              | Description                                                           |
-| ---------------- | --------------------------------------------------------------------- |
-| `wait`           | Turbo mode: `wait'0'` = after prompt; `wait'1'` = 1s after           |
-| `wait` suffixes  | `a`, `b`, `c` control order within same time-slot (`a` loads first)  |
-| `lucid`          | Suppress "Loaded ..." message for turbo-loaded plugins               |
-| `if`             | Load only when condition is true: `if'[[ -d /path ]]'`               |
-| `has`            | Load only when command exists in `$PATH`: `has"git"`                  |
-| `trigger-load`   | Create a function stub that loads the plugin on first call            |
+| Ice             | Description                                                         |
+| --------------- | ------------------------------------------------------------------- |
+| `wait`          | Turbo mode: `wait'0'` = after prompt; `wait'1'` = 1s after          |
+| `wait` suffixes | `a`, `b`, `c` control order within same time-slot (`a` loads first) |
+| `lucid`         | Suppress "Loaded ..." message for turbo-loaded plugins              |
+| `if`            | Load only when condition is true: `if'[[ -d /path ]]'`              |
+| `has`           | Load only when command exists in `$PATH`: `has"git"`                |
+| `trigger-load`  | Create a function stub that loads the plugin on first call          |
 
 ### Source/file selection
 
-| Ice              | Description                                                           |
-| ---------------- | --------------------------------------------------------------------- |
-| `pick"pattern"`  | Select file to source (pattern, first alphabetical match wins)        |
-| `src"file"`      | Additional file to source after main file                             |
-| `multisrc"..."`  | Source multiple files (space-separated, brace-expansion, globs)       |
-| `from`           | Clone source: `github` (default), `gh-r`, `gitlab`, `bitbucket`      |
-| `bpick"pattern"` | Select which GitHub Release asset to download                         |
-| `extract`        | Auto-extract archives. `!` = flatten 1 level. `!!` = flatten 2.      |
+| Ice              | Description                                                     |
+| ---------------- | --------------------------------------------------------------- |
+| `pick"pattern"`  | Select file to source (pattern, first alphabetical match wins)  |
+| `src"file"`      | Additional file to source after main file                       |
+| `multisrc"..."`  | Source multiple files (space-separated, brace-expansion, globs) |
+| `from`           | Clone source: `github` (default), `gh-r`, `gitlab`, `bitbucket` |
+| `bpick"pattern"` | Select which GitHub Release asset to download                   |
+| `extract`        | Auto-extract archives. `!` = flatten 1 level. `!!` = flatten 2. |
 
 ### Command execution hooks
 
-| Ice              | Description                                                                                    |
-| ---------------- | ---------------------------------------------------------------------------------------------- |
-| `atinit"code"`   | Run after directory setup, before loading                                                      |
-| `atclone"code"`  | Run after cloning, within plugin directory                                                     |
-| `atpull"code"`   | Run after update (only if new commits, unless `run-atpull`). `%atclone` = copy atclone content |
-| `atload"code"`   | Run after loading. `!` prefix enables unload tracking                                          |
-| `run-atpull`     | Always run atpull hook, even without new commits                                               |
-| `make"args"`     | Run make. `!` prefix = before atclone/atpull. `!!` = earliest                                 |
+| Ice             | Description                                                                                    |
+| --------------- | ---------------------------------------------------------------------------------------------- |
+| `atinit"code"`  | Run after directory setup, before loading                                                      |
+| `atclone"code"` | Run after cloning, within plugin directory                                                     |
+| `atpull"code"`  | Run after update (only if new commits, unless `run-atpull`). `%atclone` = copy atclone content |
+| `atload"code"`  | Run after loading. `!` prefix enables unload tracking                                          |
+| `run-atpull`    | Always run atpull hook, even without new commits                                               |
+| `make"args"`    | Run make. `!` prefix = before atclone/atpull. `!!` = earliest                                  |
 
 ### File manipulation
 
-| Ice              | Description                                                    |
-| ---------------- | -------------------------------------------------------------- |
-| `mv"from -> to"` | Move/rename file after clone/update                           |
-| `cp"from -> to"` | Copy file after clone/update (runs after `mv`)                |
-| `compile"pat"`   | Additional files to zcompile                                   |
-| `nocompile`      | Don't zcompile picked files at all                             |
-| `nocompile'!'`   | **DO** compile, but **after** `make` and `atclone` (delayed)  |
+| Ice              | Description                                                  |
+| ---------------- | ------------------------------------------------------------ |
+| `mv"from -> to"` | Move/rename file after clone/update                          |
+| `cp"from -> to"` | Copy file after clone/update (runs after `mv`)               |
+| `compile"pat"`   | Additional files to zcompile                                 |
+| `nocompile`      | Don't zcompile picked files at all                           |
+| `nocompile'!'`   | **DO** compile, but **after** `make` and `atclone` (delayed) |
 
 ### `nocompile` vs `nocompile'!'`
 
@@ -349,16 +349,16 @@ toolname "$@"
 
 ### Flags
 
-| Flag | Effect                                                              |
-| ---- | ------------------------------------------------------------------- |
-| `g`  | Export `$GEM_HOME` pointing to plugin directory                     |
-| `n`  | Export `$NODE_PATH` to `{plugin-dir}/node_modules`                  |
-| `p`  | Export `$VIRTUALENV` to `{plugin-dir}/venv`                         |
-| `c`  | `cd` into plugin directory before execution                         |
-| `N`  | Redirect stdout+stderr to `/dev/null`                               |
-| `E`  | Redirect stderr to `/dev/null`                                      |
-| `O`  | Redirect stdout to `/dev/null`                                      |
-| `!`  | Use `#!/usr/bin/env -S zsh -fd` (skip zshenv/zshrc, faster start)  |
+| Flag | Effect                                                            |
+| ---- | ----------------------------------------------------------------- |
+| `g`  | Export `$GEM_HOME` pointing to plugin directory                   |
+| `n`  | Export `$NODE_PATH` to `{plugin-dir}/node_modules`                |
+| `p`  | Export `$VIRTUALENV` to `{plugin-dir}/venv`                       |
+| `c`  | `cd` into plugin directory before execution                       |
+| `N`  | Redirect stdout+stderr to `/dev/null`                             |
+| `E`  | Redirect stderr to `/dev/null`                                    |
+| `O`  | Redirect stdout to `/dev/null`                                    |
+| `!`  | Use `#!/usr/bin/env -S zsh -fd` (skip zshenv/zshrc, faster start) |
 
 ### Empty `sbin`
 
@@ -379,7 +379,7 @@ Loaded synchronously in `zinit_50_plugins.zsh`:
 | Annex                      | Purpose                                                                        |
 | -------------------------- | ------------------------------------------------------------------------------ |
 | `z-a-meta-plugins`         | Meta-plugin groups (e.g. `@sharkdp` = bat + fd + hexyl + hyperfine + vivid)    |
-| `zinit-annex-unscope`      | Short plugin names without org prefix; resolves via static DB or GitHub API     |
+| `zinit-annex-unscope`      | Short plugin names without org prefix; resolves via static DB or GitHub API    |
 | `zinit-annex-readurl`      | Download latest versions from non-GitHub pages; provides `dlink`/`dlink0` ices |
 | `zinit-annex-patch-dl`     | Additional file downloads (`dl` ice) and patch application (`patch` ice)       |
 | `zinit-annex-submods`      | Clone additional repos as submodules (`submods` ice); auto-update with parent  |
@@ -392,9 +392,9 @@ Groups available via `zinit for @group-name`:
 | Group             | Contents                                                                       |
 | ----------------- | ------------------------------------------------------------------------------ |
 | `@sharkdp`        | fd, bat, hexyl, hyperfine, vivid                                               |
-| `@zsh-users`      | zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions                   |
-| `@zsh-users+fast` | fast-syntax-highlighting, zsh-autosuggestions, zsh-completions                  |
-| `@zdharma`        | fast-syntax-highlighting, history-search-multi-word, zsh-diff-so-fancy          |
+| `@zsh-users`      | zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions                  |
+| `@zsh-users+fast` | fast-syntax-highlighting, zsh-autosuggestions, zsh-completions                 |
+| `@zdharma`        | fast-syntax-highlighting, history-search-multi-word, zsh-diff-so-fancy         |
 | `@console-tools`  | dircolors-material, sharkdp group, exa, ripgrep, tig                           |
 | `@fuzzy`          | fzf, fzy, skim, peco                                                           |
 | `@ext-git`        | git-recall, git-open, git-recent, git-my, git-quick-stats, git-extras, git-cal |

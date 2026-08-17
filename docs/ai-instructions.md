@@ -19,16 +19,16 @@ For typical user workflows (installation, account updates), see `README.md`.
 
 ## Tech Stack
 
-| Tool                  | Notes                                   |
-| --------------------- | --------------------------------------- |
-| Configuration manager | chezmoi                                 |
-| Shell                 | Zsh                                     |
-| Templating            | Go templates (chezmoi)                  |
-| Encryption            | age (symmetric + asymmetric)            |
-| Package management    | Homebrew, apt-get                       |
-| Secret management     | rbw (Bitwarden CLI)                     |
-| Task runner           | just (Makefile for rbw only)            |
-| Linting               | prek (markdownlint, shellcheck, cspell) |
+| Tool                  | Notes                                        |
+| --------------------- | -------------------------------------------- |
+| Configuration manager | chezmoi                                      |
+| Shell                 | Zsh                                          |
+| Templating            | Go templates (chezmoi)                       |
+| Encryption            | age (symmetric + asymmetric)                 |
+| Package management    | Homebrew, apt-get                            |
+| Secret management     | rbw (Bitwarden CLI)                          |
+| Task runner           | just (Makefile for rbw only)                 |
+| Linting               | prek (markdownlint-cli2, shellcheck, cspell) |
 
 ## Project Structure
 
@@ -66,8 +66,8 @@ home/                            ← chezmoi source dir (declared via .chezmoiro
 justfile                         ← task entry point (test, rbw, clean, update-accounts)
 Makefile                         ← rbw build graph only; `just rbw` delegates here
 mise.toml                        ← pins chezmoi, just and prek for this repo
-.pre-commit-config.yaml          ← prek hooks: markdownlint, shellcheck
-.markdownlint.yaml               ← markdownlint rule set
+.pre-commit-config.yaml          ← prek hooks: markdownlint-cli2, shellcheck, cspell
+.markdownlint-cli2.jsonc         ← markdownlint rules, ignores and per-path overrides
 install.sh                       ← POSIX bootstrap (also chezmoi hook)
 tests/                           ← integration test suite
 ├── integration/                 ← individual test scripts (*.sh)

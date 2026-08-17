@@ -6,7 +6,8 @@
 *.html text eol=lf
 *.java text eol=lf
 *.js text eol=lf
-*.json text eol=lf
+*.json  text eol=lf
+*.jsonc text eol=lf
 *.py text eol=lf
 *.sh text eol=lf
 *.ts text eol=lf

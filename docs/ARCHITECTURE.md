@@ -260,16 +260,22 @@ Because the script is a template, chezmoi evaluates this directive on every appl
 `prek` runs the hooks declared in `.pre-commit-config.yaml`:
 
 ```sh
-just lint              # all hooks over every tracked file
-just lint markdownlint # a single hook
-just lint-install      # install prek as the git pre-commit hook
+just lint                   # all hooks over every tracked file
+just lint markdownlint-cli2 # a single hook
+just lint-install           # install prek as the git pre-commit hook
 ```
 
-| Hook         | Scope                                                          |
-| ------------ | -------------------------------------------------------------- |
-| markdownlint | tracked `*.md`, rule set in `.markdownlint.yaml`               |
-| shellcheck   | `*.sh` with an `sh`/`bash` shebang                             |
-| cspell       | all tracked text, config in `.cspell.config.yaml`              |
+| Hook              | Scope                                                                  |
+| ----------------- | ---------------------------------------------------------------------- |
+| markdownlint-cli2 | tracked `*.md`, rules and file selection in `.markdownlint-cli2.jsonc` |
+| shellcheck        | `*.sh` with an `sh`/`bash` shebang                                     |
+| cspell            | all tracked text, config in `.cspell.config.yaml`                      |
+
+`markdownlint-cli2` rather than `markdownlint-cli`: its config owns both the rule set and
+which files are linted, and its `overrides` block scopes a rule to a path glob. MD029 and
+MD041 are switched off only under `.claude/skills/`, where skill files open with YAML
+frontmatter instead of an H1 and interleave fenced blocks between numbered items — the rest
+of the repo still gets both rules.
 
 Exclusions that are deliberate and must be preserved:
 
