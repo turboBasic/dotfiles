@@ -48,7 +48,7 @@ packages:
         - repo
         - ripgrep
         - shellcheck
-        - tldr
+        - tlrc
         - yq
         - zbar
         - zsh
@@ -137,7 +137,7 @@ packages:
         - pre-commit
         - ripgrep
         - repo
-        - tldr
+        - tlrc
         - yq
         - zbar
         - zx

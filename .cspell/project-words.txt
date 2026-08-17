@@ -66,6 +66,7 @@ setsid
 softwareupdate
 stty
 systemsetup
+tlrc
 tzdata
 utmctl
 vdir
