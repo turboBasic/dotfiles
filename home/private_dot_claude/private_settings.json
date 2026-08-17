@@ -1,6 +1,8 @@
 {
-  "env": {},
-  "model": "Opus",
+  "env": {
+    "CLAUDE_CODE_SHELL": "/opt/homebrew/bin/bash"
+  },
+  "model": "Sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -19,10 +21,13 @@
     "command": "bash ~/.local/bin/claude_statusline_command"
   },
   "enabledPlugins": {
-    "gopls-lsp@claude-plugins-official": true
+    "gopls-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "editorMode": "vim"
 }
