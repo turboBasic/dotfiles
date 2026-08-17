@@ -1,0 +1,61 @@
+[
+	{
+		"name": "Copilot",
+		"vendor": "copilot",
+		"settings": {
+			"gpt-5.3-codex": {
+				"reasoningEffort": "high"
+			},
+			"gpt-5.6-sol": {
+				"contextSize": 922000
+			},
+			"gpt-5.6-terra": {
+				"contextSize": 922000
+			}
+		}
+	},
+	{
+		"name": "Copilot CLI",
+		"vendor": "copilotcli",
+		"settings": {
+			"gpt-5.3-codex": {
+				"reasoningEffort": "high"
+			}
+		}
+	},
+	{
+		"name": "OpenRouter",
+		"vendor": "customendpoint",
+		"apiKey": "${input:openRouterApiKey}",
+		"apiType": "chat-completions",
+		"models": [
+			{
+				"id": "deepseek/deepseek-v4-pro-0813",
+				"name": "DeepSeek V4 Pro 0813",
+				"url": "https://openrouter.ai/api/v1/chat/completions",
+				"toolCalling": true,
+				"vision": true,
+				"maxInputTokens": 1000000,
+				"maxOutputTokens": 64000
+			},
+			{
+				"id": "deepseek/deepseek-v4-flash-latest",
+				"name": "DeepSeek V4 Flash Latest",
+				"url": "https://openrouter.ai/api/v1/chat/completions",
+				"toolCalling": true,
+				"vision": true,
+				"maxInputTokens": 1000000,
+				"maxOutputTokens": 64000
+			},
+			{
+				"id": "qwen/qwen3.8-27b",
+				"name": "Qwen3.8 27B",
+				"url": "https://openrouter.ai/api/v1/chat/completions",
+				"toolCalling": true,
+				"vision": true,
+				"maxInputTokens": 262000,
+				"maxOutputTokens": 32000
+			}
+		]
+	}
+]

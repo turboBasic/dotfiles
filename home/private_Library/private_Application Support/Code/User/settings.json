@@ -125,6 +125,7 @@
     "monokai.theme-monokai-pro-vscode": true
   },
   "chat.mcp.gallery.enabled": true,
+  "chat.agentHost.byokModels.enabled": true,
   "chat.viewSessions.orientation": "stacked",
   "rust-analyzer.cargo.buildScripts.overrideCommand": null,
 }
