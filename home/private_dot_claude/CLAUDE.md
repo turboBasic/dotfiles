@@ -168,10 +168,14 @@ project — look first.
   a `lefthook.yml`, that is the hook runner — use it (`mise exec -- lefthook run
   pre-commit`) rather than introducing a parallel prek config. Do not migrate between the
   two runners without being asked. Absent an existing choice, use prek.
+- **CSpell is the spell checker, and belongs in every new project.** Wire it into the
+  project's hook runner like any other linter.
 - When adding a new linter or formatter, wire it into whichever runner the project already
   uses — `.pre-commit-config.yaml` for prek, `lefthook.yml` for lefthook — not a
   standalone script or a CI-only step.
 - Fix lint errors immediately when they appear — do not defer to a later step.
+- **Never disable a rule to make a run pass** without saying so. If a rule has to go, turn
+  it off in the linter's own config with a comment giving the reason, and report it.
 - **Auto-fix hooks are normal.** When a hook reformats files (ruff, trailing whitespace,
   etc.), re-stage the fixed files and retry — this is expected behavior, not an error to
   investigate.
@@ -312,9 +316,10 @@ When starting a new project or asked to scaffold one, include by default:
 3. `.gitignore` appropriate for the language/framework
 4. `mise.toml` pinning language runtimes
 5. `justfile` with at least `lint`, `test`, and `fmt` recipes
-6. `.pre-commit-config.yaml` with language-appropriate hooks
-7. `docs/ai-instructions.md` following the pattern above
-8. `CLAUDE.md` referencing `@docs/ai-instructions.md`
+6. `.pre-commit-config.yaml` with language-appropriate hooks, including CSpell
+7. `.cspell.config.yaml` importing the user config, plus `.cspell/project-words.txt`
+8. `docs/ai-instructions.md` following the pattern above
+9. `CLAUDE.md` referencing `@docs/ai-instructions.md`
 
 ---
 
