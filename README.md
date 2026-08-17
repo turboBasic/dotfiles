@@ -41,7 +41,7 @@ The bootstrap script prompts for `AGE_PASSPHRASE` interactively if not set.
 When account data changes in 1Password (new account added, email updated, etc.), run:
 
 ```shell
-./op-update-accounts
+just update-accounts
 ```
 
 This exports accounts from 1Password, encrypts and commits the result, then runs `chezmoi init --apply` to propagate changes to all templated files (gitconfigs, etc.). See [ARCHITECTURE.md](docs/ARCHITECTURE.md#updating-accounts-data) for details.

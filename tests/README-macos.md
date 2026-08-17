@@ -73,7 +73,7 @@ The base VM must be stopped before the test script can clone it.
 ## Running Tests
 
 ```shell
-make test-macos
+just test-macos
 ```
 
 ## How It Works

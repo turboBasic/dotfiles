@@ -34,6 +34,10 @@
 # Prevent Git from automatically converting line endings for specific files (e.g., Makefile)
 Makefile -text
 
+# Recipe bodies are shell; keep LF regardless of platform
+justfile text eol=lf
+*.just text eol=lf
+
 # Handle UTF-8 encoding issues (ensure consistent text encoding across platforms)
 *.log text
 *.md text

@@ -1,7 +1,3 @@
 [tools]
 chezmoi = "latest"
-
-[tasks.update-accounts]
-description = "Export accounts from secrets manager, encrypt, commit, and apply to chezmoi"
-dir = "{{config_root}}"
-run = "./op-update-accounts"
+just = "latest"

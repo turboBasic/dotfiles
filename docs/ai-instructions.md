@@ -61,7 +61,9 @@ home/                            ← chezmoi source dir (declared via .chezmoiro
 ├── symlink_dot_bashrc
 ├── symlink_dot_zshenv
 └── README.md.tmpl
-Makefile                         ← development tasks (test, rbw, clean)
+justfile                         ← task entry point (test, rbw, clean, update-accounts)
+Makefile                         ← rbw build graph only; `just rbw` delegates here
+mise.toml                        ← pins chezmoi and just for this repo
 install.sh                       ← POSIX bootstrap (also chezmoi hook)
 tests/                           ← integration test suite
 ├── integration/                 ← individual test scripts (*.sh)

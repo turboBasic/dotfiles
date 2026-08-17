@@ -202,10 +202,10 @@ This ensures bootstrap dependencies (age, chezmoi, homebrew, rbw) remain present
 When 1Password account entries change, run from the repo root:
 
 ```sh
-./op-update-accounts
+just update-accounts
 ```
 
-This wrapper script runs the full pipeline: exports accounts from 1Password, encrypts, commits the change, and runs `chezmoi init --apply`. It prompts for `AGE_PASSPHRASE` if not already set and verifies `op` is authenticated (`op whoami`) first.
+This runs `./op-update-accounts`, which drives the full pipeline: exports accounts from 1Password, encrypts, commits the change, and runs `chezmoi init --apply`. It prompts for `AGE_PASSPHRASE` if not already set and verifies `op` is authenticated (`op whoami`) first.
 
 Under the hood it calls `op-export-accounts`, which:
 
@@ -257,15 +257,23 @@ Because the script is a template, chezmoi evaluates this directive on every appl
 
 ## Test suite
 
-Seven integration tests in `tests/integration/`, run via `make test`:
+Seven integration tests in `tests/integration/`, run via `just test`:
 
 ```sh
-make test              # runs test-ubuntu + test-macos
-make test-ubuntu       # Docker-based Ubuntu tests (requires AGE_PASSPHRASE)
-make test-macos        # macOS tests via UTM VM (requires AGE_PASSPHRASE, RBW_EMAIL, RBW_PASSWORD, RBW_TOTP_SEED)
-make rbw               # build rbw binaries (default: arm64)
-make rbw ARCH=amd64    # build rbw binaries for amd64
+just                        # list all recipes
+just test                   # runs test-ubuntu + test-macos
+just test-ubuntu            # Docker-based Ubuntu tests (requires AGE_PASSPHRASE)
+just test-macos             # macOS tests via UTM VM (requires AGE_PASSPHRASE, RBW_EMAIL, RBW_PASSWORD, RBW_TOTP_SEED)
+just rbw                    # build rbw binaries (default: arm64)
+just arch=amd64 rbw         # build rbw binaries for amd64
+just update-accounts        # export accounts, encrypt, commit, apply
 ```
+
+Missing environment variables are reported by name before any work starts.
+
+`just` is the entry point for every task. The `Makefile` is retained solely for the rbw
+build graph — `$(BIN_DIR)/.stamp` gates an expensive docker build on input timestamps,
+which just cannot express — and `just rbw` / `just clean` delegate to it.
 
 ### macOS tests
 
