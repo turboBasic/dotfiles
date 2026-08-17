@@ -1,0 +1,61 @@
+[tracking]
+enabled = true
+history_days = 90
+
+[display]
+colors = true
+emoji = true
+max_width = 120
+
+[filters]
+ignore_dirs = [
+    ".git",
+    "node_modules",
+    "target",
+    "__pycache__",
+    ".venv",
+    "vendor",
+]
+ignore_files = [
+    "*.lock",
+    "*.min.js",
+    "*.min.css",
+]
+
+[tee]
+enabled = true
+mode = "failures"
+max_files = 20
+max_file_size = 1048576
+
+[telemetry]
+enabled = false
+consent_given = false
+consent_date = "2026-06-22T20:23:59.520917+00:00"
+
+[hooks]
+# Measured against native output on 2026-08-17, rtk 0.45.0. Each entry cost more than it
+# saved: either the filter is larger than what it replaces, or it drops a field that forces
+# the command to be run a second time. Everything absent from this list was measured a win
+# and is deliberately left on — pytest, ruff, cargo test, git commit, grep, rg, git status,
+# git show, gh run list, mise run, wc, tree.
+exclude_commands = [
+    "git log",        # +253% on `git log -3`: format.pretty is already one line, rtk re-expands the body
+    "git diff",       # `git diff > x.patch` writes a corrupt patch; +1% on a 25-file diff
+    "gh issue view",  # -0.6% to delete labels, milestone, parent, sub-issues, blocked-by, blocking
+    "gh issue list",  # drops labels and dates, truncates titles at ~55 chars
+    "cargo clippy",   # a warning becomes `_ (1x)` plus a bare location: lint name and message gone
+    "find",           # refuses -not/-o/-exec/-newer/-delete, exiting 1 with no results
+    "cat",            # lossless to 988 KB, so it saves nothing it does not already pass through
+    "uv run pyright", # -8%, and the error/warning tally goes with it
+    "^ls$",           # bare `ls` and `ls <dir>` are larger than native; `ls -la` is -69% and stays on
+    "^ls [^-]",
+]
+transparent_prefixes = []
+
+[limits]
+grep_max_results = 500
+grep_max_per_file = 100
+status_max_files = 15
+status_max_untracked = 10
+passthrough_max_chars = 2000
