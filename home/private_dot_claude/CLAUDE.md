@@ -4,6 +4,20 @@ Rules that apply to every project regardless of language or domain.
 
 ---
 
+## Scope of These Rules
+
+These are **authoring defaults for repositories the user owns** — those under
+`~/00-projects/`. In a repo the user did not set up (client code, a vendored dependency,
+an open-source contribution), the conventions already in the repo win: match them, and
+raise a suggestion rather than acting on it.
+
+A rule below phrased as a prohibition — "no `requirements.txt`", "no `black`", "every
+project must have an `.editorconfig`" — constrains what you **write**. It is not a mandate
+to migrate what is already there. Never convert a foreign repo's build tooling, package
+manager, task runner, or lint configuration without being asked.
+
+---
+
 ## Environment Context
 
 - Projects live in `~/00-projects/` with subdirectories for personal and work contexts.
@@ -22,6 +36,26 @@ Rules that apply to every project regardless of language or domain.
 
 ---
 
+## Shell Commands — the Bash tool's shell is pinned to bash
+
+The `Bash` tool spawns whatever `CLAUDE_CODE_SHELL` names; `settings.json` pins it to
+`/opt/homebrew/bin/bash` (5.x) so the tool runs real bash. **That variable is
+undocumented and may lapse silently on upgrade**, dropping the tool back to `/bin/zsh`
+5.9 with no rc sourced — no error, just zsh semantics again. When a command fails or
+returns something impossible, confirm the interpreter with `ps -p $$ -o comm=` before
+debugging the command. Under zsh, the failure modes are:
+
+- **An unmatched glob aborts the command** (`nomatch`), and `2>/dev/null` does not rescue
+  it. Prefer handing the pattern quoted to the tool that expands it: `rg --glob '*.md'`.
+- **Unquoted `$var` does not word-split** — `for f in $files` iterates once over the whole
+  string, a silent wrong answer. Unquoted `$(cmd)` does split. Use `${(f)files}`.
+- **Arrays are 1-indexed** — `${a[0]}` is empty.
+- **No `mapfile` or `shopt`**; `${v,,}` → `${v:l}`, `${!n}` → `${(P)n}`.
+
+Escape hatch under either shell: put anything bash-dependent in `bash -c '…'`.
+
+---
+
 ## Tone and Responses
 
 - Terse responses. End with a one-sentence summary of what changed — no multi-paragraph recaps.
@@ -32,17 +66,61 @@ Rules that apply to every project regardless of language or domain.
 
 ## Tool Invocation
 
-The hierarchy for running tools (highest priority first):
+**This section is the single source of truth for how to run anything.** Other sections
+name which tool to use for a job; none of them restate this ordering.
 
-1. **Project Makefile/Justfile** — if a `lint`, `test`, or `fmt` target exists, use it.
-2. **Pre-commit** — for linting/formatting: `mise exec -- pre-commit run`.
-3. **`uv run`** — for Python project-local tools (pytest, pyright, ruff directly).
-4. **`mise exec --`** — for system-level tools managed by mise (terraform, go, node).
-5. **Direct invocation** — only if none of the above apply.
+Two separate questions — answer them in that order.
 
-Before running tools, check if the project has `mise.toml`/`.mise.toml`. If it does,
-use `mise exec --` for tools it manages. If not, use tools directly.
-Never assume mise is present in foreign or unfamiliar projects — look first.
+### 1. Which entry point?
+
+Prefer the project's own entry point over invoking a tool yourself. If a `lint`, `test`,
+or `fmt` target exists, use it; do not reimplement what it does.
+
+1. **`justfile`** — the preferred task runner. `just` with no arguments lists recipes.
+2. **`Makefile`** — equal standing where one exists; the correct choice in repos with real
+   file-based staleness (see the boundary below).
+3. **`mise` tasks** — `mise run <task>`; `mise tasks` lists what exists, including
+   user-level tasks defined in `~/.config/mise/config.toml`.
+4. **No entry point covers the job** — fall through to question 2.
+
+### 2. How to resolve the binary?
+
+Only once no entry point covers it:
+
+1. **`uv run <tool>`** — Python project-local tools (pytest, pyright, ruff) in any repo
+   with a `pyproject.toml`.
+2. **`mise exec -- <tool>`** — tools mise manages (terraform, go, node, prek).
+3. **Direct invocation** — only when neither of the above applies.
+
+Check for `mise.toml` / `.mise.toml` before reaching for `mise exec --`, and use it only
+for tools mise actually manages. Never assume mise is present in a foreign or unfamiliar
+project — look first.
+
+### The boundary: mise / Just / Make
+
+**mise owns the environment. Just owns the workflows. Make owns file staleness.**
+
+| Concern                                                     | Home                            |
+| ----------------------------------------------------------- | ------------------------------- |
+| Tool versions, `PATH`, env vars, secret injection           | `mise.toml` `[tools]` / `[env]` |
+| Named workflows a human types                               | `justfile`                      |
+| Tasks needing mise's env engine, or that must work anywhere | mise `[tasks.*]`                |
+| Artifacts with genuine file-based staleness                 | `Makefile`                      |
+
+- **A task belongs in mise only when it needs something Just cannot give it** — per-task
+  env or secret injection, a task-scoped tool version, or availability outside any repo.
+  The `claude-*` tasks in `~/.config/mise/config.toml` qualify on two counts: they inject
+  a secret-backed token and they are user-level, not project-level.
+- **Keep a `Makefile` where the dependency graph is load-bearing.** Just has no
+  file-based staleness checking, only recipe-to-recipe dependencies. A Makefile whose
+  targets gate an expensive rebuild on input timestamps must not be converted to a
+  justfile to satisfy a preference.
+- **Calls go one way: `just` → `mise run`, never the reverse.** Bidirectional wrapping
+  leaves no clear owner of a task name. One owner per name.
+- **Recipes carry no `mise exec --` prefix.** If mise is activated the tools are already
+  on `PATH`; if it is not, that is an environment bug to fix, not to paper over per recipe.
+- **When a task could live in either, put it in the justfile** and let it rely on mise's
+  activated environment.
 
 ---
 
@@ -80,17 +158,23 @@ Never assume mise is present in foreign or unfamiliar projects — look first.
 
 ---
 
-## Linting and Pre-commit
+## Linting and Git Hooks
 
-- **Pre-commit is the linting entry point.** Never call linters (`ruff`, `mypy`,
-  `gofmt`, `biome`, etc.) directly — use `mise exec -- pre-commit run` or the
-  project's Makefile/Justfile lint target.
-- When adding a new linter or formatter, wire it through pre-commit (not a standalone
-  script or CI-only step).
+- **Prek is the linting entry point, and the default for new projects.** Never call
+  linters (`ruff`, `mypy`, `gofmt`, `biome`, etc.) directly. Reach it the way
+  *Tool Invocation* says — the project's `lint` target if it has one, otherwise
+  `mise exec -- prek run`.
+- **Lefthook is also allowed where a project is already set up with it.** If the repo has
+  a `lefthook.yml`, that is the hook runner — use it (`mise exec -- lefthook run
+  pre-commit`) rather than introducing a parallel prek config. Do not migrate between the
+  two runners without being asked. Absent an existing choice, use prek.
+- When adding a new linter or formatter, wire it into whichever runner the project already
+  uses — `.pre-commit-config.yaml` for prek, `lefthook.yml` for lefthook — not a
+  standalone script or a CI-only step.
 - Fix lint errors immediately when they appear — do not defer to a later step.
-- **Auto-fix hooks are normal.** When pre-commit reformats files (ruff, trailing
-  whitespace, etc.), re-stage the fixed files and retry — this is expected behavior,
-  not an error to investigate.
+- **Auto-fix hooks are normal.** When a hook reformats files (ruff, trailing whitespace,
+  etc.), re-stage the fixed files and retry — this is expected behavior, not an error to
+  investigate.
 
 ---
 
@@ -103,6 +187,11 @@ Never assume mise is present in foreign or unfamiliar projects — look first.
 - **Linting/formatting:** `ruff` (lint + format). No `black`, `isort`, `flake8`, `pylint`.
 - **Type checking:** `pyright` (strict mode preferred).
 - **Testing:** `pytest`. No `unittest` classes unless extending existing code that uses them.
+- **Pydantic** for defining and validating data at application boundaries.
+- **Typer** for parsing and validating CLI arguments and options.
+- **Dynaconf** for loading and validating application configuration
+- **structlog** for structured application logging
+- **Rich** for rich, human-friendly terminal output
 - **Structure:** `src/<package_name>/` layout with `__init__.py`. Tests in `tests/` at
   project root.
 - **No legacy patterns:** no `__future__` imports, no `typing.Optional` (use `X | None`),
@@ -146,9 +235,8 @@ Never assume mise is present in foreign or unfamiliar projects — look first.
 
 ## Running Tests
 
-- Use the project's Makefile/Justfile `test` target when available.
-- For Python: `uv run pytest` (not `python -m pytest`, not `mise exec -- pytest`).
-- For Go: `go test ./...` (or `mise exec -- go test ./...` if mise-managed).
+- Find the test command via *Tool Invocation*. Where no entry point defines one, it is
+  `uv run pytest` for Python (not `python -m pytest`) and `go test ./...` for Go.
 - **Do not run tests automatically** after every change — only when asked or when
   verifying a fix.
 - If tests fail after your change, investigate and fix immediately before reporting done.
@@ -206,7 +294,8 @@ subsequent AI-assisted work is grounded in correct project context from the star
 
 ## GitHub Actions / CI
 
-- Use **pinned action versions** (full SHA or explicit tag, not `@main` or `@master`).
+- Use **pinned action versions** for 3rd party deps (full SHA or explicit tag, not `@main`).
+- For in-house workflows and actions `@main` or `@v2` are allowed.
 - Prefer reusable workflows and composite actions over copy-pasted job definitions.
 - Keep workflows minimal: lint, test, build. Don't over-engineer.
 - Use `mise` in CI for consistent tool versions (via `jdx/mise-action`).
@@ -222,9 +311,10 @@ When starting a new project or asked to scaffold one, include by default:
 2. `.gitattributes` with LF normalization and binary detection
 3. `.gitignore` appropriate for the language/framework
 4. `mise.toml` pinning language runtimes
-5. `.pre-commit-config.yaml` with language-appropriate hooks
-6. `docs/ai-instructions.md` following the pattern above
-7. `CLAUDE.md` referencing `@docs/ai-instructions.md`
+5. `justfile` with at least `lint`, `test`, and `fmt` recipes
+6. `.pre-commit-config.yaml` with language-appropriate hooks
+7. `docs/ai-instructions.md` following the pattern above
+8. `CLAUDE.md` referencing `@docs/ai-instructions.md`
 
 ---
 
