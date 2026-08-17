@@ -198,5 +198,6 @@ Executed with the user; secret value is never displayed (`--no-newline` +
 - **Probe A — open (optional)**: control run without the export. Expected to
   prompt; skipping does not weaken the positive result, since Probe B's
   session was started from a shell with no prior `op` authorization.
+
 </content>
 </invoke>

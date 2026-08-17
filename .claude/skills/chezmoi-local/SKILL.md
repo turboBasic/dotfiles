@@ -6,6 +6,7 @@ description: Answer chezmoi questions using the local documentation corpus at do
 Answer the user's chezmoi question using the local documentation corpus.
 
 Steps:
+
 1. Read `docs/chezmoi/CLAUDE.md` to orient.
 2. Identify which files are relevant to the question.
 3. Read those files directly.

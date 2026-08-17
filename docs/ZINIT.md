@@ -83,6 +83,7 @@ zinit [flags] for \
 ```
 
 **Key points:**
+
 - Flags like `--lucid`, `--wait`, `--light-mode` apply to ALL plugins in the block
   unless overridden per-plugin with `--flag='value'` prefix.
 - Per-plugin ices use `--` prefix notation: `--pick='file.zsh'`, `--sbin='bin -> name'`.
@@ -130,6 +131,7 @@ appears. This is the primary mechanism for fast shell startup.
 | `--wait='1c'`       | Load ~1 second after prompt, trigger `compinit` replay     |
 
 **Rules for this config:**
+
 - Annexes and prompt theme: **never** turbo (needed before first prompt)
 - Homebrew plugin: **never** turbo (provides `$HOMEBREW_PREFIX` for later plugins)
 - Most tools and snippets: turbo with default `--wait`
@@ -190,6 +192,7 @@ URL-to-completion-file
 ### Idempotent atclone/atpull
 
 The pattern `--atpull='%atclone'` combined with `--run-atpull` ensures:
+
 - `atclone` runs on first install
 - Same commands re-run on every `zinit update`
 - No separate `atpull` logic needed
@@ -211,7 +214,7 @@ The pattern `--atpull='%atclone'` combined with `--run-atpull` ensures:
 
 When a plugin is cloned or updated, ices execute in this **exact** sequence:
 
-```
+```text
 atinit → atpull'!' → make'!!' → mv → cp → make'!' →
 atclone/atpull → make → (plugin script loading) →
 src → multisrc → atload
@@ -321,7 +324,7 @@ actual binary inside the plugin directory.
 
 ### Syntax
 
-```
+```text
 sbin'[{flags}:]{path-to-binary}[ -> {shim-name}]'
 ```
 

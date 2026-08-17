@@ -255,6 +255,31 @@ Because the script is a template, chezmoi evaluates this directive on every appl
 
 ---
 
+## Linting
+
+`prek` runs the hooks declared in `.pre-commit-config.yaml`:
+
+```sh
+just lint              # all hooks over every tracked file
+just lint markdownlint # a single hook
+just lint-install      # install prek as the git pre-commit hook
+```
+
+| Hook         | Scope                                              |
+| ------------ | -------------------------------------------------- |
+| markdownlint | tracked `*.md`, rule set in `.markdownlint.yaml`   |
+| shellcheck   | `*.sh` with an `sh`/`bash` shebang                 |
+
+Two exclusions are deliberate and must be preserved:
+
+- **`*.tmpl` is excluded globally.** Chezmoi templates are Go-template source, not valid
+  shell, markdown, or JSON, and every template in this repo carries a `.tmpl` final
+  extension. No linter may be pointed at a template.
+- **Zsh is out of shellcheck's reach.** shellcheck has no zsh dialect, so `*.zsh` and
+  `tests/test-macos.sh` (zsh despite the extension) are not checked.
+
+`docs/chezmoi/` and `docs/zinit/` are vendored submodules and are excluded as well.
+
 ## Test suite
 
 Seven integration tests in `tests/integration/`, run via `just test`:

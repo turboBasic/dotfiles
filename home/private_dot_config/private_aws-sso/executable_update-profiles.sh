@@ -57,6 +57,5 @@ function flush() {
 cp "$tmp" "$AWS_CONFIG"
 
 # 3. Report
-count=$(grep -c '^\[profile ' "$tmp" | grep -c '' || true)
 kept=$(sed -n "/$MARKER_BEGIN/,/$MARKER_END/p" "$AWS_CONFIG" | grep -c '^\[profile ')
 echo "Done. Kept $kept profiles matching: $KEEP_PATTERN"

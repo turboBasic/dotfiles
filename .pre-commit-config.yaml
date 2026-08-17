@@ -1,0 +1,27 @@
+# Chezmoi templates are Go-template source, not valid shell/markdown/JSON, so no
+# linter may see them. Every template in this repo carries a .tmpl final extension
+# (`.chezmoitemplates/` is the only other template location and holds no code), so
+# excluding .tmpl globally is sufficient — do not lint a template by any hook.
+# docs/chezmoi and docs/zinit are vendored submodules.
+exclude: |
+  (?x)(
+    \.tmpl$|
+    ^docs/chezmoi/|
+    ^docs/zinit/
+  )
+
+repos:
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.45.0
+    hooks:
+      - id: markdownlint
+
+  # shellcheck has no zsh dialect, and chezmoi templates are not valid shell, so
+  # this covers only real sh/bash scripts. tests/test-macos.sh is zsh despite the
+  # extension.
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        files: \.sh$
+        exclude: ^tests/test-macos\.sh$

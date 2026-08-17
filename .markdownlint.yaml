@@ -1,0 +1,13 @@
+default: true
+
+# Line length is declared once, in .editorconfig (max_line_length = 120). Several docs
+# here deliberately keep prose unwrapped, so enforcing it as a lint gate would mean
+# rewrapping ~30 pre-existing lines across unrelated files.
+MD013: false
+
+# Numbered procedures interleave fenced code blocks between items, which restarts
+# markdownlint's list numbering. The rendered output numbers correctly.
+MD029: false
+
+# SKILL.md and ADR files open with YAML frontmatter and a prose summary rather than an H1.
+MD041: false

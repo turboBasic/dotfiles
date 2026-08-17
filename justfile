@@ -10,6 +10,14 @@ image_name := "dotfiles-test-" + arch
 default:
     @just --list --unsorted
 
+# Run all lint hooks over every tracked file
+lint *args:
+    prek run --all-files {{ args }}
+
+# Install prek as the git pre-commit hook
+lint-install:
+    prek install
+
 # Run all integration tests
 test: test-ubuntu test-macos
 
