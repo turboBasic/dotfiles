@@ -35,6 +35,7 @@ bitwarden
 buildx
 cookiecutter
 coreutils
+deepseek
 direnv
 dlink
 findutils
@@ -50,6 +51,7 @@ libreadline
 nmcli
 oathtool
 opencode
+openrouter
 pecl
 peco
 pinentry
