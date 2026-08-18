@@ -25,6 +25,7 @@ packages:
     manual:
       formulae:
         - aria2
+        - aws-sso-cli
         - awscli
         - bash
         - bitwarden-cli
@@ -34,22 +35,31 @@ packages:
         - curl
         - db
         - dive
-        - docker
+        - dust
         - ffmpeg
         - gh
         - git
         - git-lfs
         - graphviz
         - hatch
+        - jira-cli
+        - tap: "terror/tap"
+          name: "just-lsp"
         - less
         - midnight-commander
+        - mise
         - neovim
+        - pi-coding-agent
         - pre-commit
         - repo
         - ripgrep
+        - rtk
+        - scc
         - shellcheck
+        - taproom
         - tlrc
         - yq
+        - yt-dlp
         - zbar
         - zsh
         - zstd
@@ -57,7 +67,9 @@ packages:
 
       casks:
         - arc
+        - atoll
         - chatgpt
+        - claude-code
         - commander-one
         - docker-desktop
         - font-fira-code-nerd-font
@@ -68,16 +80,20 @@ packages:
         - iterm2
         - jetbrains-toolbox
         - keystore-explorer
+        - lm-studio
+        - miro
         - obsidian
         - raindropio
         - raycast
         - slack
         - sublime-text
+        - taphouse
         - telegram
         - utm
         - visual-studio-code
         - vlc
         - whatsapp
+        - whimsical
         - xnviewmp
         - zen
 
