@@ -16,7 +16,7 @@
     "*zshrc.tmpl": "shellscript"
   },
   "files.exclude": {
-    "**/.git": false,
+    "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,
     "**/.DS_Store": true,
@@ -55,5 +55,6 @@
     "**/_symlinks/**": true,
     "**/symlink_*": true,
     "**/create_private_dot_zsh_history": true
-  }
+  },
+  "hide-files.files": []
 }
