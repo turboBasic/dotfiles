@@ -1,0 +1,5 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "openrouter/deepseek/deepseek-v4-flash-latest",
+  "plugin": ["/Users/aamelnyk/.config/opencode/ponytail/.opencode/plugins/ponytail.mjs"]
+}
