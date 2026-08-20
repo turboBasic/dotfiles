@@ -24,10 +24,14 @@ main() {
     brew update
 
     log "update zinit-managed mise"
-    zinit update jdx/mise
+    zsh -c 'source "${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git/zinit.zsh"; zinit update jdx/mise'
 
     log "mise upgrade"
     mise upgrade
+    mise upgrade --minimum-release-age 0 claude
+
+    log "mise prune"
+    mise prune --yes
 
     upgrade_formulas
     upgrade_casks
