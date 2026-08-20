@@ -1,0 +1,44 @@
+// Profile: ai-infra
+// Profile path: ~/Library/Application Support/Code/User/profiles/6ff9ea05/
+// Visual settings copied from the Default profile.
+{
+  "editor.fontFamily": "FiraCode Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontLigatures": false,
+  "editor.fontSize": 15,
+  "editor.formatOnSave": true,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "all",
+  "editor.stickyScroll.enabled": false,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "breadcrumbs.enabled": false,
+  "window.commandCenter": false,
+  "workbench.startupEditor": "none",
+  "workbench.colorTheme": "Monokai Pro",
+  "workbench.editor.enablePreview": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.statusBar.visible": true,
+  "workbench.activityBar.location": "default",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.scrollback": 5000,
+  "terminal.integrated.confirmOnExit": "hasChildProcesses",
+  "terminal.integrated.enableMultiLinePasteWarning": "never"
+}
+/*
+
+❯ code --list-extensions --profile 00-common | sort | clipcopy
+
+anthropic.claude-code
+davidanson.vscode-markdownlint
+editorconfig.editorconfig
+github.vscode-github-actions
+github.vscode-pull-request-github
+mhutchie.git-graph
+monokai.theme-monokai-pro-vscode
+pkief.material-icon-theme
+redhat.vscode-yaml
+streetsidesoftware.code-spell-checker
+streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
+tamasfe.even-better-toml
+
+*/
