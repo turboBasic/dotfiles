@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>local.brew-upgrade</string>
+	<string>local.upgrade</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>{{ .chezmoi.homeDir }}/.local/bin/brew-upgrade-all</string>
+		<string>{{ .chezmoi.homeDir }}/.local/bin/upgrade-all</string>
 	</array>
 	<key>StartCalendarInterval</key>
 	<dict>
@@ -22,9 +22,9 @@
 	<key>LowPriorityIO</key>
 	<true/>
 	<key>StandardOutPath</key>
-	<string>{{ .chezmoi.homeDir }}/Library/Logs/brew-upgrade.log</string>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/upgrade.log</string>
 	<key>StandardErrorPath</key>
-	<string>{{ .chezmoi.homeDir }}/Library/Logs/brew-upgrade.log</string>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/upgrade.log</string>
 	<key>EnvironmentVariables</key>
 	<dict>
 		<key>HOMEBREW_NO_AUTO_UPDATE</key>
