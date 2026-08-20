@@ -148,6 +148,7 @@ ZSH_ARGZERO
 # Names
 Andrii
 Melnyk
+turbobasic
 
 # Account aliases (German)
 chamäleon

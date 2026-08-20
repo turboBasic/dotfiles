@@ -24,13 +24,25 @@
     "gopls-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "ponytail@ponytail": true
+    "ponytail@ponytail": true,
+    "1password-docs@turbobasic": true,
+    "aws-sso-cli-docs@turbobasic": true,
+    "chezmoi-docs@turbobasic": true,
+    "mise-docs@turbobasic": true,
+    "uv-docs@turbobasic": true,
+    "zinit-docs@turbobasic": true
   },
   "extraKnownMarketplaces": {
     "ponytail": {
       "source": {
         "source": "github",
         "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "turbobasic": {
+      "source": {
+        "source": "github",
+        "repo": "turboBasic/claude-plugins"
       }
     }
   },
