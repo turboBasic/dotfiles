@@ -30,7 +30,8 @@
     "chezmoi-docs@turbobasic": true,
     "mise-docs@turbobasic": true,
     "uv-docs@turbobasic": true,
-    "zinit-docs@turbobasic": true
+    "zinit-docs@turbobasic": true{{- if hasKey . "claude_work_plugin" }},
+    "{{ .claude_work_plugin }}@{{ .claude_work_marketplace }}": true{{- end }}
   },
   "extraKnownMarketplaces": {
     "ponytail": {
@@ -44,7 +45,13 @@
         "source": "github",
         "repo": "turboBasic/claude-plugins"
       }
-    }
+    }{{- if hasKey . "claude_work_repo" }},
+    "{{ .claude_work_marketplace }}": {
+      "source": {
+        "source": "github",
+        "repo": "{{ .claude_work_repo }}"
+      }
+    }{{- end }}
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
