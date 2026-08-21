@@ -1,7 +1,4 @@
 {
-  "enabledMcpjsonServers": [
-    "zinit-kb"
-  ],
   "permissions": {
     "allow": [
       "Bash(perl *)",
@@ -10,5 +7,23 @@
       "mcp__zinit-kb__list_cards",
       "mcp__zinit-kb__search_cards"
     ]
+  },
+  "enabledMcpjsonServers": [
+    "zinit-kb"
+  ],
+  "enabledPlugins": {
+    "hygiene@turbobasic": true,
+    "chezmoi-docs@turbobasic": true,
+    "zinit-docs@turbobasic": true,
+    "mise-docs@turbobasic": true,
+    "1password-docs@turbobasic": true
+  },
+  "extraKnownMarketplaces": {
+    "turbobasic": {
+      "source": {
+        "source": "github",
+        "repo": "turboBasic/claude-plugins"
+      }
+    }
   }
 }
