@@ -33,6 +33,19 @@ encryption = "age"
 {{- $profile := promptChoiceOnce . "profile" "Please select profile" (list "personal" "work.2025.05") "work.2025.05" }}
     profile = {{ $profile | quote }}
 
+{{- /* Work Claude marketplace. Answer the first prompt blank on a machine with no work tooling;
+       private_dot_claude/private_settings.json.tmpl then renders without the marketplace rather
+       than failing. */}}
+{{- $org := printf "%s%s" "mo" "ia" }}
+{{- $claude_work_marketplace := promptStringOnce . "claude_work_marketplace" "Work Claude marketplace name (blank for none)" $org }}
+{{- if $claude_work_marketplace }}
+{{-   $claude_work_plugin := promptStringOnce . "claude_work_plugin" "Work Claude plugin name" $org }}
+{{-   $claude_work_repo := promptStringOnce . "claude_work_repo" "Work Claude marketplace repo (owner/name)" (printf "andrii-melnyk-%s/claude-plugins-%s" $org $org) }}
+    claude_work_marketplace = {{ $claude_work_marketplace | quote }}
+    claude_work_plugin = {{ $claude_work_plugin | quote }}
+    claude_work_repo = {{ $claude_work_repo | quote }}
+{{- end }}
+
 {{- $script := joinPath .chezmoi.sourceDir ".chezmoiscripts/run_onchange_before_decrypt-chezmoi-secrets.sh.tmpl" }}
 {{- $command := print "export DOTFILES_KEY_NAME=" $dotfiles_key_name "; zsh " $script }}
 {{- $_ := output "zsh" "-c" $command }}

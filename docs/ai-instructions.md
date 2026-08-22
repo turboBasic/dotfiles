@@ -49,6 +49,11 @@ home/                            ← chezmoi source dir (declared via .chezmoiro
 ├── .secrets/
 │   ├── accounts.json.age        ← encrypted accounts
 │   └── age-00-chezmoi.key.age   ← encrypted main age private key
+├── private_dot_claude/          ← Claude Code user config
+│   ├── CLAUDE.md                ← global instructions for every project
+│   ├── private_RTK.md           ← rtk command reference, included by CLAUDE.md
+│   ├── private_settings.json.tmpl  ← settings; marketplaces and enabled plugins (templated)
+│   └── skills/symlink_raindrop.tmpl ← the one skill still symlinked to a project checkout
 ├── dot_local/bin/               ← scripts installed to ~/.local/bin
 ├── private_dot_config/
 │   ├── private_git/             ← per-account gitconfigs (templated, some encrypted)
@@ -81,7 +86,10 @@ op-export-accounts               ← 1Password account export helper
 op-update-accounts               ← Full pipeline: export → commit → chezmoi init --apply
 docs/
 ├── ai-instructions.md           ← you are here
+├── ARCHITECTURE.md              ← install flow, encryption, hooks, template data, test suite
 ├── ZINIT.md                     ← Zinit plugin manager conventions and reference
+├── guide-claude-plugins.md      ← Claude Code marketplaces: what a fresh machine needs
+├── guide-work-vw-service-account.md ← work service-account setup
 ├── adr/                         ← Architecture Decision Records (NNNN-title.md + template.md)
 ├── zinit/                       ← Zinit Knowledge Base submodule
 │   ├── cards/                   ← ~500 KB cards (ices, commands, concepts, annexes, packages, recipes, troubleshooting, installation, migration)
