@@ -139,6 +139,16 @@ All `.tmpl` files have access to chezmoi's standard variables plus the `[data]` 
 | `.aliases`             | JSON string mapping alias → account key |
 | `.packages`            | entire `packages.yaml` tree             |
 
+Three more are **optional** — present only where `chezmoi init` was answered for them, and absent on a
+machine with no work tooling. `private_dot_claude/private_settings.json.tmpl` guards each with `hasKey`,
+so it renders valid JSON either way. See [guide-claude-plugins.md](guide-claude-plugins.md).
+
+| Variable                    | Description                                          |
+| --------------------------- | ---------------------------------------------------- |
+| `.claude_work_marketplace`  | Work Claude marketplace name                         |
+| `.claude_work_plugin`       | Work Claude plugin name within it                    |
+| `.claude_work_repo`         | `owner/name` of the private repo hosting it          |
+
 Profile-conditional logic (e.g. `zsh/.include/zinit_30_profiles.zsh.tmpl`, `zsh/private_dot_zshrc.tmpl`, git configs) uses `{{ if eq .profile "personal" }}` / `{{ if eq .profile "work.2025.05" }}`.
 
 ### Profiles
