@@ -1,6 +1,6 @@
 ---
 name: cross-repo
-description: Route a stray thought - an idea, a bug, a follow-up - to the repository that should hold it, then check whether an issue already covers it. Use when asked where something belongs, when a request names no repository, or when the right home is the question.
+description: Route a stray thought - an idea, a bug, a follow-up - to the repository that should hold it, check whether an issue already covers it, and put the issue on the backlog project. Use when asked where something belongs, when a request names no repository, when the right home is the question, or when an existing issue needs adding to the backlog.
 ---
 
 # Route a stray thought to the right repository
@@ -66,14 +66,20 @@ runner-up is weak, say it is weak.
 `GH_TOKEN=$(gh auth token -h github.com -u turboBasic) gh label list -R <owner>/<repo>` on the chosen
 repository, and pick only from what is there. No label is created from this skill.
 
-## The cross-repo project
+## The backlog project
 
-Work spanning more than one repository belongs in user project #3, and the one automated route in is its
-`Auto-add sub-issues` workflow.
+**Every issue belongs in user project #3, whether or not it spans repositories.** GitHub's `Auto-add to
+project` workflow takes one repository each and is capped by plan, so it can never cover all 50-odd, which
+is why adding by hand is the normal route rather than a fallback.
 
-- **A parent already tracked in #3** → wire the new issue as that parent's sub-issue and the workflow
+- **A parent already tracked in #3** → wire the new issue as that parent's sub-issue; `Auto-add sub-issues`
   places it.
-- **No such parent** → say plainly that the issue is in no project. Never `gh project item-add`.
+- **No such parent** → add it:
+
+  ```bash
+  GH_TOKEN=$(gh auth token -h github.com -u turboBasic) \
+    gh project item-add 3 --owner turboBasic --url <issue-url>
+  ```
 
 ## Where a new repository goes
 
