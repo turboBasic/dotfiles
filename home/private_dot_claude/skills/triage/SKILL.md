@@ -1,13 +1,12 @@
 ---
-name: cross-repo
-description: Route a stray thought - an idea, a bug, a follow-up - to the repository that should hold it, then check whether an issue already covers it. Use when asked where something belongs, when a request names no repository, or when the right home is the question.
+name: triage
+description: Route a stray thought - an idea, a bug, a follow-up - to the repository that should hold it, check whether an issue already covers it, and put it on the backlog. Use when asked where something belongs, when a request names no repository, when the right home is the question, or when an existing issue needs filing.
 ---
 
-# Route a stray thought to the right repository
+# Triage a stray thought
 
-**Acting as product owner.** It owns which repository holds a deliverable and whether that deliverable is
-already tracked. It does not write the issue body — `planning:write-issue` owns that — and it changes
-nothing in any repository it reads.
+**Acting as product owner.** It owns the repository, the duplicate check and the backlog placement.
+`planning:write-issue` owns the body; this skill changes nothing in any repository it reads.
 
 ## The catalogue
 
@@ -66,14 +65,16 @@ runner-up is weak, say it is weak.
 `GH_TOKEN=$(gh auth token -h github.com -u turboBasic) gh label list -R <owner>/<repo>` on the chosen
 repository, and pick only from what is there. No label is created from this skill.
 
-## The cross-repo project
+## The backlog project
 
-Work spanning more than one repository belongs in user project #3, and the one automated route in is its
-`Auto-add sub-issues` workflow.
+**Tracked work goes on user project #3 whether or not it spans repositories** — the board is where work
+lands once triaged, not a census of every open issue. `Auto-add to project` is per-repository and
+plan-capped, so add it:
 
-- **A parent already tracked in #3** → wire the new issue as that parent's sub-issue and the workflow
-  places it.
-- **No such parent** → say plainly that the issue is in no project. Never `gh project item-add`.
+`GH_TOKEN=$(gh auth token -h github.com -u turboBasic) gh project item-add 3 --owner turboBasic --url <issue-url>`
+
+Unconditionally: the call returns the existing item when the issue is already on the board, so a parent's
+`Auto-add sub-issues` placement is not a case to branch on.
 
 ## Where a new repository goes
 

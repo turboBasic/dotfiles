@@ -57,12 +57,12 @@ every project cloned first.
 **`raindrop` is one exception and keeps its symlink.** It is not a documentation lookup — it resolves a
 vault through that symlink and writes into the live vault, which a read-only plugin cache is not.
 
-**`cross-repo` is the other, and the file itself is not a symlink** — a real file here, applied to
-`~/.claude/skills/cross-repo/`. It names two GitHub owners, an inline token and a project number, which the
+**`triage` is the other, and the file itself is not a symlink** — a real file here, applied to
+`~/.claude/skills/triage/`. It names two GitHub owners, an inline token and a project number, which the
 marketplace's generic-skill invariant keeps out of a plugin; and being asked from any directory, it has no
 consuming repository whose `.claude/skills/` could hold it instead. A skill in that position belongs at
 account scope. **A second harness reaches the same file through a symlink of its own:**
-`private_dot_config/opencode/skill/symlink_cross-repo.tmpl` points OpenCode's global skill directory
+`private_dot_config/opencode/skill/symlink_triage.tmpl` points OpenCode's global skill directory
 (`~/.config/opencode/skill/`) at the applied Claude Code skill, so there is still one file, not two copies.
 
 ## Scope reference
