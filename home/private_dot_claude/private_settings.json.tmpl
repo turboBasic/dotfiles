@@ -30,8 +30,15 @@
     "chezmoi-docs@turbobasic": true,
     "mise-docs@turbobasic": true,
     "uv-docs@turbobasic": true,
-    "zinit-docs@turbobasic": true{{- if hasKey . "claude_work_plugin" }},
-    "{{ .claude_work_plugin }}@{{ .claude_work_marketplace }}": true{{- end }}
+    "zinit-docs@turbobasic": true,
+{{- if hasKey . "claude_work_plugin" }}
+    "{{ .claude_work_plugin }}@{{ .claude_work_marketplace }}": true,
+{{- end }}
+    "planning@turbobasic": true,
+    "review@turbobasic": true,
+    "hygiene@turbobasic": true,
+    "stacks@turbobasic": true,
+    "scaffold@turbobasic": true
   },
   "extraKnownMarketplaces": {
     "ponytail": {
@@ -57,5 +64,6 @@
   "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "editorMode": "vim"
+  "editorMode": "vim",
+  "tui": "fullscreen"
 }
