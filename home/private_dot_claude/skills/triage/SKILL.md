@@ -5,9 +5,8 @@ description: Route a stray thought - an idea, a bug, a follow-up - to the reposi
 
 # Triage a stray thought
 
-**Acting as product owner.** It owns which repository holds a deliverable, whether that deliverable is
-already tracked, and whether it reaches the backlog. It does not write the issue body — `planning:write-issue` owns that — and it changes
-nothing in any repository it reads.
+**Acting as product owner.** It owns the repository, the duplicate check and the backlog placement.
+`planning:write-issue` owns the body; this skill changes nothing in any repository it reads.
 
 ## The catalogue
 
@@ -68,18 +67,14 @@ repository, and pick only from what is there. No label is created from this skil
 
 ## The backlog project
 
-**Every issue belongs in user project #3, whether or not it spans repositories.** GitHub's `Auto-add to
-project` workflow takes one repository each and is capped by plan, so it can never cover all 50-odd, which
-is why adding by hand is the normal route rather than a fallback.
+**Tracked work goes on user project #3 whether or not it spans repositories** — the board is where work
+lands once triaged, not a census of every open issue. `Auto-add to project` is per-repository and
+plan-capped, so add it:
 
-- **A parent already tracked in #3** → wire the new issue as that parent's sub-issue; `Auto-add sub-issues`
-  places it.
-- **No such parent** → add it:
+`GH_TOKEN=$(gh auth token -h github.com -u turboBasic) gh project item-add 3 --owner turboBasic --url <issue-url>`
 
-  ```bash
-  GH_TOKEN=$(gh auth token -h github.com -u turboBasic) \
-    gh project item-add 3 --owner turboBasic --url <issue-url>
-  ```
+Unconditionally: the call returns the existing item when the issue is already on the board, so a parent's
+`Auto-add sub-issues` placement is not a case to branch on.
 
 ## Where a new repository goes
 
