@@ -1,12 +1,12 @@
 ---
-name: cross-repo
-description: Route a stray thought - an idea, a bug, a follow-up - to the repository that should hold it, check whether an issue already covers it, and put the issue on the backlog project. Use when asked where something belongs, when a request names no repository, when the right home is the question, or when an existing issue needs adding to the backlog.
+name: triage
+description: Route a stray thought - an idea, a bug, a follow-up - to the repository that should hold it, check whether an issue already covers it, and put it on the backlog. Use when asked where something belongs, when a request names no repository, when the right home is the question, or when an existing issue needs filing.
 ---
 
-# Route a stray thought to the right repository
+# Triage a stray thought
 
-**Acting as product owner.** It owns which repository holds a deliverable and whether that deliverable is
-already tracked. It does not write the issue body — `planning:write-issue` owns that — and it changes
+**Acting as product owner.** It owns which repository holds a deliverable, whether that deliverable is
+already tracked, and whether it reaches the backlog. It does not write the issue body — `planning:write-issue` owns that — and it changes
 nothing in any repository it reads.
 
 ## The catalogue
