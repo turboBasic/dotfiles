@@ -1,9 +1,15 @@
 {
 	"folders": [
 		{
+			"name": "claude-plugins",
 			"path": "turboBasic/claude-plugins"
 		},
 		{
+			"name": "claude-plugins-moia",
+			"path": "../vw/github/claude-plugins-moia"
+		},
+		{
+			"name": "PopulationCircles2026",
 			"path": "turboBasic/PopulationCircles2026"
 		}
 	],

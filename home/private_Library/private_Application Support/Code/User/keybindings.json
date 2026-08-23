@@ -7,5 +7,12 @@
     {
         "key": "cmd+h",
         "command": "workbench.action.closePanel"
+    },
+    // Markdown has no formatting provider, so the default Format Document binding is inert here
+    // (it is gated on editorHasDocumentFormattingProvider). markdownlint fixes what it can instead.
+    {
+        "key": "shift+alt+f",
+        "command": "markdownlint.fixAll",
+        "when": "editorLangId == markdown && editorTextFocus && !editorReadonly"
     }
 ]
