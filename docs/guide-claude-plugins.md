@@ -54,8 +54,14 @@ Documentation-lookup skills used to be symlinks from `~/.claude/skills` into pro
 the repository where it is edited, so a fresh machine gets them from the marketplace instead of needing
 every project cloned first.
 
-**`raindrop` is the one exception and keeps its symlink.** It is not a documentation lookup — it resolves a
+**`raindrop` is one exception and keeps its symlink.** It is not a documentation lookup — it resolves a
 vault through that symlink and writes into the live vault, which a read-only plugin cache is not.
+
+**`cross-repo` is the other, and is not a symlink at all** — a real file here, applied to
+`~/.claude/skills/cross-repo/`. It names two GitHub owners, an inline token and a project number, which the
+marketplace's generic-skill invariant keeps out of a plugin; and being asked from any directory, it has no
+consuming repository whose `.claude/skills/` could hold it instead. A skill in that position belongs at
+account scope.
 
 ## Scope reference
 

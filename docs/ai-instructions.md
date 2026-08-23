@@ -53,6 +53,7 @@ home/                            ← chezmoi source dir (declared via .chezmoiro
 │   ├── CLAUDE.md                ← global instructions for every project
 │   ├── private_RTK.md           ← rtk command reference, included by CLAUDE.md
 │   ├── private_settings.json.tmpl  ← settings; marketplaces and enabled plugins (templated)
+│   ├── skills/cross-repo/       ← routes a stray thought to the right repo; account-scope, so no repo owns it
 │   └── skills/symlink_raindrop.tmpl ← the one skill still symlinked to a project checkout
 ├── dot_local/bin/               ← scripts installed to ~/.local/bin
 ├── private_dot_config/
