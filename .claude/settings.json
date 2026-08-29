@@ -12,7 +12,6 @@
     "zinit-kb"
   ],
   "enabledPlugins": {
-    "hygiene@turbobasic": true,
     "chezmoi-docs@turbobasic": true,
     "zinit-docs@turbobasic": true,
     "mise-docs@turbobasic": true,
