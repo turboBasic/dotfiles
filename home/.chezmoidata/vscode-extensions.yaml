@@ -34,6 +34,7 @@ vscodeExtensions:
     - vivaxy.vscode-conventional-commits
     - vsls-contrib.gistfs
   Default:
+    - alefragnani.project-manager
     - anthropic.claude-code
     - charliermarsh.ruff
     - davidanson.vscode-markdownlint
@@ -55,6 +56,7 @@ vscodeExtensions:
     - tamasfe.even-better-toml
     - vivaxy.vscode-conventional-commits
   Go:
+    - alefragnani.project-manager
     - axetroy.vscode-auto-schema
     - editorconfig.editorconfig
     - golang.go
@@ -70,6 +72,7 @@ vscodeExtensions:
     - vscode-icons-team.vscode-icons
     - wassimdev.wassimdev-vscode-deepseek
   Java:
+    - alefragnani.project-manager
     - editorconfig.editorconfig
     - pkief.material-icon-theme
     - redhat.java
@@ -84,6 +87,7 @@ vscodeExtensions:
     - vscjava.vscode-java-test
     - vscjava.vscode-maven
   Node.js:
+    - alefragnani.project-manager
     - christian-kohler.npm-intellisense
     - dbaeumer.vscode-eslint
     - editorconfig.editorconfig
@@ -100,6 +104,7 @@ vscodeExtensions:
     - xabikos.javascriptsnippets
   Python:
     - akhail.save-typing
+    - alefragnani.project-manager
     - amazonwebservices.amazon-q-vscode
     - anthropic.claude-code
     - benjaminbenais.copilot-theme
@@ -247,6 +252,7 @@ vscodeExtensions:
     - zaguini.vscode-file-vault
   Terraform:
     - 4ops.terraform
+    - alefragnani.project-manager
     - anthropic.claude-code
     - arahata.linter-actionlint
     - bierner.markdown-mermaid
@@ -282,6 +288,7 @@ vscodeExtensions:
     - zainchen.json
   VW.ADMT:
     - 4ops.terraform
+    - alefragnani.project-manager
     - anthropic.claude-code
     - arahata.linter-actionlint
     - axetroy.vscode-auto-schema
@@ -330,6 +337,7 @@ vscodeExtensions:
     - willasm.obsidian-md-vsc
     - zainchen.json
   ai-infra:
+    - alefragnani.project-manager
     - anthropic.claude-code
     - bierner.github-markdown-preview
     - bierner.markdown-checkbox
@@ -349,6 +357,7 @@ vscodeExtensions:
     - streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
     - tamasfe.even-better-toml
   tb-shared-repos:
+    - alefragnani.project-manager
     - anthropic.claude-code
     - arahata.linter-actionlint
     - charliermarsh.ruff
