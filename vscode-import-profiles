@@ -11,15 +11,18 @@
 #   execute from the root of the chezmoi directory:
 #   $ ./vscode-import-profiles [--list | --self-check]
 
+import functools
 import json
 import shutil
 import subprocess
 import sys
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
 SUPPORT_DIR = Path.home() / "Library/Application Support/Code/User"
 REPO_PROFILES = Path("home/private_Library/private_Application Support/Code/User/profiles")
+EXTENSIONS_YAML = Path("home/.chezmoidata/vscode-extensions.yaml")
 
 INERT_NOTE = (
     "// NOTE: useDefaultFlags.settings is true — VS Code reads the root "
@@ -43,7 +46,8 @@ def list_profiles(support_dir: Path) -> list[Profile]:
     ]
 
 
-def list_extensions(name: str) -> list[str]:
+@functools.cache
+def list_extensions(name: str) -> tuple[str, ...]:
     if shutil.which("code") is None:
         sys.exit("error: the `code` CLI is not on PATH")
     out = subprocess.run(
@@ -52,7 +56,7 @@ def list_extensions(name: str) -> list[str]:
         text=True,
         check=True,
     ).stdout
-    return sorted(line for line in out.splitlines() if line)
+    return tuple(sorted(line for line in out.splitlines() if line))
 
 
 _OWNED_HEADER = ("// Profile:", "// Profile path:", "// NOTE:")
@@ -77,7 +81,7 @@ def render(
     name: str,
     profile_path: str,
     settings_body: str,
-    extensions: list[str],
+    extensions: Sequence[str],
     uses_default_settings: bool,
 ) -> str:
     header = [f"// Profile: {name}", f"// Profile path: {profile_path}"]
@@ -191,6 +195,16 @@ def import_profiles(support_dir: Path, repo_profiles: Path) -> None:
         print(f"imported {profile.name}{inert}")
 
 
+def write_vscode_extensions_yaml(path: Path, profiles: list[Profile]) -> None:
+    lines = ["vscodeExtensions:"]
+    for profile in sorted(profiles, key=lambda p: p.name):
+        extensions = list_extensions(profile.name)
+        lines.append(f"  {profile.name}:{'' if extensions else ' []'}")
+        lines.extend(f"    - {ext}" for ext in extensions)
+    path.write_text("\n".join(lines) + "\n")
+    print(f"wrote {path}")
+
+
 def main(argv: list[str]) -> int:
     if argv == ["--self-check"]:
         _self_check()
@@ -203,6 +217,7 @@ def main(argv: list[str]) -> int:
         print("usage: vscode-import-profiles [--list | --self-check]", file=sys.stderr)
         return 2
     import_profiles(SUPPORT_DIR, REPO_PROFILES)
+    write_vscode_extensions_yaml(EXTENSIONS_YAML, list_profiles(SUPPORT_DIR))
     return 0
 
 

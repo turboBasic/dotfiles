@@ -314,7 +314,8 @@ Exclusions that are deliberate and must be preserved:
 - **Zsh is out of shellcheck's reach.** shellcheck has no zsh dialect, so `*.zsh` and
   `tests/test-macos.sh` (zsh despite the extension) are not checked.
 - **VS Code user config is excluded from cspell** (`**/Code/User/**`,
-  `.vscode/extensions.json`) — generated settings across profiles contribute roughly 150
+  `.vscode/extensions.json`, `home/.chezmoidata/vscode-extensions.yaml`) — generated
+  settings and the generated per-profile extension lists contribute roughly 150
   marketplace publisher IDs and no prose.
 - **age recipient keys and 1Password 26-char IDs** are dropped by `ignoreRegExpList`
   rather than being listed word by word.
