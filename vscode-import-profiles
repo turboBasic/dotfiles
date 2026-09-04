@@ -209,6 +209,12 @@ def main(argv: list[str]) -> int:
     if argv == ["--self-check"]:
         _self_check()
         return 0
+    if sys.platform != "darwin":
+        print(
+            "error: macOS only — VS Code profiles live under ~/Library/Application Support",
+            file=sys.stderr,
+        )
+        return 1
     if argv == ["--list"]:
         for profile in list_profiles(SUPPORT_DIR):
             print(f"{profile.location}\t{profile.name}\t{profile.uses_default_settings}")
