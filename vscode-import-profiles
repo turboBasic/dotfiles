@@ -1,0 +1,105 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = []
+# ///
+
+# Regenerate the chezmoi-managed copies of the VS Code profile settings.json files
+# from live data, so the header and the trailing extension list can never drift from
+# the profile they claim to describe.
+# Usage:
+#   execute from the root of the chezmoi directory:
+#   $ ./vscode-import-profiles [--list | --self-check]
+
+import sys
+
+INERT_NOTE = (
+    "// NOTE: useDefaultFlags.settings is true — VS Code reads the root "
+    "Code/User/settings.json for this profile; this file is not currently active."
+)
+
+
+def render(
+    name: str,
+    profile_path: str,
+    settings_body: str,
+    extensions: list[str],
+    uses_default_settings: bool,
+) -> str:
+    header = [f"// Profile: {name}", f"// Profile path: {profile_path}"]
+    if uses_default_settings:
+        header.append(INERT_NOTE)
+    body = settings_body if settings_body.endswith("\n") else settings_body + "\n"
+    footer = [
+        "/*",
+        "",
+        f"❯ code --list-extensions --profile {name} | sort | clipcopy",
+        "",
+        *extensions,
+        "",
+        "*/",
+    ]
+    return "\n".join(header) + "\n" + body + "\n".join(footer) + "\n"
+
+
+def _self_check() -> None:
+    live = render(
+        "VW.ADMT",
+        "~/Library/Application Support/Code/User/profiles/-46c02fca/settings.json",
+        '{\n\t"editor.fontSize": 13\n}\n',
+        ["editorconfig.editorconfig", "redhat.vscode-yaml"],
+        False,
+    )
+    assert live == (
+        "// Profile: VW.ADMT\n"
+        "// Profile path: ~/Library/Application Support/Code/User/profiles/-46c02fca/settings.json\n"
+        "{\n"
+        '\t"editor.fontSize": 13\n'
+        "}\n"
+        "/*\n"
+        "\n"
+        "❯ code --list-extensions --profile VW.ADMT | sort | clipcopy\n"
+        "\n"
+        "editorconfig.editorconfig\n"
+        "redhat.vscode-yaml\n"
+        "\n"
+        "*/\n"
+    ), live
+
+    inert = render(
+        "Shell",
+        "~/Library/Application Support/Code/User/profiles/7ba910e7/settings.json",
+        '{\n  "editor.fontSize": 14\n}',
+        ["mhutchie.git-graph"],
+        True,
+    )
+    assert inert == (
+        "// Profile: Shell\n"
+        "// Profile path: ~/Library/Application Support/Code/User/profiles/7ba910e7/settings.json\n"
+        "// NOTE: useDefaultFlags.settings is true — VS Code reads the root "
+        "Code/User/settings.json for this profile; this file is not currently active.\n"
+        "{\n"
+        '  "editor.fontSize": 14\n'
+        "}\n"
+        "/*\n"
+        "\n"
+        "❯ code --list-extensions --profile Shell | sort | clipcopy\n"
+        "\n"
+        "mhutchie.git-graph\n"
+        "\n"
+        "*/\n"
+    ), inert
+
+    print("self-check ok")
+
+
+def main(argv: list[str]) -> int:
+    if argv == ["--self-check"]:
+        _self_check()
+        return 0
+    print("usage: vscode-import-profiles [--list | --self-check]", file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

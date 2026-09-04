@@ -33,6 +33,7 @@ atuin
 awscli
 bitwarden
 buildx
+clipcopy
 cookiecutter
 coreutils
 deepseek
