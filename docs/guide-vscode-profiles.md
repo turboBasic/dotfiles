@@ -114,6 +114,12 @@ annotate the header comment so a reader doesn't mistake it for the active config
 `./vscode-import-profiles` at the repo root does exactly this, and is the tool to reach
 for rather than editing a managed copy by hand. One wrinkle it has to handle: chezmoi
 applies the annotated repo copy back over the live `profiles/<location>/settings.json`,
-so on the next import the "live" file already carries the header and the trailing
-extension block. The importer strips the lines it emitted itself before re-rendering —
-hand-written comments in the same file survive.
+so on the next import the "live" file already carries the header it wrote last time. The
+importer strips the lines it emitted itself before re-rendering — hand-written comments in
+the same file survive.
+
+The header is all it writes. Each profile's extension list lives in
+`home/.chezmoidata/vscode-extensions.yaml`, which the same run regenerates and
+`run_onchange_02-install-vscode-extensions.sh.tmpl` enforces; earlier copies of these
+files also carried the list as a trailing `❯ code --list-extensions` comment block, and
+the importer strips that block wherever it still finds one.

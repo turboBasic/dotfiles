@@ -19,23 +19,3 @@
     },
     "vsicons.dontShowNewVersionMessage": true
 }
-/*
-
-❯ code --list-extensions --profile Go | sort | clipcopy
-
-axetroy.vscode-auto-schema
-editorconfig.editorconfig
-golang.go
-mhutchie.git-graph
-ms-azuretools.vscode-containers
-piotrpalarz.vscode-gitignore-generator
-pkief.material-icon-theme
-redhat.vscode-yaml
-streetsidesoftware.code-spell-checker
-streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
-tamasfe.even-better-toml
-vivaxy.vscode-conventional-commits
-vscode-icons-team.vscode-icons
-wassimdev.wassimdev-vscode-deepseek
-
-*/

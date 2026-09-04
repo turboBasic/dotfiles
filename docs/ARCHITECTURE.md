@@ -133,8 +133,8 @@ Triggered on every `chezmoi apply` when `vscode-extensions.yaml` changes (hash i
 scratch on every run, from `code --list-extensions --profile <name>` for each profile in
 `globalStorage/storage.json`. Hand edits are lost on the next run; change the profile in
 VS Code and re-import. The same run regenerates the chezmoi-managed profile
-`settings.json` copies, so the enforced install list and the human-readable extension
-comment in each `settings.json` share one source of truth.
+`settings.json` copies, which carry only a header comment — the extension list lives here
+and nowhere else, so there is no second copy to drift.
 
 ---
 
