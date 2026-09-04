@@ -136,6 +136,12 @@ VS Code and re-import. The same run regenerates the chezmoi-managed profile
 `settings.json` copies, which carry only a header comment — the extension list lives here
 and nowhere else, so there is no second copy to drift.
 
+The install script only ever adds. An extension installed into a profile by hand and
+never imported stays there, so the YAML describes a floor, not the exact set.
+`./vscode-import-profiles --prune` reports what a profile has beyond the YAML, and
+`--prune --yes` uninstalls it — kept out of `chezmoi apply` deliberately, so a stale YAML
+can never strip a machine's extensions unattended.
+
 ---
 
 ## Encryption model
