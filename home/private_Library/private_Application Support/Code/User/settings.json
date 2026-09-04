@@ -36,7 +36,6 @@
   "workbench.iconTheme": "material-icon-theme",
   "workbench.statusBar.visible": true,
   "workbench.activityBar.location": "default",
-  "workspaceExplorer.workspaceStorageDirectory": "~/00-projects",
   // Search settings
   "search.exclude": {
     "**/node_modules": true,
@@ -102,6 +101,11 @@
   "settingsSync.ignoredExtensions": [],
   "svg.preview.mode": "svg",
   "projectManager.git.baseFolders": [
+    "~/00-projects"
+  ],
+  // Matches both .vscode/ folders and .code-workspace files, so the multi-root
+  // workspaces under personal/ and vw/ show up alongside the git repos.
+  "projectManager.vscode.baseFolders": [
     "~/00-projects"
   ],
   // Markdown is fixed deliberately, never on save: files.autoSave is afterDelay, so a fix-on-save

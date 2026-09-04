@@ -236,7 +236,6 @@ vscodeExtensions:
     - stuart.unique-window-colors
     - tamasfe.even-better-toml
     - timonwong.shellcheck
-    - tomsaunders.vscode-workspace-explorer
     - ttfree.decode
     - tyriar.sort-lines
     - vivaxy.vscode-conventional-commits
