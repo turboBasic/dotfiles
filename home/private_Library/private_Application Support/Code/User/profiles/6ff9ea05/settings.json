@@ -1,5 +1,6 @@
 // Profile: ai-infra
-// Profile path: ~/Library/Application Support/Code/User/profiles/6ff9ea05/
+// Profile path: ~/Library/Application Support/Code/User/profiles/6ff9ea05/settings.json
+// NOTE: useDefaultFlags.settings is true — VS Code reads the root Code/User/settings.json for this profile; this file is not currently active.
 // Visual settings copied from the Default profile.
 {
   "editor.fontFamily": "FiraCode Nerd Font, Menlo, Monaco, 'Courier New', monospace",
@@ -24,21 +25,3 @@
   "terminal.integrated.confirmOnExit": "hasChildProcesses",
   "terminal.integrated.enableMultiLinePasteWarning": "never"
 }
-/*
-
-❯ code --list-extensions --profile 00-common | sort | clipcopy
-
-anthropic.claude-code
-davidanson.vscode-markdownlint
-editorconfig.editorconfig
-github.vscode-github-actions
-github.vscode-pull-request-github
-mhutchie.git-graph
-monokai.theme-monokai-pro-vscode
-pkief.material-icon-theme
-redhat.vscode-yaml
-streetsidesoftware.code-spell-checker
-streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
-tamasfe.even-better-toml
-
-*/

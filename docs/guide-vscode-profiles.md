@@ -81,10 +81,10 @@ overridden by profile settings.json." Exactly one file is read for a given
 
 | Profile | `useDefaultFlags.settings` | Effective `settings.json` |
 | --- | --- | --- |
-| ai-infra (`6ff9ea05`), 00-common (`-48dfce3f`), Terraform (`73029c16`), Shell (`7ba910e7`), tb-shared-repos (`2223344d`), Java (`-548e617c`) | `true` | root `Code/User/settings.json` — their own `profiles/<location>/settings.json` is **not read** |
-| Go (`-5b384f0`), Python (`-158228ab`), Node.js (`451b20d1`), VW.ADMT (`-46c02fca`) | absent | their own `profiles/<location>/settings.json` |
+| ai-infra (`6ff9ea05`), 00-common (`-48dfce3f`), Terraform (`73029c16`), Shell (`7ba910e7`), Java (`-548e617c`) | `true` | root `Code/User/settings.json` — their own `profiles/<location>/settings.json` is **not read** |
+| Go (`-5b384f0`), Python (`-158228ab`), Node.js (`451b20d1`), VW.ADMT (`-46c02fca`), tb-shared-repos (`2223344d`) | absent | their own `profiles/<location>/settings.json` |
 
-Six of the ten non-builtin profiles are currently reading the root settings file, not
+Five of the ten non-builtin profiles are currently reading the root settings file, not
 their own. `6ff9ea05`'s own file still carries real content (font, theme, terminal
 settings) and a stale comment ("Visual settings copied from the Default profile") —
 almost certainly a leftover from before the profile was switched to "use Default
@@ -109,6 +109,17 @@ Before writing or trusting a chezmoi-managed `profiles/<location>/settings.json`
 cross-check `globalStorage/storage.json` → `userDataProfiles[].useDefaultFlags.settings`
 for that `location`. If `true`, that profile's real settings live in the root
 `Code/User/settings.json` — either skip importing the profile-local file, or clearly
-annotate the header comment so a reader doesn't mistake it for the active config. See
-the import script's own plan for how this is applied:
-`tmp/plans/vscode-import-profiles.plan.md` (scratch, not committed).
+annotate the header comment so a reader doesn't mistake it for the active config.
+
+`./vscode-import-profiles` at the repo root does exactly this, and is the tool to reach
+for rather than editing a managed copy by hand. One wrinkle it has to handle: chezmoi
+applies the annotated repo copy back over the live `profiles/<location>/settings.json`,
+so on the next import the "live" file already carries the header it wrote last time. The
+importer strips the lines it emitted itself before re-rendering — hand-written comments in
+the same file survive.
+
+The header is all it writes. Each profile's extension list lives in
+`home/.chezmoidata/vscode-extensions.yaml`, which the same run regenerates and
+`run_onchange_02-install-vscode-extensions.sh.tmpl` enforces; earlier copies of these
+files also carried the list as a trailing `❯ code --list-extensions` comment block, and
+the importer strips that block wherever it still finds one.

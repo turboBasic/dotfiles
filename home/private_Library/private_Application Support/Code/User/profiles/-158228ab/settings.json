@@ -1,0 +1,61 @@
+// Profile: Python
+// Profile path: ~/Library/Application Support/Code/User/profiles/-158228ab/settings.json
+{
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.fixAll": ["source.unusedImports"],  
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.cache": true,
+        "**/.coverage": true,
+        "**/.coverage.*": true,
+        "**/.hypothesis": true,
+        "**/.mypy_cache": true,
+        "**/.nox": true,
+        "**/.pytest_cache": true,
+        "**/.ruff_cache": true,
+        "**/.tox": true
+    },
+    "git.autofetch": true,
+    "editor.cursorWidth": 3,
+    "editor.fontSize": 14,
+    "editor.fontVariations": false,
+    "terminal.integrated.fontSize": 13,
+    "workbench.colorTheme": "Copilot Theme",
+    "amazonQ.telemetry": false,
+    "aws.cloudformation.telemetry.enabled": false,
+    "claudeCode.preferredLocation": "panel",
+    "claudeCode.selectedModel": "default",
+    "chat.viewSessions.orientation": "stacked",
+    "redhat.telemetry.enabled": false,
+    "files.autoSave": "afterDelay",
+    "editor.renderWhitespace": "all",
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "json.schemaDownload.trustedDomains": {
+        "https://biomejs.dev": true,
+        "https://developer.microsoft.com/json-schemas/": true,
+        "https://json-schema.org/": true,
+        "https://json.schemastore.org/": true,
+        "https://raw.githubusercontent.com/devcontainers/spec/": true,
+        "https://raw.githubusercontent.com/microsoft/vscode/": true,
+        "https://schemastore.azurewebsites.net/": true,
+        "https://www.schemastore.org/": true
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "explorer.confirmDelete": false,
+    "yaml.disableSchemaDetection": [
+        "**/.github/workflows/*.yml",
+        "**/.github/workflows/*.yaml",
+        "**/.gitea/workflows/*.yml",
+        "**/.gitea/workflows/*.yaml",
+        "**/.forgejo/workflows/*.yml",
+        "**/.forgejo/workflows/*.yaml"
+    ]
+}

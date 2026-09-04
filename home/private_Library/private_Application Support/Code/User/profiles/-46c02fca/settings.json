@@ -1,0 +1,38 @@
+// Profile: VW.ADMT
+// Profile path: ~/Library/Application Support/Code/User/profiles/-46c02fca/settings.json
+{
+    "workbench.colorTheme": "Monokai",
+    "explorer.confirmDelete": false,
+    "mise.configureExtensionsAutomatically": true,
+    "mise.configureExtensionsAutomaticallyIncludeList": [
+        "golang.go"
+    ],
+    "mise.configureExtensionsIncludeGlobalTools": false,
+    "files.autoSave": "afterDelay",
+    "chat.viewSessions.orientation": "stacked",
+    "editor.renderWhitespace": "boundary",
+    "git.blame.editorDecoration.enabled": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "go.toolsManagement.autoUpdate": true,
+    "explorer.confirmDragAndDrop": false,
+    "claudeCode.preferredLocation": "panel",
+    "diffEditor.useInlineViewWhenSpaceIsLimited": false,
+    "git.autofetch": true,
+    "git.blame.statusBarItem.enabled": true,
+    "yaml.disableSchemaDetection": [
+        "**/.github/workflows/*.yml",
+        "**/.github/workflows/*.yaml",
+        "**/.gitea/workflows/*.yml",
+        "**/.gitea/workflows/*.yaml",
+        "**/.forgejo/workflows/*.yml",
+        "**/.forgejo/workflows/*.yaml"
+    ],
+    "obsidian-md-vsc.defaultVault": "obsidian-vw",
+    "obsidian-md-vsc.defaultVaultPath": "/Users/aamelnyk/00-projects/vw/github/obsidian-vw",
+    "obsidian-md-vsc.defaultNote": "pages/vehicle-data-shared",
+    "editor.fontSize": 15,
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    },
+    "window.density.layout": "compact"
+}

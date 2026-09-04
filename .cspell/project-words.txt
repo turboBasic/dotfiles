@@ -33,6 +33,7 @@ atuin
 awscli
 bitwarden
 buildx
+clipcopy
 cookiecutter
 coreutils
 deepseek
@@ -195,3 +196,6 @@ TOTP
 # Work-specific identifiers
 idpcli
 uici
+
+# Tooling terms
+stdlib

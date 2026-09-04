@@ -1,0 +1,284 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = []
+# ///
+
+# Regenerate the chezmoi-managed copies of the VS Code profile settings.json files, and
+# .chezmoidata/vscode-extensions.yaml, from live data — so the repo can never drift from
+# the profiles it claims to describe.
+# Usage:
+#   execute from the root of the chezmoi directory:
+#   $ ./vscode-import-profiles                 import live state into the repo
+#   $ ./vscode-import-profiles --list          show the profile table
+#   $ ./vscode-import-profiles --prune [--yes] report (or remove) extensions installed in
+#                                              a profile but absent from the YAML
+#   $ ./vscode-import-profiles --self-check    run the render/strip fixtures
+
+import json
+import shutil
+import subprocess
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+
+SUPPORT_DIR = Path.home() / "Library/Application Support/Code/User"
+REPO_PROFILES = Path("home/private_Library/private_Application Support/Code/User/profiles")
+EXTENSIONS_YAML = Path("home/.chezmoidata/vscode-extensions.yaml")
+
+INERT_NOTE = (
+    "// NOTE: useDefaultFlags.settings is true — VS Code reads the root "
+    "Code/User/settings.json for this profile; this file is not currently active."
+)
+
+
+@dataclass(frozen=True)
+class Profile:
+    location: str
+    name: str
+    uses_default_settings: bool
+
+
+def list_profiles(support_dir: Path) -> list[Profile]:
+    storage = json.loads((support_dir / "globalStorage/storage.json").read_text())
+    return [
+        Profile(entry["location"], entry["name"], entry.get("useDefaultFlags", {}).get("settings", False))
+        for entry in storage["userDataProfiles"]
+        if not entry["location"].startswith("builtin/")
+    ]
+
+
+def list_extensions(name: str) -> list[str]:
+    if shutil.which("code") is None:
+        sys.exit("error: the `code` CLI is not on PATH")
+    out = subprocess.run(
+        ["code", "--list-extensions", "--profile", name],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+    return sorted(line for line in out.splitlines() if line)
+
+
+_OWNED_HEADER = ("// Profile:", "// Profile path:")
+
+
+# Undoes a previous render(): chezmoi applies the annotated copy back over the live file,
+# so a re-import would otherwise stack a second header and extension block. Only the lines
+# render() itself emits are removed - INERT_NOTE is matched whole, since `// NOTE:` is a
+# prefix a human writes too.
+def strip_rendered(body: str) -> str:
+    lines = body.splitlines()
+    while lines and (lines[0].startswith(_OWNED_HEADER) or lines[0] == INERT_NOTE):
+        lines.pop(0)
+    for i in range(len(lines) - 1, -1, -1):
+        if lines[i] == "/*" and any(l.startswith("❯ code --list-extensions") for l in lines[i:]):
+            del lines[i:]
+            break
+    while lines and not lines[-1].strip():
+        lines.pop()
+    return "\n".join(lines) + "\n" if lines else ""
+
+
+# No extension list here: home/.chezmoidata/vscode-extensions.yaml holds it, and a second
+# copy in a comment is one more thing to drift. strip_rendered() still removes the block
+# from files written before that split.
+def render(
+    name: str,
+    profile_path: str,
+    settings_body: str,
+    uses_default_settings: bool,
+) -> str:
+    header = [f"// Profile: {name}", f"// Profile path: {profile_path}"]
+    if uses_default_settings:
+        header.append(INERT_NOTE)
+    body = settings_body if settings_body.endswith("\n") else settings_body + "\n"
+    return "\n".join(header) + "\n" + body
+
+
+def _self_check() -> None:
+    live = render(
+        "VW.ADMT",
+        "~/Library/Application Support/Code/User/profiles/-46c02fca/settings.json",
+        '{\n\t"editor.fontSize": 13\n}\n',
+        False,
+    )
+    assert live == (
+        "// Profile: VW.ADMT\n"
+        "// Profile path: ~/Library/Application Support/Code/User/profiles/-46c02fca/settings.json\n"
+        "{\n"
+        '\t"editor.fontSize": 13\n'
+        "}\n"
+    ), live
+
+    inert = render(
+        "Shell",
+        "~/Library/Application Support/Code/User/profiles/7ba910e7/settings.json",
+        '{\n  "editor.fontSize": 14\n}',
+        True,
+    )
+    assert inert == (
+        "// Profile: Shell\n"
+        "// Profile path: ~/Library/Application Support/Code/User/profiles/7ba910e7/settings.json\n"
+        "// NOTE: useDefaultFlags.settings is true — VS Code reads the root "
+        "Code/User/settings.json for this profile; this file is not currently active.\n"
+        "{\n"
+        '  "editor.fontSize": 14\n'
+        "}\n"
+    ), inert
+
+    stripped = strip_rendered(
+        "// Profile: ai-infra\n"
+        "// Profile path: ~/Library/Application Support/Code/User/profiles/6ff9ea05/\n"
+        "// Visual settings copied from the Default profile.\n"
+        "{\n"
+        '  "editor.fontSize": 15\n'
+        "}\n"
+        "/*\n"
+        "\n"
+        "❯ code --list-extensions --profile 00-common | sort | clipcopy\n"
+        "\n"
+        "editorconfig.editorconfig\n"
+        "\n"
+        "*/\n"
+    )
+    assert stripped == (
+        "// Visual settings copied from the Default profile.\n"
+        "{\n"
+        '  "editor.fontSize": 15\n'
+        "}\n"
+    ), stripped
+    body = '{\n  "a": 1\n}\n'
+    assert strip_rendered(render("X", "p", body, True)) == body
+    kept = "// NOTE: hand-written, not ours\n" + body
+    assert strip_rendered(kept) == kept, strip_rendered(kept)
+    plain = '{\n\t"a": 1\n}\n'
+    assert strip_rendered(plain) == plain, strip_rendered(plain)
+
+    parsed = parse_extensions_yaml(
+        "# Generated by ./vscode-import-profiles\n"
+        "vscodeExtensions:\n"
+        "  Java: []\n"
+        "  Node.js:\n"
+        "    - a.b\n"
+        "    - c.d\n"
+    )
+    assert parsed == {"Java": [], "Node.js": ["a.b", "c.d"]}, parsed
+
+    print("self-check ok")
+
+
+def import_profiles(support_dir: Path, repo_profiles: Path) -> None:
+    for profile in list_profiles(support_dir):
+        live = support_dir / "profiles" / profile.location / "settings.json"
+        if not live.is_file():
+            print(f"skipped {profile.name}: no settings.json")
+            continue
+        rendered = render(
+            profile.name,
+            f"~/Library/Application Support/Code/User/profiles/{profile.location}/settings.json",
+            strip_rendered(live.read_text()),
+            profile.uses_default_settings,
+        )
+        target = repo_profiles / profile.location / "settings.json"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(rendered)
+        inert = " (inert: reads root settings.json)" if profile.uses_default_settings else ""
+        print(f"imported {profile.name}{inert}")
+
+
+def write_vscode_extensions_yaml(path: Path, profiles: list[Profile]) -> None:
+    lines = [
+        "# Generated by ./vscode-import-profiles — rewritten from scratch on every run.",
+        "# Hand edits are lost; change the profile in VS Code and re-run the importer.",
+        "#",
+        "# VS Code extensions per profile:",
+        "# ❯ code --list-extensions --profile <name> | sort",
+        "#",
+        "vscodeExtensions:",
+    ]
+    for profile in sorted(profiles, key=lambda p: p.name):
+        extensions = list_extensions(profile.name)
+        lines.append(f"  {profile.name}:{'' if extensions else ' []'}")
+        lines.extend(f"    - {ext}" for ext in extensions)
+    path.write_text("\n".join(lines) + "\n")
+    print(f"wrote {path}")
+
+
+# The YAML is written by write_vscode_extensions_yaml() above and by nothing else, so it
+# only ever has the two shapes handled here — a `  <name>:` line followed by `    - <id>`
+# lines, or `  <name>: []` for a profile with no extensions.
+def parse_extensions_yaml(text: str) -> dict[str, list[str]]:
+    profiles: dict[str, list[str]] = {}
+    current = ""
+    for line in text.splitlines():
+        if line.startswith("    - "):
+            profiles[current].append(line[6:])
+        elif line.startswith("  ") and not line.lstrip().startswith("#"):
+            current = line.strip().removesuffix(" []").removesuffix(":")
+            profiles[current] = []
+    return profiles
+
+
+def prune(uninstall: bool) -> int:
+    wanted = parse_extensions_yaml(EXTENSIONS_YAML.read_text())
+    known = {p.name for p in list_profiles(SUPPORT_DIR)}
+    extra_count = 0
+    for name in sorted(wanted.keys() & known, key=str.lower):
+        for ext in sorted(set(list_extensions(name)) - set(wanted[name])):
+            extra_count += 1
+            if uninstall:
+                subprocess.run(
+                    ["code", "--uninstall-extension", ext, "--profile", name],
+                    capture_output=True,
+                    text=True,
+                    check=True,
+                )
+                print(f"uninstalled {name}: {ext}")
+            else:
+                print(f"would uninstall {name}: {ext}")
+    for name in sorted(wanted.keys() - known, key=str.lower):
+        print(f"skipped {name}: no such profile on this machine")
+    if not extra_count:
+        print("nothing to prune — every profile matches the YAML")
+    elif not uninstall:
+        print(f"{extra_count} to remove; re-run with `--prune --yes` to uninstall")
+    return 0
+
+
+def main(argv: list[str]) -> int:
+    if argv == ["--self-check"]:
+        _self_check()
+        return 0
+    if sys.platform != "darwin":
+        print(
+            "error: macOS only — VS Code profiles live under ~/Library/Application Support",
+            file=sys.stderr,
+        )
+        return 1
+    if argv == ["--list"]:
+        profiles = sorted(list_profiles(SUPPORT_DIR), key=lambda p: p.name.lower())
+        rows = [("name", "location", "uses_default_settings")]
+        rows += [(p.name, p.location, str(p.uses_default_settings)) for p in profiles]
+        name_width, location_width = (max(len(row[i]) for row in rows) for i in (0, 1))
+        for name, location, inert in rows:
+            print(f"{name:<{name_width}}  {location:<{location_width}}  {inert}")
+        return 0
+    if argv in ([], ["--prune"], ["--prune", "--yes"]):
+        if not EXTENSIONS_YAML.parent.is_dir():
+            print("error: run from the chezmoi repo root", file=sys.stderr)
+            return 1
+        if argv:
+            return prune(uninstall=argv[1:] == ["--yes"])
+        import_profiles(SUPPORT_DIR, REPO_PROFILES)
+        write_vscode_extensions_yaml(EXTENSIONS_YAML, list_profiles(SUPPORT_DIR))
+        return 0
+    print(
+        "usage: vscode-import-profiles [--list | --prune [--yes] | --self-check]",
+        file=sys.stderr,
+    )
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

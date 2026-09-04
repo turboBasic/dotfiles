@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# chezmoi:template:left-delimiter=#{ right-delimiter=}#
+# vscode-extensions.yaml hash: #{ include ".chezmoidata/vscode-extensions.yaml" | sha256sum }#
+
+#{ if eq .chezmoi.os "darwin" }#
+if ! command -v code >/dev/null 2>&1; then
+    echo "vscode-extensions: 'code' CLI not found, skipping" >&2
+    exit 0
+fi
+
+# One `code` process per profile, and only for what is missing: invoked per extension it
+# spawns Electron ~300 times and prints an "already installed" paragraph for each.
+install_missing() {
+    profile=$1
+    shift
+    installed=$(code --list-extensions --profile "$profile")
+    nl='
+'
+    count=$#
+    i=0
+    while [ "$i" -lt "$count" ]; do
+        extension=$1
+        shift
+        i=$((i + 1))
+        case "$nl$installed$nl" in
+            *"$nl$extension$nl"*) continue ;;
+        esac
+        set -- "$@" --install-extension "$extension"
+    done
+    [ $# -gt 0 ] || return 0
+    echo "vscode-extensions: $profile — installing $(($# / 2))"
+    code --profile "$profile" "$@"
+}
+
+#{ range $profile, $extensions := .vscodeExtensions }#
+install_missing #{ $profile | quote }##{ range $extensions }# \
+    #{ . | quote }##{ end }#
+
+#{ end }#
+#{ end }#

@@ -1,0 +1,24 @@
+// Profile: Node.js
+// Profile path: ~/Library/Application Support/Code/User/profiles/451b20d1/settings.json
+{
+    "editor.formatOnPaste": true,
+    "git.autofetch": true,
+    "[markdown]":  {
+        "editor.wordWrap": "on"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}

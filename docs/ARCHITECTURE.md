@@ -113,6 +113,39 @@ The template uses custom delimiters `#{` / `}#` (declared via `chezmoi:template:
 
 ---
 
+### VS Code extension installation (`run_onchange_02-install-vscode-extensions.sh.tmpl`)
+
+Triggered on every `chezmoi apply` when `vscode-extensions.yaml` changes (hash in comment,
+`run_onchange_` prefix, same mechanism as package installation above).
+
+- **macOS only** (skips with a message if the `code` CLI isn't on `PATH`).
+- Reads `vscodeExtensions: {<profile name>: [<extension id>, ...]}` from
+  `.chezmoidata/vscode-extensions.yaml`.
+- **One `code` process per profile, for missing extensions only.** It reads
+  `code --list-extensions --profile <name>` once, subtracts that from the wanted list in
+  the shell, and passes what's left as repeated `--install-extension` flags in a single
+  invocation. `--install-extension` is idempotent, so re-installing would be harmless —
+  but one invocation per extension boots Electron ~300 times and prints an "already
+  installed" paragraph for each. Diffing first takes the whole run to ~3 s and silence.
+- Keyed by **profile name**, not folder (`location`) — `--profile` takes the name, and the
+  name↔folder mapping only exists in live `globalStorage/storage.json` (see
+  `docs/guide-vscode-profiles.md`), which this script doesn't read.
+
+`vscode-extensions.yaml` is **generated** — `./vscode-import-profiles` rewrites it from
+scratch on every run, from `code --list-extensions --profile <name>` for each profile in
+`globalStorage/storage.json`. Hand edits are lost on the next run; change the profile in
+VS Code and re-import. The same run regenerates the chezmoi-managed profile
+`settings.json` copies, which carry only a header comment — the extension list lives here
+and nowhere else, so there is no second copy to drift.
+
+The install script only ever adds. An extension installed into a profile by hand and
+never imported stays there, so the YAML describes a floor, not the exact set.
+`./vscode-import-profiles --prune` reports what a profile has beyond the YAML, and
+`--prune --yes` uninstalls it — kept out of `chezmoi apply` deliberately, so a stale YAML
+can never strip a machine's extensions unattended.
+
+---
+
 ## Encryption model
 
 | Secret                                  | Encrypted with                          | Decrypted by                   |
@@ -296,7 +329,8 @@ Exclusions that are deliberate and must be preserved:
 - **Zsh is out of shellcheck's reach.** shellcheck has no zsh dialect, so `*.zsh` and
   `tests/test-macos.sh` (zsh despite the extension) are not checked.
 - **VS Code user config is excluded from cspell** (`**/Code/User/**`,
-  `.vscode/extensions.json`) — generated settings across profiles contribute roughly 150
+  `.vscode/extensions.json`, `home/.chezmoidata/vscode-extensions.yaml`) — generated
+  settings and the generated per-profile extension lists contribute roughly 150
   marketplace publisher IDs and no prose.
 - **age recipient keys and 1Password 26-char IDs** are dropped by `ignoreRegExpList`
   rather than being listed word by word.
