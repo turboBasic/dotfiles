@@ -11,12 +11,33 @@
 #   execute from the root of the chezmoi directory:
 #   $ ./vscode-import-profiles [--list | --self-check]
 
+import json
 import sys
+from dataclasses import dataclass
+from pathlib import Path
+
+SUPPORT_DIR = Path.home() / "Library/Application Support/Code/User"
 
 INERT_NOTE = (
     "// NOTE: useDefaultFlags.settings is true — VS Code reads the root "
     "Code/User/settings.json for this profile; this file is not currently active."
 )
+
+
+@dataclass(frozen=True)
+class Profile:
+    location: str
+    name: str
+    uses_default_settings: bool
+
+
+def list_profiles(support_dir: Path) -> list[Profile]:
+    storage = json.loads((support_dir / "globalStorage/storage.json").read_text())
+    return [
+        Profile(entry["location"], entry["name"], entry.get("useDefaultFlags", {}).get("settings", False))
+        for entry in storage["userDataProfiles"]
+        if not entry["location"].startswith("builtin/")
+    ]
 
 
 def render(
@@ -96,6 +117,10 @@ def _self_check() -> None:
 def main(argv: list[str]) -> int:
     if argv == ["--self-check"]:
         _self_check()
+        return 0
+    if argv == ["--list"]:
+        for profile in list_profiles(SUPPORT_DIR):
+            print(f"{profile.location}\t{profile.name}\t{profile.uses_default_settings}")
         return 0
     print("usage: vscode-import-profiles [--list | --self-check]", file=sys.stderr)
     return 2
