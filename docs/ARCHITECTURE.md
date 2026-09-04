@@ -113,6 +113,24 @@ The template uses custom delimiters `#{` / `}#` (declared via `chezmoi:template:
 
 ---
 
+### VS Code extension installation (`run_onchange_02-install-vscode-extensions.sh.tmpl`)
+
+Triggered on every `chezmoi apply` when `vscode-extensions.yaml` changes (hash in comment,
+`run_onchange_` prefix, same mechanism as package installation above).
+
+- **macOS only** (skips with a message if the `code` CLI isn't on `PATH`).
+- Reads `vscodeExtensions: {<profile name>: [<extension id>, ...]}` from
+  `.chezmoidata/vscode-extensions.yaml` and runs
+  `code --install-extension <id> --profile <name>` per entry.
+- `code --install-extension` is idempotent — already-installed extensions are a no-op — so
+  the script re-runs its full list on every trigger rather than diffing against what's
+  installed.
+- Keyed by **profile name**, not folder (`location`) — `--profile` takes the name, and the
+  name↔folder mapping only exists in live `globalStorage/storage.json` (see
+  `docs/guide-vscode-profiles.md`), which this script doesn't read.
+
+---
+
 ## Encryption model
 
 | Secret                                  | Encrypted with                          | Decrypted by                   |

@@ -39,11 +39,13 @@ For typical user workflows (installation, account updates), see `README.md`.
 home/                            ← chezmoi source dir (declared via .chezmoiroot)
 ├── .chezmoi.toml.tmpl           ← config template, runs on init
 ├── .chezmoidata/
-│   └── packages.yaml            ← package manifest for macOS/Linux
+│   ├── packages.yaml            ← package manifest for macOS/Linux
+│   └── vscode-extensions.yaml   ← required extensions per VS Code profile
 ├── .chezmoiignore
 ├── .chezmoiscripts/
 │   ├── run_onchange_before_decrypt-chezmoi-secrets.sh  ← decrypts secrets
-│   └── run_onchange_01-install-packages.sh.tmpl        ← installs packages
+│   ├── run_onchange_01-install-packages.sh.tmpl        ← installs packages
+│   └── run_onchange_02-install-vscode-extensions.sh.tmpl ← installs profile extensions (macOS only)
 ├── .chezmoitemplates/           ← reusable template snippets
 ├── .chezmoiexternals/           ← external resources
 ├── .secrets/

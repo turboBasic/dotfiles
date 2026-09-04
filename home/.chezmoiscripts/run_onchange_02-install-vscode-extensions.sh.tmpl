@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# chezmoi:template:left-delimiter=#{ right-delimiter=}#
+# vscode-extensions.yaml hash: #{ include ".chezmoidata/vscode-extensions.yaml" | sha256sum }#
+
+#{ if eq .chezmoi.os "darwin" }#
+if ! command -v code >/dev/null 2>&1; then
+    echo "vscode-extensions: 'code' CLI not found, skipping" >&2
+    exit 0
+fi
+
+#{ range $profile, $extensions := .vscodeExtensions }#
+#{ range $extensions }#
+code --install-extension #{ . | quote }# --profile #{ $profile | quote }#
+#{ end }#
+#{ end }#
+#{ end }#

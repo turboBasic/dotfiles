@@ -195,3 +195,14 @@ TOTP
 # Work-specific identifiers
 idpcli
 uici
+
+# VS Code extension publisher/name IDs (vscode-extensions.yaml)
+arahata
+charliermarsh
+davidanson
+fnando
+hverlin
+mhutchie
+pkief
+tamasfe
+vivaxy
