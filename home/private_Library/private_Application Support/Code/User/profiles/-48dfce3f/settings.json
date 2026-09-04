@@ -1,5 +1,6 @@
 // Profile: 00-common
 // Profile path: ~/Library/Application Support/Code/User/profiles/-48dfce3f/settings.json
+// NOTE: useDefaultFlags.settings is true — VS Code reads the root Code/User/settings.json for this profile; this file is not currently active.
 {
   // General settings
   // Git settings
@@ -19,7 +20,6 @@
 alefragnani.bookmarks
 alefragnani.project-manager
 anthropic.claude-code
-codezombiech.gitignore
 donjayamanne.githistory
 editorconfig.editorconfig
 emmanuelbeziat.vscode-great-icons
@@ -29,20 +29,19 @@ github.remotehub
 github.vscode-github-actions
 github.vscode-pull-request-github
 gruntfuggly.todo-tree
-hashhar.gitattributes
 howardzuo.vscode-favorites
-ldez.ignore-files
 mhutchie.git-graph
 monokai.theme-monokai-pro-vscode
 ms-vscode-remote.remote-containers
 ms-vscode.remote-repositories
+nefrob.vscode-just-syntax
 pkief.material-icon-theme
 redhat.vscode-yaml
-roonie007.hide-files
+streetsidesoftware.code-spell-checker
+streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
 swellaby.workspace-config-plus
 tamasfe.even-better-toml
 vivaxy.vscode-conventional-commits
 vsls-contrib.gistfs
-yy0931.gitconfig-lsp
 
 */

@@ -1,0 +1,44 @@
+// Profile: Node.js
+// Profile path: ~/Library/Application Support/Code/User/profiles/451b20d1/settings.json
+{
+    "editor.formatOnPaste": true,
+    "git.autofetch": true,
+    "[markdown]":  {
+        "editor.wordWrap": "on"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}
+/*
+
+❯ code --list-extensions --profile Node.js | sort | clipcopy
+
+christian-kohler.npm-intellisense
+dbaeumer.vscode-eslint
+editorconfig.editorconfig
+esbenp.prettier-vscode
+humao.rest-client
+mikestead.dotenv
+ms-azuretools.vscode-docker
+ms-vscode-remote.remote-containers
+orta.vscode-jest
+pkief.material-icon-theme
+redhat.vscode-yaml
+streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
+tamasfe.even-better-toml
+xabikos.javascriptsnippets
+
+*/

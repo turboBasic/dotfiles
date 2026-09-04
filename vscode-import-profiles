@@ -19,6 +19,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 SUPPORT_DIR = Path.home() / "Library/Application Support/Code/User"
+REPO_PROFILES = Path("home/private_Library/private_Application Support/Code/User/profiles")
 
 INERT_NOTE = (
     "// NOTE: useDefaultFlags.settings is true — VS Code reads the root "
@@ -52,6 +53,24 @@ def list_extensions(name: str) -> list[str]:
         check=True,
     ).stdout
     return sorted(line for line in out.splitlines() if line)
+
+
+_OWNED_HEADER = ("// Profile:", "// Profile path:", "// NOTE:")
+
+
+def strip_rendered(body: str) -> str:
+    """Undo a previous render(): chezmoi applies the annotated copy back over the live
+    file, so a re-import would otherwise stack a second header and extension block."""
+    lines = body.splitlines()
+    while lines and lines[0].startswith(_OWNED_HEADER):
+        lines.pop(0)
+    for i in range(len(lines) - 1, -1, -1):
+        if lines[i] == "/*" and any(l.startswith("❯ code --list-extensions") for l in lines[i:]):
+            del lines[i:]
+            break
+    while lines and not lines[-1].strip():
+        lines.pop()
+    return "\n".join(lines) + "\n" if lines else ""
 
 
 def render(
@@ -125,7 +144,51 @@ def _self_check() -> None:
         "*/\n"
     ), inert
 
+    stripped = strip_rendered(
+        "// Profile: ai-infra\n"
+        "// Profile path: ~/Library/Application Support/Code/User/profiles/6ff9ea05/\n"
+        "// Visual settings copied from the Default profile.\n"
+        "{\n"
+        '  "editor.fontSize": 15\n'
+        "}\n"
+        "/*\n"
+        "\n"
+        "❯ code --list-extensions --profile 00-common | sort | clipcopy\n"
+        "\n"
+        "editorconfig.editorconfig\n"
+        "\n"
+        "*/\n"
+    )
+    assert stripped == (
+        "// Visual settings copied from the Default profile.\n"
+        "{\n"
+        '  "editor.fontSize": 15\n'
+        "}\n"
+    ), stripped
+    plain = '{\n\t"a": 1\n}\n'
+    assert strip_rendered(plain) == plain, strip_rendered(plain)
+
     print("self-check ok")
+
+
+def import_profiles(support_dir: Path, repo_profiles: Path) -> None:
+    for profile in list_profiles(support_dir):
+        live = support_dir / "profiles" / profile.location / "settings.json"
+        if not live.is_file():
+            print(f"skipped {profile.name}: no settings.json")
+            continue
+        rendered = render(
+            profile.name,
+            f"~/Library/Application Support/Code/User/profiles/{profile.location}/settings.json",
+            strip_rendered(live.read_text()),
+            list_extensions(profile.name),
+            profile.uses_default_settings,
+        )
+        target = repo_profiles / profile.location / "settings.json"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(rendered)
+        inert = " (inert: reads root settings.json)" if profile.uses_default_settings else ""
+        print(f"imported {profile.name}{inert}")
 
 
 def main(argv: list[str]) -> int:
@@ -136,8 +199,11 @@ def main(argv: list[str]) -> int:
         for profile in list_profiles(SUPPORT_DIR):
             print(f"{profile.location}\t{profile.name}\t{profile.uses_default_settings}")
         return 0
-    print("usage: vscode-import-profiles [--list | --self-check]", file=sys.stderr)
-    return 2
+    if argv:
+        print("usage: vscode-import-profiles [--list | --self-check]", file=sys.stderr)
+        return 2
+    import_profiles(SUPPORT_DIR, REPO_PROFILES)
+    return 0
 
 
 if __name__ == "__main__":

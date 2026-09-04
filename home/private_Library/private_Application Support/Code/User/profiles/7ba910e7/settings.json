@@ -1,5 +1,6 @@
 // Profile: Shell
 // Profile path: ~/Library/Application Support/Code/User/profiles/7ba910e7/settings.json
+// NOTE: useDefaultFlags.settings is true — VS Code reads the root Code/User/settings.json for this profile; this file is not currently active.
 {
   // Use settings from Default profile
 }
@@ -7,7 +8,6 @@
 
 ❯ code --list-extensions --profile Shell | sort | clipcopy
 
-4ops.terraform
 aaron-bond.better-comments
 adam-watters.vscode-color-pick
 adamhartford.vscode-base64
@@ -18,7 +18,6 @@ andrei-ignatev.codeowners-tree
 anthropic.claude-code
 arahata.linter-actionlint
 bahramjoharshamshiri.hcl-lsp
-bceskavich.theme-dracula-at-night
 bhughes339.replacerules
 bierner.markdown-checkbox
 bierner.markdown-mermaid
@@ -26,14 +25,10 @@ bmuskalla.vscode-tldr
 bodil.prettier-toml
 brunnerh.insert-unicode
 buttaiwan.cursor-charcode
-charliermarsh.ruff
-codezombiech.gitignore
-d-biehl.robotcode
 davidanson.vscode-markdownlint
 deerawan.vscode-dash
 deerawan.vscode-faker
 deerawan.vscode-hasher
-devine-davies.make-hidden
 docker.docker
 donjayamanne.githistory
 dracula-theme.theme-dracula
@@ -54,9 +49,6 @@ github.vscode-github-actions
 github.vscode-pull-request-github
 glavin001.unibeautify-vscode
 gruntfuggly.todo-tree
-hashhar.gitattributes
-hashicorp.hcl
-hashicorp.terraform
 hcoban.codeowners
 helixquar.randomeverything
 huizhou.githd
@@ -64,25 +56,19 @@ hungvo.htext
 iliazeus.vscode-ansi
 jasonnutter.vscode-codeowners
 jetmartin.bats
+jinliming2.vscode-go-template
 jock.svg
 johnguo.columnpaste
 kdcro101.favorites
-kenhowardpdx.vscode-gist
 l13rary.l13-diff
 lamartire.line-to-column
-ldez.ignore-files
 letmaik.git-tree-compare
 mads-hartmann.bash-ide-vscode
-magicstack.magicpython
 maziac.hex-hover-converter
 mhutchie.git-graph
-michelemelluso.gitignore
+monokai.theme-monokai-pro-vscode
 moshfeu.compare-folders
 ms-azuretools.vscode-containers
-ms-python.debugpy
-ms-python.python
-ms-python.vscode-pylance
-ms-python.vscode-python-envs
 ms-vscode-remote.remote-containers
 ms-vscode-remote.remote-ssh
 ms-vscode-remote.remote-ssh-edit
@@ -95,7 +81,6 @@ nickdemayo.vscode-json-editor
 openai.chatgpt
 pdconsec.vscode-print
 peterschmalfeldt.explorer-exclude
-pjmiravalle.terraform-advanced-syntax-highlighting
 pkief.material-icon-theme
 pnp.polacode
 qcz.text-power-tools
@@ -104,7 +89,6 @@ redhat.vscode-yaml
 remisa.shellman
 richie5um2.vscode-sort-json
 rogalmic.bash-debug
-roonie007.hide-files
 samuelcolvin.jinjahtml
 shalimski.swapdiff
 sidneys1.gitconfig
@@ -121,8 +105,6 @@ vscode-icons-team.vscode-icons
 vsls-contrib.gistfs
 wassimdev.wassimdev-vscode-deepseek
 yhirose.filtertext
-yy0931.gitconfig-lsp
-yzhang.markdown-all-in-one
 zaguini.vscode-file-vault
 
 */

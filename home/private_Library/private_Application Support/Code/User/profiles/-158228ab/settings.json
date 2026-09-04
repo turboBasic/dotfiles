@@ -1,0 +1,116 @@
+// Profile: Python
+// Profile path: ~/Library/Application Support/Code/User/profiles/-158228ab/settings.json
+{
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.fixAll": ["source.unusedImports"],  
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.cache": true,
+        "**/.coverage": true,
+        "**/.coverage.*": true,
+        "**/.hypothesis": true,
+        "**/.mypy_cache": true,
+        "**/.nox": true,
+        "**/.pytest_cache": true,
+        "**/.ruff_cache": true,
+        "**/.tox": true
+    },
+    "git.autofetch": true,
+    "editor.cursorWidth": 3,
+    "editor.fontSize": 14,
+    "editor.fontVariations": false,
+    "terminal.integrated.fontSize": 13,
+    "workbench.colorTheme": "Copilot Theme",
+    "amazonQ.telemetry": false,
+    "aws.cloudformation.telemetry.enabled": false,
+    "claudeCode.preferredLocation": "panel",
+    "claudeCode.selectedModel": "default",
+    "chat.viewSessions.orientation": "stacked",
+    "redhat.telemetry.enabled": false,
+    "files.autoSave": "afterDelay",
+    "editor.renderWhitespace": "all",
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "json.schemaDownload.trustedDomains": {
+        "https://biomejs.dev": true,
+        "https://developer.microsoft.com/json-schemas/": true,
+        "https://json-schema.org/": true,
+        "https://json.schemastore.org/": true,
+        "https://raw.githubusercontent.com/devcontainers/spec/": true,
+        "https://raw.githubusercontent.com/microsoft/vscode/": true,
+        "https://schemastore.azurewebsites.net/": true,
+        "https://www.schemastore.org/": true
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "explorer.confirmDelete": false,
+    "yaml.disableSchemaDetection": [
+        "**/.github/workflows/*.yml",
+        "**/.github/workflows/*.yaml",
+        "**/.gitea/workflows/*.yml",
+        "**/.gitea/workflows/*.yaml",
+        "**/.forgejo/workflows/*.yml",
+        "**/.forgejo/workflows/*.yaml"
+    ]
+}
+/*
+
+❯ code --list-extensions --profile Python | sort | clipcopy
+
+akhail.save-typing
+amazonwebservices.amazon-q-vscode
+anthropic.claude-code
+benjaminbenais.copilot-theme
+charliermarsh.ruff
+d-biehl.robotcode
+darkriszty.markdown-table-prettify
+davidanson.vscode-markdownlint
+donjayamanne.githistory
+donjayamanne.python-environment-manager
+editorconfig.editorconfig
+esbenp.prettier-vscode
+github.vscode-github-actions
+github.vscode-pull-request-github
+golang.go
+hashicorp.hcl
+ironmansoftware.powershellprotools
+magicstack.magicpython
+mechatroner.rainbow-csv
+mhutchie.git-graph
+ms-azuretools.vscode-containers
+ms-azuretools.vscode-docker
+ms-python.debugpy
+ms-python.python
+ms-python.vscode-pylance
+ms-python.vscode-python-envs
+ms-toolsai.jupyter
+ms-toolsai.jupyter-keymap
+ms-toolsai.jupyter-renderers
+ms-toolsai.vscode-jupyter-cell-tags
+ms-toolsai.vscode-jupyter-slideshow
+ms-vscode-remote.remote-containers
+ms-vscode-remote.remote-ssh
+ms-vscode-remote.remote-ssh-edit
+ms-vscode-remote.remote-wsl
+ms-vscode-remote.vscode-remote-extensionpack
+ms-vscode.powershell
+ms-vscode.remote-explorer
+ms-vscode.remote-server
+ms-vscode.vscode-chat-customizations-evaluations
+nefrob.vscode-just-syntax
+njpwerner.autodocstring
+pkief.material-icon-theme
+qcz.text-power-tools
+redhat.vscode-yaml
+streetsidesoftware.code-spell-checker
+streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
+tamasfe.even-better-toml
+zhuangtongfa.material-theme
+
+*/

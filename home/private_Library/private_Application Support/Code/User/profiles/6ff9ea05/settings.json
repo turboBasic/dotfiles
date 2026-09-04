@@ -1,5 +1,6 @@
 // Profile: ai-infra
-// Profile path: ~/Library/Application Support/Code/User/profiles/6ff9ea05/
+// Profile path: ~/Library/Application Support/Code/User/profiles/6ff9ea05/settings.json
+// NOTE: useDefaultFlags.settings is true — VS Code reads the root Code/User/settings.json for this profile; this file is not currently active.
 // Visual settings copied from the Default profile.
 {
   "editor.fontFamily": "FiraCode Nerd Font, Menlo, Monaco, 'Courier New', monospace",
@@ -26,9 +27,15 @@
 }
 /*
 
-❯ code --list-extensions --profile 00-common | sort | clipcopy
+❯ code --list-extensions --profile ai-infra | sort | clipcopy
 
 anthropic.claude-code
+bierner.github-markdown-preview
+bierner.markdown-checkbox
+bierner.markdown-emoji
+bierner.markdown-footnotes
+bierner.markdown-preview-github-styles
+darkriszty.markdown-table-prettify
 davidanson.vscode-markdownlint
 editorconfig.editorconfig
 github.vscode-github-actions

@@ -1,0 +1,41 @@
+// Profile: Go
+// Profile path: ~/Library/Application Support/Code/User/profiles/-5b384f0/settings.json
+{
+    "explorer.confirmDelete": false,
+    "editor.fontSize": 14,
+    "conventionalCommits.showNewVersionNotes": false,
+    "github.copilot.chat.codesearch.enabled": true,
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false,
+        "go": true
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "redhat.telemetry.enabled": true,
+    "go.alternateTools": {
+        "go": "/Users/aamelnyk/.local/share/mise/installs/go/1.26.2/bin/go"
+    },
+    "vsicons.dontShowNewVersionMessage": true
+}
+/*
+
+❯ code --list-extensions --profile Go | sort | clipcopy
+
+axetroy.vscode-auto-schema
+editorconfig.editorconfig
+golang.go
+mhutchie.git-graph
+ms-azuretools.vscode-containers
+piotrpalarz.vscode-gitignore-generator
+pkief.material-icon-theme
+redhat.vscode-yaml
+streetsidesoftware.code-spell-checker
+streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
+tamasfe.even-better-toml
+vivaxy.vscode-conventional-commits
+vscode-icons-team.vscode-icons
+wassimdev.wassimdev-vscode-deepseek
+
+*/
