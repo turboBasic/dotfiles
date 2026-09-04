@@ -12,6 +12,8 @@
 #   $ ./vscode-import-profiles [--list | --self-check]
 
 import json
+import shutil
+import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -38,6 +40,18 @@ def list_profiles(support_dir: Path) -> list[Profile]:
         for entry in storage["userDataProfiles"]
         if not entry["location"].startswith("builtin/")
     ]
+
+
+def list_extensions(name: str) -> list[str]:
+    if shutil.which("code") is None:
+        sys.exit("error: the `code` CLI is not on PATH")
+    out = subprocess.run(
+        ["code", "--list-extensions", "--profile", name],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+    return sorted(line for line in out.splitlines() if line)
 
 
 def render(
