@@ -153,6 +153,30 @@ vscodeExtensions:
     - streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
     - tamasfe.even-better-toml
     - zhuangtongfa.material-theme
+  Rust:
+    - alefragnani.project-manager
+    - anthropic.claude-code
+    - charliermarsh.ruff
+    - davidanson.vscode-markdownlint
+    - dustypomerleau.rust-syntax
+    - editorconfig.editorconfig
+    - foxundermoon.shell-format
+    - github.vscode-github-actions
+    - github.vscode-pull-request-github
+    - jock.svg
+    - madcatpx.explorer-exclude-manager
+    - mhutchie.git-graph
+    - monokai.theme-monokai-pro-vscode
+    - ms-azuretools.vscode-containers
+    - ms-vscode-remote.remote-containers
+    - pkief.material-icon-theme
+    - qcz.text-power-tools
+    - redhat.vscode-yaml
+    - rust-lang.rust-analyzer
+    - streetsidesoftware.code-spell-checker
+    - streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
+    - tamasfe.even-better-toml
+    - vivaxy.vscode-conventional-commits
   Shell:
     - aaron-bond.better-comments
     - adam-watters.vscode-color-pick
