@@ -129,6 +129,13 @@ Triggered on every `chezmoi apply` when `vscode-extensions.yaml` changes (hash i
   name↔folder mapping only exists in live `globalStorage/storage.json` (see
   `docs/guide-vscode-profiles.md`), which this script doesn't read.
 
+`vscode-extensions.yaml` is **generated** — `./vscode-import-profiles` rewrites it from
+scratch on every run, from `code --list-extensions --profile <name>` for each profile in
+`globalStorage/storage.json`. Hand edits are lost on the next run; change the profile in
+VS Code and re-import. The same run regenerates the chezmoi-managed profile
+`settings.json` copies, so the enforced install list and the human-readable extension
+comment in each `settings.json` share one source of truth.
+
 ---
 
 ## Encryption model

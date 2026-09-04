@@ -109,6 +109,11 @@ Before writing or trusting a chezmoi-managed `profiles/<location>/settings.json`
 cross-check `globalStorage/storage.json` → `userDataProfiles[].useDefaultFlags.settings`
 for that `location`. If `true`, that profile's real settings live in the root
 `Code/User/settings.json` — either skip importing the profile-local file, or clearly
-annotate the header comment so a reader doesn't mistake it for the active config. See
-the import script's own plan for how this is applied:
-`tmp/plans/vscode-import-profiles.plan.md` (scratch, not committed).
+annotate the header comment so a reader doesn't mistake it for the active config.
+
+`./vscode-import-profiles` at the repo root does exactly this, and is the tool to reach
+for rather than editing a managed copy by hand. One wrinkle it has to handle: chezmoi
+applies the annotated repo copy back over the live `profiles/<location>/settings.json`,
+so on the next import the "live" file already carries the header and the trailing
+extension block. The importer strips the lines it emitted itself before re-rendering —
+hand-written comments in the same file survive.
