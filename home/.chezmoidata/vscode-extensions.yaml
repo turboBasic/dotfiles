@@ -33,6 +33,26 @@ vscodeExtensions:
     - tamasfe.even-better-toml
     - vivaxy.vscode-conventional-commits
     - vsls-contrib.gistfs
+  Default:
+    - anthropic.claude-code
+    - charliermarsh.ruff
+    - davidanson.vscode-markdownlint
+    - editorconfig.editorconfig
+    - foxundermoon.shell-format
+    - github.vscode-github-actions
+    - github.vscode-pull-request-github
+    - jock.svg
+    - mhutchie.git-graph
+    - monokai.theme-monokai-pro-vscode
+    - ms-azuretools.vscode-containers
+    - ms-vscode-remote.remote-containers
+    - pkief.material-icon-theme
+    - qcz.text-power-tools
+    - redhat.vscode-yaml
+    - streetsidesoftware.code-spell-checker
+    - streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
+    - tamasfe.even-better-toml
+    - vivaxy.vscode-conventional-commits
   Go:
     - axetroy.vscode-auto-schema
     - editorconfig.editorconfig
@@ -142,7 +162,6 @@ vscodeExtensions:
     - bierner.markdown-checkbox
     - bierner.markdown-mermaid
     - bmuskalla.vscode-tldr
-    - bodil.prettier-toml
     - brunnerh.insert-unicode
     - buttaiwan.cursor-charcode
     - davidanson.vscode-markdownlint

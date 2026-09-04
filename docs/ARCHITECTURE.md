@@ -133,8 +133,10 @@ Triggered on every `chezmoi apply` when `vscode-extensions.yaml` changes (hash i
 
 `vscode-extensions.yaml` is **generated** — `./vscode-import-profiles` rewrites it from
 scratch on every run, from `code --list-extensions --profile <name>` for each profile in
-`globalStorage/storage.json`. Hand edits are lost on the next run; change the profile in
-VS Code and re-import. The same run regenerates the chezmoi-managed profile
+`globalStorage/storage.json`, plus `Default`. Default has no `userDataProfiles` entry and
+no profile folder, so only its extension list is imported — its settings.json is the root
+`Code/User/settings.json`, managed separately. Hand edits are lost on the next run;
+change the profile in VS Code and re-import. The same run regenerates the chezmoi-managed profile
 `settings.json` copies, which carry only a header comment — the extension list lives here
 and nowhere else, so there is no second copy to drift.
 

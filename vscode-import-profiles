@@ -48,6 +48,17 @@ def list_profiles(support_dir: Path) -> list[Profile]:
     ]
 
 
+# Default has no entry in storage.json's userDataProfiles and no profile folder — its
+# settings.json is the root Code/User/settings.json, managed by chezmoi separately. Only
+# its extension list is ours to reproduce, so it joins the profile list for extensions
+# only, never for import_profiles().
+DEFAULT_PROFILE = Profile("", "Default", False)
+
+
+def extension_profiles(support_dir: Path) -> list[Profile]:
+    return [DEFAULT_PROFILE, *list_profiles(support_dir)]
+
+
 def list_extensions(name: str) -> list[str]:
     if shutil.which("code") is None:
         sys.exit("error: the `code` CLI is not on PATH")
@@ -222,7 +233,7 @@ def parse_extensions_yaml(text: str) -> dict[str, list[str]]:
 
 def prune(uninstall: bool) -> int:
     wanted = parse_extensions_yaml(EXTENSIONS_YAML.read_text())
-    known = {p.name for p in list_profiles(SUPPORT_DIR)}
+    known = {p.name for p in extension_profiles(SUPPORT_DIR)}
     extra_count = 0
     for name in sorted(wanted.keys() & known, key=str.lower):
         for ext in sorted(set(list_extensions(name)) - set(wanted[name])):
@@ -257,9 +268,9 @@ def main(argv: list[str]) -> int:
         )
         return 1
     if argv == ["--list"]:
-        profiles = sorted(list_profiles(SUPPORT_DIR), key=lambda p: p.name.lower())
+        profiles = sorted(extension_profiles(SUPPORT_DIR), key=lambda p: p.name.lower())
         rows = [("name", "location", "uses_default_settings")]
-        rows += [(p.name, p.location, str(p.uses_default_settings)) for p in profiles]
+        rows += [(p.name, p.location or "-", str(p.uses_default_settings)) for p in profiles]
         name_width, location_width = (max(len(row[i]) for row in rows) for i in (0, 1))
         for name, location, inert in rows:
             print(f"{name:<{name_width}}  {location:<{location_width}}  {inert}")
@@ -271,7 +282,7 @@ def main(argv: list[str]) -> int:
         if argv:
             return prune(uninstall=argv[1:] == ["--yes"])
         import_profiles(SUPPORT_DIR, REPO_PROFILES)
-        write_vscode_extensions_yaml(EXTENSIONS_YAML, list_profiles(SUPPORT_DIR))
+        write_vscode_extensions_yaml(EXTENSIONS_YAML, extension_profiles(SUPPORT_DIR))
         return 0
     print(
         "usage: vscode-import-profiles [--list | --prune [--yes] | --self-check]",
