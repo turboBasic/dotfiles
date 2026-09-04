@@ -31,3 +31,15 @@ repos:
     rev: v10.0.1
     hooks:
       - id: cspell
+
+  # The importer's render()/strip_rendered() fixtures are hand-written expected strings;
+  # this keeps them from rotting silently. python3 rather than `uv run --script`: mise.toml
+  # pins chezmoi, just and prek but not uv, and the script is stdlib-only.
+  - repo: local
+    hooks:
+      - id: vscode-import-profiles-self-check
+        name: vscode-import-profiles --self-check
+        entry: python3 ./vscode-import-profiles --self-check
+        language: system
+        files: ^vscode-import-profiles$
+        pass_filenames: false

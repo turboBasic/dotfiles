@@ -128,7 +128,7 @@ def _self_check() -> None:
         "Shell",
         "~/Library/Application Support/Code/User/profiles/7ba910e7/settings.json",
         '{\n  "editor.fontSize": 14\n}',
-        ["mhutchie.git-graph"],
+        ["editorconfig.editorconfig"],
         True,
     )
     assert inert == (
@@ -143,7 +143,7 @@ def _self_check() -> None:
         "\n"
         "❯ code --list-extensions --profile Shell | sort | clipcopy\n"
         "\n"
-        "mhutchie.git-graph\n"
+        "editorconfig.editorconfig\n"
         "\n"
         "*/\n"
     ), inert
