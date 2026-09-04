@@ -226,8 +226,12 @@ def main(argv: list[str]) -> int:
         )
         return 1
     if argv == ["--list"]:
-        for profile in list_profiles(SUPPORT_DIR):
-            print(f"{profile.location}\t{profile.name}\t{profile.uses_default_settings}")
+        profiles = sorted(list_profiles(SUPPORT_DIR), key=lambda p: p.name.lower())
+        rows = [("name", "location", "uses_default_settings")]
+        rows += [(p.name, p.location, str(p.uses_default_settings)) for p in profiles]
+        name_width, location_width = (max(len(row[i]) for row in rows) for i in (0, 1))
+        for name, location, inert in rows:
+            print(f"{name:<{name_width}}  {location:<{location_width}}  {inert}")
         return 0
     if argv:
         print("usage: vscode-import-profiles [--list | --self-check]", file=sys.stderr)
