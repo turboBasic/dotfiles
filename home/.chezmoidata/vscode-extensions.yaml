@@ -42,6 +42,7 @@ vscodeExtensions:
     - github.vscode-github-actions
     - github.vscode-pull-request-github
     - jock.svg
+    - madcatpx.explorer-exclude-manager
     - mhutchie.git-graph
     - monokai.theme-monokai-pro-vscode
     - ms-azuretools.vscode-containers
@@ -202,6 +203,7 @@ vscodeExtensions:
     - l13rary.l13-diff
     - lamartire.line-to-column
     - letmaik.git-tree-compare
+    - madcatpx.explorer-exclude-manager
     - mads-hartmann.bash-ide-vscode
     - maziac.hex-hover-converter
     - mhutchie.git-graph
@@ -219,7 +221,6 @@ vscodeExtensions:
     - nickdemayo.vscode-json-editor
     - openai.chatgpt
     - pdconsec.vscode-print
-    - peterschmalfeldt.explorer-exclude
     - pkief.material-icon-theme
     - pnp.polacode
     - qcz.text-power-tools
