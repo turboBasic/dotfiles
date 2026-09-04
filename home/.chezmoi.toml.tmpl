@@ -63,7 +63,10 @@ encryption = "age"
 
 [diff]
     pager = "diff-so-fancy"
-    exclude = ["scripts"]
+    # Not exclude = ["scripts"]: that hid script targets from `chezmoi diff` entirely, and a
+    # config-level exclude also overrides `--include=scripts` on the command line. This shows
+    # that a script will run without dumping its rendered body (437 lines for the VS Code one).
+    scriptContents = false
 
     # Example of how to use VS Code for diff (remove "_disable" suffix to activate):
     command_disable = "code"
