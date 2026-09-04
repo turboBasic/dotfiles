@@ -19,6 +19,7 @@ vscodeExtensions:
     - github.vscode-pull-request-github
     - gruntfuggly.todo-tree
     - howardzuo.vscode-favorites
+    - madcatpx.explorer-exclude-manager
     - mhutchie.git-graph
     - monokai.theme-monokai-pro-vscode
     - ms-vscode-remote.remote-containers
@@ -338,6 +339,7 @@ vscodeExtensions:
     - github.vscode-github-actions
     - github.vscode-pull-request-github
     - hverlin.mise-vscode
+    - madcatpx.explorer-exclude-manager
     - mhutchie.git-graph
     - monokai.theme-monokai-pro-vscode
     - ms-python.debugpy
