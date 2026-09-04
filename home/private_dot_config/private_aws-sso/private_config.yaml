@@ -1,4 +1,13 @@
 SSOConfig:
+  cargonautica:
+    SSORegion: eu-central-1
+    StartUrl: https://cargonautica.awsapps.com/start
+    DefaultRegion: eu-central-1
+    Accounts:
+      381492075850:
+        Roles:
+          AdministratorAccess:
+            Profile: cargonautica-admin
   moia:
     SSORegion: eu-central-1
     StartUrl: https://moia-dev.awsapps.com/start
