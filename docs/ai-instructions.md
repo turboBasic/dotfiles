@@ -92,6 +92,7 @@ docs/
 ├── ZINIT.md                     ← Zinit plugin manager conventions and reference
 ├── guide-claude-plugins.md      ← Claude Code marketplaces: what a fresh machine needs
 ├── guide-work-vw-service-account.md ← work service-account setup
+├── guide-vscode-profiles.md     ← VS Code profile folder hashing, storage.json, useDefaultFlags
 ├── adr/                         ← Architecture Decision Records (NNNN-title.md + template.md)
 ├── zinit/                       ← Zinit Knowledge Base submodule
 │   ├── cards/                   ← ~500 KB cards (ices, commands, concepts, annexes, packages, recipes, troubleshooting, installation, migration)
