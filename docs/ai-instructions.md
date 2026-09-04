@@ -88,6 +88,7 @@ tests/                           ← integration test suite
 └── Dockerfile.rbw-ubuntu        ← builds rbw binaries for linux/<arch>
 op-export-accounts               ← 1Password account export helper
 op-update-accounts               ← Full pipeline: export → commit → chezmoi init --apply
+vscode-import-profiles           ← Regenerates VS Code profile settings.json copies from live data
 docs/
 ├── ai-instructions.md           ← you are here
 ├── ARCHITECTURE.md              ← install flow, encryption, hooks, template data, test suite
