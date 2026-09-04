@@ -81,10 +81,10 @@ overridden by profile settings.json." Exactly one file is read for a given
 
 | Profile | `useDefaultFlags.settings` | Effective `settings.json` |
 | --- | --- | --- |
-| ai-infra (`6ff9ea05`), 00-common (`-48dfce3f`), Terraform (`73029c16`), Shell (`7ba910e7`), tb-shared-repos (`2223344d`), Java (`-548e617c`) | `true` | root `Code/User/settings.json` — their own `profiles/<location>/settings.json` is **not read** |
-| Go (`-5b384f0`), Python (`-158228ab`), Node.js (`451b20d1`), VW.ADMT (`-46c02fca`) | absent | their own `profiles/<location>/settings.json` |
+| ai-infra (`6ff9ea05`), 00-common (`-48dfce3f`), Terraform (`73029c16`), Shell (`7ba910e7`), Java (`-548e617c`) | `true` | root `Code/User/settings.json` — their own `profiles/<location>/settings.json` is **not read** |
+| Go (`-5b384f0`), Python (`-158228ab`), Node.js (`451b20d1`), VW.ADMT (`-46c02fca`), tb-shared-repos (`2223344d`) | absent | their own `profiles/<location>/settings.json` |
 
-Six of the ten non-builtin profiles are currently reading the root settings file, not
+Five of the ten non-builtin profiles are currently reading the root settings file, not
 their own. `6ff9ea05`'s own file still carries real content (font, theme, terminal
 settings) and a stale comment ("Visual settings copied from the Default profile") —
 almost certainly a leftover from before the profile was switched to "use Default
