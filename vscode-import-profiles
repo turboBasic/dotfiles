@@ -59,14 +59,16 @@ def list_extensions(name: str) -> tuple[str, ...]:
     return tuple(sorted(line for line in out.splitlines() if line))
 
 
-_OWNED_HEADER = ("// Profile:", "// Profile path:", "// NOTE:")
+_OWNED_HEADER = ("// Profile:", "// Profile path:")
 
 
+# Undoes a previous render(): chezmoi applies the annotated copy back over the live file,
+# so a re-import would otherwise stack a second header and extension block. Only the lines
+# render() itself emits are removed - INERT_NOTE is matched whole, since `// NOTE:` is a
+# prefix a human writes too.
 def strip_rendered(body: str) -> str:
-    """Undo a previous render(): chezmoi applies the annotated copy back over the live
-    file, so a re-import would otherwise stack a second header and extension block."""
     lines = body.splitlines()
-    while lines and lines[0].startswith(_OWNED_HEADER):
+    while lines and (lines[0].startswith(_OWNED_HEADER) or lines[0] == INERT_NOTE):
         lines.pop(0)
     for i in range(len(lines) - 1, -1, -1):
         if lines[i] == "/*" and any(l.startswith("❯ code --list-extensions") for l in lines[i:]):
@@ -169,6 +171,10 @@ def _self_check() -> None:
         '  "editor.fontSize": 15\n'
         "}\n"
     ), stripped
+    body = '{\n  "a": 1\n}\n'
+    assert strip_rendered(render("X", "p", body, ["a.b"], True)) == body
+    kept = "// NOTE: hand-written, not ours\n" + body
+    assert strip_rendered(kept) == kept, strip_rendered(kept)
     plain = '{\n\t"a": 1\n}\n'
     assert strip_rendered(plain) == plain, strip_rendered(plain)
 
@@ -222,6 +228,9 @@ def main(argv: list[str]) -> int:
     if argv:
         print("usage: vscode-import-profiles [--list | --self-check]", file=sys.stderr)
         return 2
+    if not EXTENSIONS_YAML.parent.is_dir():
+        print("error: run from the chezmoi repo root", file=sys.stderr)
+        return 1
     import_profiles(SUPPORT_DIR, REPO_PROFILES)
     write_vscode_extensions_yaml(EXTENSIONS_YAML, list_profiles(SUPPORT_DIR))
     return 0
