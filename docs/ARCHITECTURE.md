@@ -120,11 +120,13 @@ Triggered on every `chezmoi apply` when `vscode-extensions.yaml` changes (hash i
 
 - **macOS only** (skips with a message if the `code` CLI isn't on `PATH`).
 - Reads `vscodeExtensions: {<profile name>: [<extension id>, ...]}` from
-  `.chezmoidata/vscode-extensions.yaml` and runs
-  `code --install-extension <id> --profile <name>` per entry.
-- `code --install-extension` is idempotent — already-installed extensions are a no-op — so
-  the script re-runs its full list on every trigger rather than diffing against what's
-  installed.
+  `.chezmoidata/vscode-extensions.yaml`.
+- **One `code` process per profile, for missing extensions only.** It reads
+  `code --list-extensions --profile <name>` once, subtracts that from the wanted list in
+  the shell, and passes what's left as repeated `--install-extension` flags in a single
+  invocation. `--install-extension` is idempotent, so re-installing would be harmless —
+  but one invocation per extension boots Electron ~300 times and prints an "already
+  installed" paragraph for each. Diffing first takes the whole run to ~3 s and silence.
 - Keyed by **profile name**, not folder (`location`) — `--profile` takes the name, and the
   name↔folder mapping only exists in live `globalStorage/storage.json` (see
   `docs/guide-vscode-profiles.md`), which this script doesn't read.
