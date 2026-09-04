@@ -14,5 +14,13 @@
         "key": "shift+alt+f",
         "command": "markdownlint.fixAll",
         "when": "editorLangId == markdown && editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "shift+enter",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "\u001b\r"
+        },
+        "when": "terminalFocus"
     }
 ]
