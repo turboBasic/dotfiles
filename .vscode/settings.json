@@ -55,6 +55,5 @@
     "**/_symlinks/**": true,
     "**/symlink_*": true,
     "**/create_private_dot_zsh_history": true
-  },
-  "hide-files.files": []
+  }
 }
