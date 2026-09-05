@@ -46,6 +46,18 @@
   "terminal.integrated.scrollback": 5000,
   "terminal.integrated.confirmOnExit": "hasChildProcesses",
   "terminal.integrated.enableMultiLinePasteWarning": "never",
+  // Print settings — pdconsec.vscode-print lives in the Shell profile, which reads this file
+  "print.folder.exclude": [
+    "{bin,obj,out}",
+    "node_modules",
+    "data",
+    "**/*.{bin,exe,dll,hex,pdb,pdf,pfx,png,jpg,gif,bmp,suo,design}"
+  ],
+  "print.folder.fileNames": true,
+  "print.folder.include": [],
+  "print.folder.includeFileList": false,
+  "print.folder.maxFiles": 30,
+  "print.folder.maxLines": 1200,
   // Shellcheck settings
   "shellcheck.disableVersionCheck": true,
   "shellcheck.useWorkspaceRootAsCwd": true,
@@ -95,6 +107,7 @@
   "[markdown]": {
     "editor.formatOnSave": false
   },
+  "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "security.promptForLocalFileProtocolHandling": false,
