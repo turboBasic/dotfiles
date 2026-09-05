@@ -39,21 +39,27 @@ vscodeExtensions:
     - charliermarsh.ruff
     - davidanson.vscode-markdownlint
     - editorconfig.editorconfig
+    - elagil.pre-commit-helper
     - foxundermoon.shell-format
     - github.vscode-github-actions
     - github.vscode-pull-request-github
+    - hashhar.gitattributes
+    - hverlin.mise-vscode
     - jock.svg
+    - ldez.ignore-files
     - madcatpx.explorer-exclude-manager
     - mhutchie.git-graph
     - monokai.theme-monokai-pro-vscode
     - ms-azuretools.vscode-containers
     - ms-vscode-remote.remote-containers
+    - nefrob.vscode-just-syntax
     - pkief.material-icon-theme
     - qcz.text-power-tools
     - redhat.vscode-yaml
     - streetsidesoftware.code-spell-checker
     - streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries
     - tamasfe.even-better-toml
+    - timonwong.shellcheck
     - vivaxy.vscode-conventional-commits
   Go:
     - alefragnani.project-manager
