@@ -52,7 +52,7 @@ safe to re-run as a hook on every source state read (see below):
 reproducing a fresh-machine install on a machine that already has one.
 
 Pinned tool versions, download sources and the order of the steps are `install.sh`'s own
-business; read the script for those.
+business — read `main()` for the sequence rather than reasoning from this section.
 
 ---
 
