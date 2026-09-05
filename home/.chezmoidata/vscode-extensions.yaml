@@ -51,9 +51,6 @@ vscodeExtensions:
   Go:
     - axetroy.vscode-auto-schema
     - golang.go
-    - piotrpalarz.vscode-gitignore-generator
-    - vscode-icons-team.vscode-icons
-    - wassimdev.wassimdev-vscode-deepseek
   Java:
     - redhat.java
     - visualstudioexptteam.intellicode-api-usage-examples
