@@ -22,13 +22,20 @@ vscodeExtensions:
     - hashhar.gitattributes
     - howardzuo.vscode-favorites
     - hverlin.mise-vscode
+    - iliazeus.vscode-ansi
+    - jetmartin.bats
     - jock.svg
     - ldez.ignore-files
     - madcatpx.explorer-exclude-manager
+    - mads-hartmann.bash-ide-vscode
     - mhutchie.git-graph
     - monokai.theme-monokai-pro-vscode
     - ms-azuretools.vscode-containers
     - ms-vscode-remote.remote-containers
+    - ms-vscode-remote.remote-ssh
+    - ms-vscode-remote.remote-ssh-edit
+    - ms-vscode.hexeditor
+    - ms-vscode.remote-explorer
     - ms-vscode.remote-repositories
     - nefrob.vscode-just-syntax
     - pkief.material-icon-theme
@@ -85,12 +92,9 @@ vscodeExtensions:
     - ms-toolsai.jupyter-renderers
     - ms-toolsai.vscode-jupyter-cell-tags
     - ms-toolsai.vscode-jupyter-slideshow
-    - ms-vscode-remote.remote-ssh
-    - ms-vscode-remote.remote-ssh-edit
     - ms-vscode-remote.remote-wsl
     - ms-vscode-remote.vscode-remote-extensionpack
     - ms-vscode.powershell
-    - ms-vscode.remote-explorer
     - ms-vscode.remote-server
     - ms-vscode.vscode-chat-customizations-evaluations
     - njpwerner.autodocstring
@@ -131,21 +135,14 @@ vscodeExtensions:
     - helixquar.randomeverything
     - huizhou.githd
     - hungvo.htext
-    - iliazeus.vscode-ansi
     - jasonnutter.vscode-codeowners
-    - jetmartin.bats
     - jinliming2.vscode-go-template
     - johnguo.columnpaste
     - l13rary.l13-diff
     - lamartire.line-to-column
     - letmaik.git-tree-compare
-    - mads-hartmann.bash-ide-vscode
     - maziac.hex-hover-converter
     - moshfeu.compare-folders
-    - ms-vscode-remote.remote-ssh
-    - ms-vscode-remote.remote-ssh-edit
-    - ms-vscode.hexeditor
-    - ms-vscode.remote-explorer
     - ms-vscode.vscode-websearchforcopilot
     - ms-vsliveshare.vsliveshare
     - nepaul.editorconfiggenerator
