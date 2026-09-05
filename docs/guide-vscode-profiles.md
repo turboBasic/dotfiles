@@ -77,21 +77,16 @@ This is **exclusive file selection, not merging** — never "root settings.json,
 overridden by profile settings.json." Exactly one file is read for a given
 (profile, resource type) pair.
 
-### Confirmed on this machine (2026-09-04)
+### An inert file still looks entirely real
 
-| Profile | `useDefaultFlags.settings` | Effective `settings.json` |
-| --- | --- | --- |
-| ai-infra (`6ff9ea05`), 00-common (`-48dfce3f`), Terraform (`73029c16`), Shell (`7ba910e7`), Java (`-548e617c`) | `true` | root `Code/User/settings.json` — their own `profiles/<location>/settings.json` is **not read** |
-| Go (`-5b384f0`), Python (`-158228ab`), Node.js (`451b20d1`), VW.ADMT (`-46c02fca`), tb-shared-repos (`2223344d`) | absent | their own `profiles/<location>/settings.json` |
+Switching a profile to "use Default profile settings" in the VS Code UI flips the flag
+and leaves the old `profiles/<location>/settings.json` untouched — content, comments and
+all. So a chezmoi-tracked profile `settings.json` full of plausible font and theme keys
+proves nothing about what VS Code reads. Treat every one as **potentially inert** and
+check `useDefaultFlags.settings` for that `location` first.
 
-Five of the ten non-builtin profiles are currently reading the root settings file, not
-their own. `6ff9ea05`'s own file still carries real content (font, theme, terminal
-settings) and a stale comment ("Visual settings copied from the Default profile") —
-almost certainly a leftover from before the profile was switched to "use Default
-profile settings" in the VS Code UI, which flips the flag without deleting the old
-file. Treat any chezmoi-tracked `profiles/<location>/settings.json` as **potentially
-inert**: check `useDefaultFlags.settings` for that `location` before assuming the
-file reflects what's actually active.
+`./vscode-import-profiles --list` prints the live name / `location` /
+`uses_default_settings` table for this machine, which is why one isn't reproduced here.
 
 ## Where this sits in the wider settings precedence
 
@@ -112,14 +107,7 @@ for that `location`. If `true`, that profile's real settings live in the root
 annotate the header comment so a reader doesn't mistake it for the active config.
 
 `./vscode-import-profiles` at the repo root does exactly this, and is the tool to reach
-for rather than editing a managed copy by hand. One wrinkle it has to handle: chezmoi
-applies the annotated repo copy back over the live `profiles/<location>/settings.json`,
-so on the next import the "live" file already carries the header it wrote last time. The
-importer strips the lines it emitted itself before re-rendering — hand-written comments in
-the same file survive.
-
-The header is all it writes. Each profile's extension list lives in
-`home/.chezmoidata/vscode-extensions.yaml`, which the same run regenerates and
-`run_onchange_02-install-vscode-extensions.sh.tmpl` enforces; earlier copies of these
-files also carried the list as a trailing `❯ code --list-extensions` comment block, and
-the importer strips that block wherever it still finds one.
+for rather than editing a managed copy by hand. What it writes, what the extension lists
+mean and when `chezmoi apply` reinstalls them is owned by
+[ARCHITECTURE.md § "VS Code extension installation"](ARCHITECTURE.md#vs-code-extension-installation-run_onchange_02-install-vscode-extensionsshtmpl)
+— this page stays on VS Code's own behavior.

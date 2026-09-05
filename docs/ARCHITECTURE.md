@@ -115,6 +115,19 @@ The template uses custom delimiters `#{` / `}#` (declared via `chezmoi:template:
 
 ### VS Code extension installation (`run_onchange_02-install-vscode-extensions.sh.tmpl`)
 
+#### Intent: Default is the baseline, every other profile is a delta
+
+- **`Default` holds what every profile gets** — both extensions and settings. Its
+  extension list is reproduced into every other profile.
+- **Every other profile lists only its own extensions**, on top of Default's. This holds
+  **regardless of whether the profile inherits extensions from Default in VS Code or keeps
+  a fully independent list** — the YAML records the delta either way, and the install
+  script is what makes the inherited case true on a fresh machine.
+- **Settings work the opposite way round.** A profile's settings may legitimately differ
+  from Default's, but a newly created profile inherits them
+  (`useDefaultFlags.settings: true`, see `docs/guide-vscode-profiles.md`), so Default's
+  settings are the baseline until a profile is deliberately given its own.
+
 Triggered on every `chezmoi apply` when `vscode-extensions.yaml` changes (hash in comment,
 `run_onchange_` prefix, same mechanism as package installation above).
 
@@ -138,7 +151,10 @@ no profile folder, so only its extension list is imported — its settings.json 
 `Code/User/settings.json`, managed separately. Hand edits are lost on the next run;
 change the profile in VS Code and re-import. The same run regenerates the chezmoi-managed profile
 `settings.json` copies, which carry only a header comment — the extension list lives here
-and nowhere else, so there is no second copy to drift.
+and nowhere else, so there is no second copy to drift. Because `chezmoi apply` writes that
+annotated copy back over the live file, the next import sees its own header in the "live"
+input; it strips the lines it emitted before re-rendering, and leaves hand-written comments
+alone.
 
 The install script only ever adds. An extension installed into a profile by hand and
 never imported stays there, so the YAML describes a floor, not the exact set.
