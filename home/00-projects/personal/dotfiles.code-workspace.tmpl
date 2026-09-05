@@ -14,8 +14,13 @@
             ".chezmoiignore": "gitignore",
             "**/.git/config": "gitconfig",
             "**/git/*ignore*": "gitignore",
-            "**/git/*.tmpl": "gitconfig",
-            "*.gitconfig.tmpl": "gitconfig",
+            // `ini`, not `gitconfig` or `properties`: these are Go templates, and
+            // yy0931.gitconfig-lsp selects on exactly `gitconfig`, `gitattributes` and
+            // `properties`, so either of those attaches its parser to template syntax it
+            // cannot read. `ini` shares the same source.ini grammar as `properties` —
+            // same colors, no language server, no formatter.
+            "**/git/*.tmpl": "ini",
+            "*.gitconfig.tmpl": "ini",
             "*.md.tmpl": "markdown",
             "*.sh.tmpl": "shellscript",
             "*.toml.tmpl": "toml",
