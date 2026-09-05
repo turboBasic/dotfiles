@@ -67,7 +67,6 @@ vscodeExtensions:
     - humao.rest-client
     - mikestead.dotenv
     - orta.vscode-jest
-    - xabikos.javascriptsnippets
   Python:
     - d-biehl.robotcode
     - esbenp.prettier-vscode
@@ -87,10 +86,8 @@ vscodeExtensions:
     - dustypomerleau.rust-syntax
     - rust-lang.rust-analyzer
   Terraform:
-    - 4ops.terraform
     - arahata.linter-actionlint
     - bierner.markdown-mermaid
-    - bpruitt-goddard.mermaid-markdown-syntax-highlighting
     - fnando.linter
     - hashicorp.terraform
     - ms-python.debugpy
@@ -98,36 +95,19 @@ vscodeExtensions:
     - ms-python.vscode-pylance
     - ms-python.vscode-python-envs
     - ms-vscode.makefile-tools
-    - pjmiravalle.terraform-advanced-syntax-highlighting
     - samuelcolvin.jinjahtml
-    - tomoyukim.vscode-mermaid-editor
     - tylerharris.terraform-link-docs
     - zainchen.json
   VW.ADMT:
-    - 4ops.terraform
     - arahata.linter-actionlint
     - axetroy.vscode-auto-schema
     - bierner.markdown-mermaid
-    - bpruitt-goddard.mermaid-markdown-syntax-highlighting
-    - evzen-wybitul.magic-racket
     - fnando.linter
     - golang.go
     - grafana.vscode-jsonnet
     - hashicorp.terraform
-    - ms-python.debugpy
-    - ms-python.python
-    - ms-python.vscode-pylance
-    - ms-python.vscode-python-envs
     - ms-vscode.makefile-tools
-    - ms-vscode.vscode-chat-customizations-evaluations
-    - openai.chatgpt
-    - pjmiravalle.terraform-advanced-syntax-highlighting
     - pomdtr.excalidraw-editor
-    - rooveterinaryinc.roo-cline
-    - samuelcolvin.jinjahtml
-    - saoudrizwan.claude-dev
-    - tomoki1207.pdf
-    - tomoyukim.vscode-mermaid-editor
     - tylerharris.terraform-link-docs
     - willasm.obsidian-md-vsc
     - zainchen.json
