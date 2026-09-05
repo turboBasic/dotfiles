@@ -2,5 +2,13 @@
 // Profile path: ~/Library/Application Support/Code/User/profiles/2223344d/settings.json
 {
 	"workbench.iconTheme": "material-icon-theme",
-	"workbench.colorTheme": "Monokai Pro (Filter Machine)"
+	"workbench.colorTheme": "Monokai Pro (Filter Machine)",
+	"yaml.disableSchemaDetection": [
+		"**/.github/workflows/*.yml",
+		"**/.github/workflows/*.yaml",
+		"**/.gitea/workflows/*.yml",
+		"**/.gitea/workflows/*.yaml",
+		"**/.forgejo/workflows/*.yml",
+		"**/.forgejo/workflows/*.yaml"
+	]
 }
