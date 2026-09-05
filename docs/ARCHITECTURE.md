@@ -11,7 +11,7 @@ Key top-level paths relevant to this document:
 
 - `home/` — chezmoi source dir (declared via `.chezmoiroot`)
 - `install.sh` — POSIX bootstrap (single source of truth; also chezmoi hook)
-- `Makefile` — development tasks (test, rbw, clean)
+- `Makefile` — the rbw build graph only; `just` is the task entry point
 - `tests/` — integration test suite (Docker for Linux, UTM VM for macOS)
 
 ---
@@ -36,67 +36,59 @@ AGE_PASSPHRASE=... sh -c "$(curl -fsSL 'https://raw.githubusercontent.com/turboB
 ... -- --cleanup init turboBasic/dotfiles
 ```
 
-**Bootstrap sequence** (`main` / `install_main`):
+**What it guarantees on exit.** Every step is a no-op once satisfied, which is what makes it
+safe to re-run as a hook on every source state read (see below):
 
-1. Detect OS (`darwin` / `linux`) and arch (`amd64` / `arm64`).
-2. `check_utils` — verify `curl`, `expect`, `git`, `grep`, `sed`, `tar`, `uname`, `unzip`, `zsh` are present; on Linux, also installs `rbw` via apt-get.
-3. `install_bin_dir` — ensure `~/.local/bin` exists and is on `PATH`.
-4. `install_age` — download age v1.1.1 binary to `~/.local/bin` if not present.
-5. `install_chezmoi` — download chezmoi via `get.chezmoi.io/lb` to `~/.local/bin` if not present.
-6. `install_rozetta` — on Apple Silicon, install Rosetta 2 if not running.
-7. `install_homebrew` — install Homebrew if absent; run `eval "$(brew shellenv)"`.
-8. `install_pinentry` — install `pinentry-tty` (apt on Linux, brew on macOS).
-9. `install_rbw` — install rbw (latest .deb on Linux, brew on macOS).
-10. `install_oathtool` — install oath-toolkit (brew on macOS, apt on Linux).
-11. If subcommand is `init`, `unlock_rbw` runs — configures rbw email, lock_timeout (86400 s), pinentry; runs `rbw unlock`.
-12. If `--cleanup` flag: wipe contents of `~/.cache/chezmoi`, `~/.config/chezmoi`, `~/.local/share/chezmoi`, `~/.local/state/chezmoi`.
-13. If `init` subcommand: call `_install_dotfiles` with the repo argument.
+- `~/.local/bin` exists, is on `PATH`, and holds `age` and `chezmoi`
+- Homebrew is installed and on `PATH`; on Apple Silicon, Rosetta 2 is present
+- `rbw`, a TTY pinentry and `oath-toolkit` are installed (brew on macOS, apt on Linux)
+- the utilities the rest of the install assumes are present, or it fails naming what is
+  missing rather than part-way through
+- with the `init` subcommand only: `rbw` is configured and unlocked, then `chezmoi init`
+  and `chezmoi init --apply` run with `AGE_PASSPHRASE` in the environment, so config
+  rendering and secret decryption never need an interactive prompt
 
-**`_install_dotfiles`:**
+`--cleanup` wipes chezmoi's cache, config, data and state directories before init — for
+reproducing a fresh-machine install on a machine that already has one.
 
-```bash
-AGE_PASSPHRASE=... chezmoi init turboBasic/dotfiles
-AGE_PASSPHRASE=... chezmoi init --apply
-```
-
-Both invocations pass `AGE_PASSPHRASE` so that config template processing and secret decryption can access it without interactive prompts.
+Pinned tool versions, download sources and the order of the steps are `install.sh`'s own
+business; read the script for those.
 
 ---
 
 ### chezmoi init — config template (`.chezmoi.toml.tmpl`)
 
-Executed during `chezmoi init`. Steps in template order:
+Rendered during `chezmoi init`, and the only thing that ever writes `chezmoi.toml`. It:
 
-1. **Guard** — fail immediately if `AGE_PASSPHRASE` is not set and this is a first run (no `profile` key in existing data).
-2. **Prompt once** for `dotfiles_key_name` (default: `age-00-chezmoi.key`) and `dotfiles_public_key` (the age recipient public key).
-3. Derive `$configDir` from `CHEZMOI_CONFIG_FILE` env var (`~/.config/chezmoi/`).
-4. Write `chezmoi.toml` with:
-   - `encryption = "age"`, identity = `$configDir/<key_name>`, recipient = public key.
-   - `[scriptEnv] DOTFILES_KEY_NAME` — passed to scripts as env var.
-   - `[hooks.read-source-state.pre] command = "install.sh"` — re-runs install.sh before every source state read.
-   - `[data]` block: `dotfiles_id`, `dotfiles_key_name`, `dotfiles_public_key`, `profile`.
-5. **Prompt once** for `profile` choice: `personal` or `work.2025.05`.
-6. **Execute inline** `run_onchange_before_decrypt-chezmoi-secrets.sh` (via `output "zsh" "-c" ...`) to decrypt secrets into `~/.config/chezmoi/` before the template finishes.
-7. If `accounts.json` now exists in `$configDir`, read and embed it into `[data]` as `accounts` (JSON string) and `aliases` (alias→account-key map).
+- **fails immediately when `AGE_PASSPHRASE` is unset on a first run** — nothing downstream
+  can decrypt anything without it, so this is a guard rather than a confusing later failure
+- **prompts once, and remembers**, for the age key name, the age recipient public key and
+  the profile; subsequent inits are silent unless a stored answer is removed
+- **writes the age encryption settings, the script environment, the
+  `read-source-state.pre` hook and the `[data]` block** that every other template reads
+  (see "Template data")
+- **runs the secret-decryption script inline, before finishing**, so `accounts.json` is
+  already decrypted in `~/.config/chezmoi/` in time to be read into `[data]` as
+  `.accounts` and `.aliases` during the same render
+
+That last point is the load-bearing one: `[data]` is baked into a static `chezmoi.toml`, so
+anything templates need must be decrypted *before* the config is written, not during the
+apply that follows. It is also why account changes require `chezmoi init --apply` and not a
+plain apply (see "Updating accounts data").
 
 ---
 
 ### Secret decryption (`run_onchange_before_decrypt-chezmoi-secrets.sh`)
 
-This script runs both:
+This script runs in two places:
 
-- **During config template rendering** (via `output` call in `.chezmoi.toml.tmpl`)
-- **On every `chezmoi apply`** when `.secrets/*.age` content changes (the `run_onchange_` prefix re-triggers on hash change; the hash is embedded as a comment in line 3)
+- **during config template rendering**, called inline by `.chezmoi.toml.tmpl`
+- **on every `chezmoi apply` where the encrypted sources changed** — it is a
+  `run_onchange_` script whose rendered body carries the ciphertext hashes, so a changed
+  `*.age` file changes the script and re-triggers it
 
-Sequence:
-
-1. Set `DEST_DIR = ~/.config/chezmoi/`, `SOURCE_DIR = <source>/.secrets/`.
-2. Build the list of secret files: always includes `$DOTFILES_KEY_NAME` (the main key), plus every `*.age` file in `.secrets/` stripped of the `.age` suffix.
-3. For each secret:
-   a. If an existing decrypted file is present, rename to `.old`.
-   b. Try `decrypt_using_chezmoi_key` — `age --decrypt --identity $DOTFILES_PRIVATE_KEY`.
-   c. On failure, try `decrypt_using_passphrase` — calls `dot_local/bin/executable_age-passphrase --decrypt` with `AGE_PASSPHRASE`.
-   d. Set permissions 600 on the output file.
+It decrypts the main age key and every `*.age` file in `.secrets/` into
+`~/.config/chezmoi/` at mode 600, keeping any previous plaintext alongside as `.old`.
 
 **Two-key design:** The main key (`age-00-chezmoi.key`) is always encrypted symmetrically (passphrase). Other secrets (`accounts.json`) may be encrypted either symmetrically or asymmetrically using the main key — the script tries the key first, falls back to passphrase.
 
@@ -107,9 +99,7 @@ Sequence:
 Triggered on every `chezmoi apply` when `packages.yaml` changes (hash in comment, `run_onchange_` prefix).
 
 - **macOS:** `brew bundle` with `darwin.bootstrap` formulae and casks from `packages.yaml`.
-- **Linux:** `sudo apt-get install` for `linux.apts` packages, then `brew bundle` with `linux.bootstrap` formulae. Skips brew bundle inside Docker (detected via `/.dockerenv`).
-
-The template uses custom delimiters `#{` / `}#` (declared via `chezmoi:template:left-delimiter` / `right-delimiter` directives) to avoid conflicts with heredoc content.
+- **Linux:** `sudo apt-get install` for `linux.apts` packages, then `brew bundle` with `linux.bootstrap` formulae. Brew is skipped inside a container, so the Docker test image installs apt packages only.
 
 ---
 
@@ -128,8 +118,8 @@ The template uses custom delimiters `#{` / `}#` (declared via `chezmoi:template:
   (`useDefaultFlags.settings: true`, see `docs/guide-vscode-profiles.md`), so Default's
   settings are the baseline until a profile is deliberately given its own.
 
-Triggered on every `chezmoi apply` when `vscode-extensions.yaml` changes (hash in comment,
-`run_onchange_` prefix, same mechanism as package installation above).
+Triggered on every `chezmoi apply` when `vscode-extensions.yaml` changes, by the same
+`run_onchange_` mechanism as package installation above.
 
 - **macOS only** (skips with a message if the `code` CLI isn't on `PATH`).
 - Reads `vscodeExtensions: {<profile name>: [<extension id>, ...]}` from
@@ -138,27 +128,24 @@ Triggered on every `chezmoi apply` when `vscode-extensions.yaml` changes (hash i
   reaches every profile without editing any other list — which is what makes the baseline
   rule above hold for profiles that keep an independent extension list in VS Code rather
   than mirroring Default's.
-- **One `code` process per profile, for missing extensions only.** It reads
-  `code --list-extensions --profile <name>` once, subtracts that from the wanted list in
-  the shell, and passes what's left as repeated `--install-extension` flags in a single
-  invocation. `--install-extension` is idempotent, so re-installing would be harmless —
-  but one invocation per extension boots Electron ~300 times and prints an "already
-  installed" paragraph for each. Diffing first takes the whole run to ~3 s and silence.
-- Keyed by **profile name**, not folder (`location`) — `--profile` takes the name, and the
-  name↔folder mapping only exists in live `globalStorage/storage.json` (see
-  `docs/guide-vscode-profiles.md`), which this script doesn't read.
+- **Only missing extensions are installed, in one `code` invocation per profile.**
+  Installing is idempotent, so the diffing buys nothing in correctness — it is purely
+  about cost: an invocation per extension boots Electron hundreds of times and buries the
+  run in "already installed" output.
+- Keyed by **profile name**, not folder — the name is what `code --profile` accepts, and
+  the name↔folder mapping exists only in live VS Code state, which this script does not
+  read (see `docs/guide-vscode-profiles.md`).
 
 `vscode-extensions.yaml` is **generated** — `./vscode-import-profiles` rewrites it from
-scratch on every run, from `code --list-extensions --profile <name>` for each profile in
-`globalStorage/storage.json`, plus `Default`. Default has no `userDataProfiles` entry and
-no profile folder, so only its extension list is imported — its settings.json is the root
-`Code/User/settings.json`, managed separately. Hand edits are lost on the next run;
-change the profile in VS Code and re-import. The same run regenerates the chezmoi-managed profile
-`settings.json` copies, which carry only a header comment — the extension list lives here
-and nowhere else, so there is no second copy to drift. Because `chezmoi apply` writes that
-annotated copy back over the live file, the next import sees its own header in the "live"
-input; it strips the lines it emitted before re-rendering, and leaves hand-written comments
-alone.
+scratch on every run out of live VS Code state, so hand edits are lost; change the profile
+in VS Code and re-import. Default is imported for its extensions only: it has no profile
+folder, and its settings are the root `Code/User/settings.json`, managed separately.
+
+The same run regenerates the chezmoi-managed profile `settings.json` copies, which carry
+nothing but a header comment — each profile's extension list lives in the YAML and nowhere
+else, so there is no second copy to drift. Import is safe to repeat: `chezmoi apply` writes
+the annotated copy back over the live file, so the importer must recognise and replace its
+own previous output while leaving hand-written comments intact.
 
 The install script only ever adds. An extension installed into a profile by hand and
 never imported stays there, so the YAML describes a floor, not the exact set.
@@ -233,19 +220,13 @@ directly and change the `profile` value, then run `chezmoi apply`.
 
 ## Platform differences
 
-The `.chezmoiignore` file gates platform-specific paths:
+`.chezmoiignore` is templated on `.chezmoi.os`, and is where every platform-specific path
+exclusion belongs — the same target lives at a different path per platform, and the choice
+is made there rather than inside each file. VS Code is the standing example: `~/Library` on
+macOS, `~/.config/Code` on Linux, each ignored on the other.
 
-```go
-{{ if ne .chezmoi.os "darwin" }}
-Library          ← macOS ~/Library (VS Code, etc.) excluded on Linux
-{{ end }}
-{{ if ne .chezmoi.os "linux" }}
-.config/Code     ← Linux VS Code path excluded on macOS
-{{ end }}
-```
-
-macOS-only: Rosetta install, `private_Library/` (VS Code settings at `~/Library/Application Support/Code`).
-Linux-only: apt-get package installation, `.config/Code/` path.
+macOS-only: Rosetta install, `private_Library/`. Linux-only: apt-get package installation,
+`.config/Code/`.
 
 ---
 
@@ -292,31 +273,24 @@ op-export-accounts
   └─► home/.secrets/accounts.json.age (encrypted, committed)
 
 chezmoi init --apply
-  ├─► .chezmoi.toml.tmpl (line 36-37): executes decrypt script inline via `output`
+  ├─► .chezmoi.toml.tmpl: runs the decrypt script inline
   │     └─► decrypts accounts.json into ~/.config/chezmoi/
-  ├─► .chezmoi.toml.tmpl (line 39-48): reads decrypted accounts.json
+  ├─► .chezmoi.toml.tmpl: reads the decrypted accounts.json
   │     └─► populates [data] accounts + aliases in chezmoi.toml
   └─► apply phase: templates resolve .accounts/.aliases with fresh data
         └─► e.g. 60-vergnügte-wanze.gitconfig.tmpl renders correctly
 ```
 
-The decrypt script (`run_onchange_before_decrypt-chezmoi-secrets.sh.tmpl`) is a **template** — the `.tmpl` suffix is critical. Line 3 contains:
-
-```go
-# accounts.json.age hash: {{ include ".secrets/accounts.json.age" | sha256sum }}
-```
-
-Because the script is a template, chezmoi evaluates this directive on every apply. When `accounts.json.age` changes, the rendered script content changes, and `run_onchange_` fires. The script then:
-
-1. Renames existing `~/.config/chezmoi/accounts.json` to `.old`.
-2. Decrypts `accounts.json.age` using the main age key (falls back to `AGE_PASSPHRASE` for symmetric decryption).
-3. Writes the result to `~/.config/chezmoi/accounts.json`.
+The decrypt script's `.tmpl` suffix is what makes the re-trigger work: because it is a
+template, the ciphertext hash it embeds is re-evaluated on every apply, so a changed
+`accounts.json.age` changes the rendered script and `run_onchange_` fires. Drop the suffix
+and the script becomes static — it would never re-run after new account data lands.
 
 ### Important notes
 
 - The `AGE_PASSPHRASE` env var is needed because the script decrypts the main age key (`age-00-chezmoi.key.age`) first, which uses symmetric encryption. Without it (and without an interactive terminal), decryption fails silently and chezmoi still marks the script as executed — requiring `chezmoi state delete-bucket --bucket=entryState` to re-trigger.
 - If decryption fails (no passphrase, no terminal), chezmoi records the script hash in `entryState` regardless of exit code. A subsequent `chezmoi apply` will not re-run the script. To force a re-run: `chezmoi state delete-bucket --bucket=entryState` (this also resets state for `run_onchange_01-install-packages.sh`).
-- The config template (`.chezmoi.toml.tmpl` line 35-37) calls the decrypt script by its **literal filesystem path** (including `.tmpl` suffix), not by its chezmoi target name.
+- The config template calls the decrypt script by its **literal filesystem path** — `.tmpl` suffix and all — not by its chezmoi target name. Renaming the script therefore breaks `chezmoi init`, not just the apply-time re-trigger.
 
 ---
 
@@ -365,7 +339,7 @@ recurs across every repo belongs in the user dictionary
 
 ## Test suite
 
-Seven integration tests in `tests/integration/`, run via `just test`:
+Integration tests live in `tests/integration/`, one script per assertion, run via `just test`:
 
 ```sh
 just                        # list all recipes
@@ -380,8 +354,9 @@ just update-accounts        # export accounts, encrypt, commit, apply
 Missing environment variables are reported by name before any work starts.
 
 `just` is the entry point for every task. The `Makefile` is retained solely for the rbw
-build graph — `$(BIN_DIR)/.stamp` gates an expensive docker build on input timestamps,
-which just cannot express — and `just rbw` / `just clean` delegate to it.
+build graph, the one place with genuine file-based staleness: a stamp file gates an
+expensive docker build on input timestamps, which just cannot express. `just rbw` and
+`just clean` delegate to it, and calls only ever go that way round.
 
 ### macOS tests
 
