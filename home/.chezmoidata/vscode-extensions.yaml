@@ -166,7 +166,6 @@ vscodeExtensions:
     - ttfree.decode
     - tyriar.sort-lines
     - vscode-icons-team.vscode-icons
-    - vsls-contrib.gistfs
     - wassimdev.wassimdev-vscode-deepseek
     - yhirose.filtertext
     - zaguini.vscode-file-vault
@@ -176,7 +175,6 @@ vscodeExtensions:
     - bierner.markdown-mermaid
     - bpruitt-goddard.mermaid-markdown-syntax-highlighting
     - fnando.linter
-    - github.copilot-chat
     - hashicorp.terraform
     - ms-python.debugpy
     - ms-python.python
@@ -187,7 +185,6 @@ vscodeExtensions:
     - samuelcolvin.jinjahtml
     - tomoyukim.vscode-mermaid-editor
     - tylerharris.terraform-link-docs
-    - vsls-contrib.gistfs
     - zainchen.json
   VW.ADMT:
     - 4ops.terraform
@@ -215,7 +212,6 @@ vscodeExtensions:
     - tomoki1207.pdf
     - tomoyukim.vscode-mermaid-editor
     - tylerharris.terraform-link-docs
-    - vsls-contrib.gistfs
     - willasm.obsidian-md-vsc
     - zainchen.json
   ai-infra:

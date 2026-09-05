@@ -59,6 +59,18 @@ def extension_profiles(support_dir: Path) -> list[Profile]:
     return [DEFAULT_PROFILE, *list_profiles(support_dir)]
 
 
+# Extensions VS Code now ships itself. `--uninstall-extension` refuses them ("is a
+# Built-in extension and cannot be uninstalled"), so a profile that gallery-installed one
+# before it was absorbed keeps reporting it from `--list-extensions` forever, with no way
+# to take it back out. Recording that in the YAML describes something neither the importer
+# nor the install script can act on, so drop it on the way in.
+BUILTIN_EXTENSIONS = frozenset({"github.copilot-chat"})
+
+
+def manageable(extensions: list[str]) -> list[str]:
+    return [e for e in extensions if e not in BUILTIN_EXTENSIONS]
+
+
 def list_extensions(name: str) -> list[str]:
     if shutil.which("code") is None:
         sys.exit("error: the `code` CLI is not on PATH")
@@ -68,7 +80,7 @@ def list_extensions(name: str) -> list[str]:
         text=True,
         check=True,
     ).stdout
-    return sorted(line for line in out.splitlines() if line)
+    return manageable(sorted(line for line in out.splitlines() if line))
 
 
 _OWNED_HEADER = ("// Profile:", "// Profile path:")
@@ -181,6 +193,8 @@ def _self_check() -> None:
     assert own_only("Default", sorted(default), default) == ["shared.one", "shared.two"]
     assert with_default("Go", ["golang.go"], default) == {"golang.go", *default}
     assert with_default("Default", sorted(default), default) == default
+
+    assert manageable(["a.b", "github.copilot-chat", "c.d"]) == ["a.b", "c.d"]
 
     print("self-check ok")
 
