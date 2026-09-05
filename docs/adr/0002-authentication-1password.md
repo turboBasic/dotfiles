@@ -103,6 +103,15 @@ The naive "read the token at every shell start and export it" approach breaks th
 The real task is therefore: *resolve the token once, cache it to a private (mode 600) file, source
 that file*, while keeping the var out of `.zshenv`/global scope and out of chezmoi's `apply` run.
 
+Consequence 2 is already mitigated three ways, one per entry point. The `chezmoi` function in
+`zsh/.include/020-functions.zsh` covers interactive shells; `op-export-accounts` and
+`op-update-accounts` prefix their own chezmoi calls; and `.claude/settings.json` sets
+`env.OP_SERVICE_ACCOUNT_TOKEN` to the empty string, which chezmoi reads as unset. That last one is
+what makes this repo work under the `claude-moia` mise task, whose `run` block exports a
+`work-vw`-scoped token into the whole session — a token that cannot read the `chezmoi` or `Personal`
+vaults this repo needs, so nothing is lost by blanking it here. Claude Code's Bash tool spawns
+`bash`, so it never sees the zsh function; the setting is the only lever that reaches it.
+
 ## Decision
 
 **Proposed (pending owner choice on delivery + scope).** Adopt a service-account token

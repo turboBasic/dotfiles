@@ -1,4 +1,7 @@
 {
+  "env": {
+    "OP_SERVICE_ACCOUNT_TOKEN": ""
+  },
   "permissions": {
     "allow": [
       "Bash(perl *)",
