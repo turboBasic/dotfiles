@@ -93,8 +93,6 @@ vscodeExtensions:
     - ms-toolsai.jupyter-renderers
     - ms-toolsai.vscode-jupyter-cell-tags
     - ms-toolsai.vscode-jupyter-slideshow
-    - ms-vscode-remote.remote-wsl
-    - ms-vscode-remote.vscode-remote-extensionpack
     - ms-vscode.powershell
     - ms-vscode.remote-server
     - ms-vscode.vscode-chat-customizations-evaluations
