@@ -5,29 +5,22 @@
 # ❯ code --list-extensions --profile <name> | sort
 #
 vscodeExtensions:
-  00-common:
-    - alefragnani.bookmarks
-    - donjayamanne.githistory
-    - emmanuelbeziat.vscode-great-icons
-    - fabiospampinato.vscode-open-in-github
-    - github.copilot-chat
-    - github.remotehub
-    - gruntfuggly.todo-tree
-    - howardzuo.vscode-favorites
-    - ms-vscode.remote-repositories
-    - swellaby.workspace-config-plus
-    - vsls-contrib.gistfs
   Default:
+    - alefragnani.bookmarks
     - alefragnani.project-manager
     - anthropic.claude-code
     - charliermarsh.ruff
     - davidanson.vscode-markdownlint
     - editorconfig.editorconfig
     - elagil.pre-commit-helper
+    - fabiospampinato.vscode-open-in-github
     - foxundermoon.shell-format
+    - github.remotehub
     - github.vscode-github-actions
     - github.vscode-pull-request-github
+    - gruntfuggly.todo-tree
     - hashhar.gitattributes
+    - howardzuo.vscode-favorites
     - hverlin.mise-vscode
     - jock.svg
     - ldez.ignore-files
@@ -36,6 +29,7 @@ vscodeExtensions:
     - monokai.theme-monokai-pro-vscode
     - ms-azuretools.vscode-containers
     - ms-vscode-remote.remote-containers
+    - ms-vscode.remote-repositories
     - nefrob.vscode-just-syntax
     - pkief.material-icon-theme
     - qcz.text-power-tools
@@ -76,7 +70,6 @@ vscodeExtensions:
     - benjaminbenais.copilot-theme
     - d-biehl.robotcode
     - darkriszty.markdown-table-prettify
-    - donjayamanne.githistory
     - donjayamanne.python-environment-manager
     - esbenp.prettier-vscode
     - golang.go
@@ -111,7 +104,6 @@ vscodeExtensions:
     - aaron-bond.better-comments
     - adam-watters.vscode-color-pick
     - adamhartford.vscode-base64
-    - alefragnani.bookmarks
     - aloysetech.hex-array-formatter
     - andrei-ignatev.codeowners-tree
     - arahata.linter-actionlint
@@ -126,11 +118,9 @@ vscodeExtensions:
     - deerawan.vscode-faker
     - deerawan.vscode-hasher
     - docker.docker
-    - donjayamanne.githistory
     - dracula-theme.theme-dracula
     - eamodio.gitlens
     - eetami.whitespace-formatter
-    - emmanuelbeziat.vscode-great-icons
     - eriklynd.json-tools
     - esbenp.prettier-vscode
     - exiasr.hadolint
@@ -139,7 +129,6 @@ vscodeExtensions:
     - fvclaus.sort-json-array
     - george-alisson.html-preview-vscode
     - glavin001.unibeautify-vscode
-    - gruntfuggly.todo-tree
     - hcoban.codeowners
     - helixquar.randomeverything
     - huizhou.githd
@@ -149,7 +138,6 @@ vscodeExtensions:
     - jetmartin.bats
     - jinliming2.vscode-go-template
     - johnguo.columnpaste
-    - kdcro101.favorites
     - l13rary.l13-diff
     - lamartire.line-to-column
     - letmaik.git-tree-compare
@@ -187,7 +175,6 @@ vscodeExtensions:
     - arahata.linter-actionlint
     - bierner.markdown-mermaid
     - bpruitt-goddard.mermaid-markdown-syntax-highlighting
-    - emmanuelbeziat.vscode-great-icons
     - fnando.linter
     - github.copilot-chat
     - hashicorp.terraform
@@ -208,7 +195,6 @@ vscodeExtensions:
     - axetroy.vscode-auto-schema
     - bierner.markdown-mermaid
     - bpruitt-goddard.mermaid-markdown-syntax-highlighting
-    - emmanuelbeziat.vscode-great-icons
     - evzen-wybitul.magic-racket
     - fnando.linter
     - golang.go
