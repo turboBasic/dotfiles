@@ -69,16 +69,8 @@ vscodeExtensions:
     - orta.vscode-jest
     - xabikos.javascriptsnippets
   Python:
-    - akhail.save-typing
-    - amazonwebservices.amazon-q-vscode
-    - benjaminbenais.copilot-theme
     - d-biehl.robotcode
-    - darkriszty.markdown-table-prettify
-    - donjayamanne.python-environment-manager
     - esbenp.prettier-vscode
-    - golang.go
-    - hashicorp.hcl
-    - ironmansoftware.powershellprotools
     - magicstack.magicpython
     - mechatroner.rainbow-csv
     - ms-python.debugpy
@@ -90,11 +82,7 @@ vscodeExtensions:
     - ms-toolsai.jupyter-renderers
     - ms-toolsai.vscode-jupyter-cell-tags
     - ms-toolsai.vscode-jupyter-slideshow
-    - ms-vscode.powershell
-    - ms-vscode.remote-server
-    - ms-vscode.vscode-chat-customizations-evaluations
     - njpwerner.autodocstring
-    - zhuangtongfa.material-theme
   Rust:
     - dustypomerleau.rust-syntax
     - rust-lang.rust-analyzer
