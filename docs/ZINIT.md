@@ -347,6 +347,23 @@ function toolname {
 toolname "$@"
 ```
 
+#### The shim replaces `argv[0]`, so never shim a multi-call binary
+
+The generated script invokes the real binary as `toolname "$@"` — the name the user
+typed is gone. A tool that decides what to do from `argv[0]` cannot be shimmed.
+
+`mise` is the standing example, which is why its entry uses `cp` and **not** `sbin`.
+mise writes its own shims into `~/.local/share/mise/shims` as symlinks to whatever
+`mise` resolves to on `PATH`, and tells a shim call from a plain call by `argv[0]`.
+Point those symlinks at an `sbin` script and every one of them arrives as a bare
+`mise <args>`: `op signin --raw` becomes a hunt for a *task* named `signin`, and
+`jq .a` fails with `no task .a found`. mise's `not_found_system_fallback` never
+fires either, because mise never learns it was called as a shim.
+
+Note that `sbin` and `cp` collide silently when both name `$ZPFX/bin/<name>`: `cp`
+copies the real binary there, then `sbin` overwrites it with the wrapper. Use one.
+`cp` is correct whenever the binary is argv[0]-sensitive or is itself a shim source.
+
 ### Flags
 
 | Flag | Effect                                                            |

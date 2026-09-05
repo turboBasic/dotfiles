@@ -140,7 +140,6 @@ zinit --lucid --wait for \
     --extract='!' \
     --mv='mise-v* -> mise' \
     --cp='mise -> $ZPFX/bin/mise' \
-    --sbin='mise -> mise' \
     --atclone='
         chmod +x $ZPFX/bin/mise
         mise completion zsh > _mise
