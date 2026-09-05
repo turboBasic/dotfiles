@@ -25,7 +25,7 @@ The `| 0` truncates to a **signed** 32-bit integer, and JavaScript's
 the hex digits of the magnitude (not two's-complement hex). A signed 32-bit hash is
 roughly 50/50 positive/negative, which is why folders like `-548e617c`, `-5b384f0`,
 `-158228ab`, `-3c46d013`, `-46c02fca` start with `-` while others
-(`451b20d1`, `7ba910e7`, `73029c16`, `6ff9ea05`, `2223344d`) don't. It's arbitrary —
+(`451b20d1`, `73029c16`, `6ff9ea05`, `2223344d`) don't. It's arbitrary —
 carries no meaning beyond "which half of the hash space this profile's random id
 landed in."
 

@@ -135,14 +135,14 @@ def _self_check() -> None:
     ), live
 
     inert = render(
-        "Shell",
-        "~/Library/Application Support/Code/User/profiles/7ba910e7/settings.json",
+        "Terraform",
+        "~/Library/Application Support/Code/User/profiles/73029c16/settings.json",
         '{\n  "editor.fontSize": 14\n}',
         True,
     )
     assert inert == (
-        "// Profile: Shell\n"
-        "// Profile path: ~/Library/Application Support/Code/User/profiles/7ba910e7/settings.json\n"
+        "// Profile: Terraform\n"
+        "// Profile path: ~/Library/Application Support/Code/User/profiles/73029c16/settings.json\n"
         "// NOTE: useDefaultFlags.settings is true — VS Code reads the root "
         "Code/User/settings.json for this profile; this file is not currently active.\n"
         "{\n"

@@ -63,8 +63,7 @@ home/                            ← chezmoi source dir (declared via .chezmoiro
 │   ├── zsh/                     ← zsh config, zinit, functions, profiles
 │   ├── mise/config.toml.tmpl
 │   ├── atuin/, bat/, cspell/, ripgrep/, tmux/
-│   ├── opencode/skill/symlink_triage.tmpl ← points OpenCode at the Claude Code triage skill
-│   └── private_Code/            ← VS Code config (Linux path)
+│   └── opencode/skill/symlink_triage.tmpl ← points OpenCode at the Claude Code triage skill
 ├── 00-projects/personal/        ← VS Code workspace files for ~/00-projects/personal
 │   ├── *.code-workspace         ← plain (relative paths only)
 │   └── *.code-workspace.tmpl   ← templated (contain absolute paths via .chezmoi.homeDir / .projectDir)

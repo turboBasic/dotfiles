@@ -1,9 +1,6 @@
 # Encryption key used by Chezmoi
 *.key.age
 
-# Project files which should not be tracked by chezmoi
-VS Code/
-
 {{ if ne .chezmoi.os "darwin" }}
 Library
 {{ end }}

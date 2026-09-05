@@ -222,11 +222,11 @@ directly and change the `profile` value, then run `chezmoi apply`.
 
 `.chezmoiignore` is templated on `.chezmoi.os`, and is where every platform-specific path
 exclusion belongs — the same target lives at a different path per platform, and the choice
-is made there rather than inside each file. VS Code is the standing example: `~/Library` on
-macOS, `~/.config/Code` on Linux, each ignored on the other.
+is made there rather than inside each file. VS Code is the standing example: its config lives
+under `~/Library` on macOS and `~/.config/Code` on Linux, so each is ignored on the other.
+Only the macOS side has managed files today — the Linux guard is kept for when it does.
 
-macOS-only: Rosetta install, `private_Library/`. Linux-only: apt-get package installation,
-`.config/Code/`.
+macOS-only: Rosetta install, `private_Library/`. Linux-only: apt-get package installation.
 
 ---
 
