@@ -33,8 +33,9 @@ install_missing() {
     code --profile "$profile" "$@"
 }
 
+#{ $default := index .vscodeExtensions "Default" | default (list) }#
 #{ range $profile, $extensions := .vscodeExtensions }#
-install_missing #{ $profile | quote }##{ range $extensions }# \
+install_missing #{ $profile | quote }##{ range (concat $extensions $default | uniq | sortAlpha) }# \
     #{ . | quote }##{ end }#
 
 #{ end }#
