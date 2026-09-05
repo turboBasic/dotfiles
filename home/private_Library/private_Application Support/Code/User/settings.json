@@ -2,9 +2,7 @@
 // Profile path: ~/Library/Application Support/Code/User/settings.json
 {
   // General settings
-  "files.associations": {},
   "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 1000,
   "files.exclude": {
     "**/.git": false,
     "**/.git disable exclusion of .git": true
@@ -16,7 +14,6 @@
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
   // Editor settings
-  "editor.detectIndentation": true,
   "editor.fontFamily": "FiraCode Nerd Font, Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": false,
   "editor.fontSize": 15,
@@ -29,13 +26,11 @@
   // UI settings
   "breadcrumbs.enabled": false,
   "window.commandCenter": false,
+  "window.density.layout": "compact",
   "window.newWindowProfile": "Default",
   "workbench.startupEditor": "none",
   "workbench.colorTheme": "Monokai Pro",
-  "workbench.editor.enablePreview": true,
   "workbench.iconTheme": "material-icon-theme",
-  "workbench.statusBar.visible": true,
-  "workbench.activityBar.location": "default",
   // Search settings
   "search.exclude": {
     "**/node_modules": true,
@@ -45,25 +40,12 @@
   },
   "search.followSymlinks": false,
   "search.smartCase": true,
-  "search.useIgnoreFiles": true,
   "search.useGlobalIgnoreFiles": true,
   // Terminal settings
   "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.scrollback": 5000,
   "terminal.integrated.confirmOnExit": "hasChildProcesses",
   "terminal.integrated.enableMultiLinePasteWarning": "never",
-  // Print settings
-  "print.folder.exclude": [
-    "{bin,obj,out}",
-    "node_modules",
-    "data",
-    "**/*.{bin,exe,dll,hex,pdb,pdf,pfx,png,jpg,gif,bmp,suo,design}"
-  ],
-  "print.folder.fileNames": true,
-  "print.folder.include": [],
-  "print.folder.includeFileList": false,
-  "print.folder.maxFiles": 30,
-  "print.folder.maxLines": 1200,
   // Shellcheck settings
   "shellcheck.disableVersionCheck": true,
   "shellcheck.useWorkspaceRootAsCwd": true,
@@ -98,7 +80,6 @@
   "aws.telemetry": false,
   "claudeCode.preferredLocation": "panel",
   "redhat.telemetry.enabled": false,
-  "settingsSync.ignoredExtensions": [],
   "svg.preview.mode": "svg",
   "projectManager.git.baseFolders": [
     "~/00-projects"
@@ -114,7 +95,7 @@
   "[markdown]": {
     "editor.formatOnSave": false
   },
-  "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
+  "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "security.promptForLocalFileProtocolHandling": false,
   "yaml.disableSchemaDetection": [
@@ -134,5 +115,4 @@
   "chat.mcp.gallery.enabled": true,
   "chat.agentHost.byokModels.enabled": true,
   "chat.viewSessions.orientation": "stacked",
-  "rust-analyzer.cargo.buildScripts.overrideCommand": null,
 }

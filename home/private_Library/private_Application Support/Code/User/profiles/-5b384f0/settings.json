@@ -2,7 +2,7 @@
 // Profile path: ~/Library/Application Support/Code/User/profiles/-5b384f0/settings.json
 {
     "explorer.confirmDelete": false,
-    "editor.fontSize": 14,
+    "editor.fontSize": 15,
     "conventionalCommits.showNewVersionNotes": false,
     "github.copilot.chat.codesearch.enabled": true,
     "github.copilot.enable": {
@@ -13,9 +13,91 @@
         "go": true
     },
     "workbench.iconTheme": "vscode-icons",
-    "redhat.telemetry.enabled": true,
+    "redhat.telemetry.enabled": false,
     "go.alternateTools": {
         "go": "/Users/aamelnyk/.local/share/mise/installs/go/1.26.2/bin/go"
     },
-    "vsicons.dontShowNewVersionMessage": true
+    "vsicons.dontShowNewVersionMessage": true,
+    "projectManager.git.baseFolders": [
+        "~/00-projects"
+    ],
+    "projectManager.vscode.baseFolders": [
+        "~/00-projects"
+    ],
+    // Copied from Default: this profile keeps its own settings.json and inherits nothing.
+    "files.autoSave": "afterDelay",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    "editor.fontFamily": "FiraCode Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontLigatures": false,
+    "editor.formatOnSave": true,
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "all",
+    "editor.stickyScroll.enabled": false,
+    "editor.tabSize": 2,
+    "editor.wordWrap": "on",
+    "breadcrumbs.enabled": false,
+    "window.commandCenter": false,
+    "window.density.layout": "compact",
+    "workbench.startupEditor": "none",
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.git": true,
+        "**/dist": true,
+        "**/build": true
+    },
+    "search.followSymlinks": false,
+    "search.smartCase": true,
+    "search.useGlobalIgnoreFiles": true,
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.scrollback": 5000,
+    "terminal.integrated.confirmOnExit": "hasChildProcesses",
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+    "shellcheck.disableVersionCheck": true,
+    "shellcheck.useWorkspaceRootAsCwd": true,
+    "shellformat.effectLanguages": [
+        "shellscript",
+        "bats"
+    ],
+    "shellformat.useEditorConfig": true,
+    "[shellscript]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[svg]": {
+        "editor.defaultFormatter": "jock.svg"
+    },
+    "[toml]": {
+        "editor.defaultFormatter": "tamasfe.even-better-toml"
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    // Never format markdown on save: files.autoSave is afterDelay, so it would rewrite
+    // lists and emphasis while typing. shift+alt+f runs markdownlint.fixAll instead.
+    "[markdown]": {
+        "editor.formatOnSave": false
+    },
+    "cSpell.validateDirectives": true,
+    "cSpell.userWords": [
+        "aamelnyk"
+    ],
+    "aws.telemetry": false,
+    "claudeCode.preferredLocation": "panel",
+    "chat.mcp.gallery.enabled": true,
+    "chat.agentHost.byokModels.enabled": true,
+    "chat.viewSessions.orientation": "stacked",
+    "explorer.confirmDragAndDrop": false,
+    "security.promptForLocalFileProtocolHandling": false,
+    "svg.preview.mode": "svg",
+    "yaml.disableSchemaDetection": [
+        "**/.github/workflows/*.yml",
+        "**/.github/workflows/*.yaml",
+        "**/.gitea/workflows/*.yml",
+        "**/.gitea/workflows/*.yaml",
+        "**/.forgejo/workflows/*.yml",
+        "**/.forgejo/workflows/*.yaml"
+    ]
 }
