@@ -34,7 +34,6 @@ vscodeExtensions:
     - ms-vscode-remote.remote-containers
     - ms-vscode-remote.remote-ssh
     - ms-vscode-remote.remote-ssh-edit
-    - ms-vscode.azure-repos
     - ms-vscode.hexeditor
     - ms-vscode.remote-explorer
     - ms-vscode.remote-repositories
@@ -106,6 +105,7 @@ vscodeExtensions:
     - golang.go
     - grafana.vscode-jsonnet
     - hashicorp.terraform
+    - ms-vscode.azure-repos
     - ms-vscode.makefile-tools
     - pomdtr.excalidraw-editor
     - tylerharris.terraform-link-docs
