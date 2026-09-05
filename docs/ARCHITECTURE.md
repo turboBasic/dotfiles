@@ -134,11 +134,10 @@ Triggered on every `chezmoi apply` when `vscode-extensions.yaml` changes (hash i
 - **macOS only** (skips with a message if the `code` CLI isn't on `PATH`).
 - Reads `vscodeExtensions: {<profile name>: [<extension id>, ...]}` from
   `.chezmoidata/vscode-extensions.yaml`.
-- **Default's list is merged into every profile at render time**
-  (`concat $extensions $default | uniq | sortAlpha`). This is what makes promoting an
-  extension to Default reach every profile without touching their lists — the YAML records
-  each profile's own live set, and the merge closes the gap for profiles that keep an
-  independent extension list rather than mirroring Default's in VS Code.
+- **Every profile also gets Default's list.** Promoting an extension to Default therefore
+  reaches every profile without editing any other list — which is what makes the baseline
+  rule above hold for profiles that keep an independent extension list in VS Code rather
+  than mirroring Default's.
 - **One `code` process per profile, for missing extensions only.** It reads
   `code --list-extensions --profile <name>` once, subtracts that from the wanted list in
   the shell, and passes what's left as repeated `--install-extension` flags in a single
