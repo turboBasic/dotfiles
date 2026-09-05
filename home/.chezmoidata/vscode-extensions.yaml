@@ -61,7 +61,6 @@ vscodeExtensions:
     - esbenp.prettier-vscode
     - humao.rest-client
     - mikestead.dotenv
-    - ms-azuretools.vscode-docker
     - orta.vscode-jest
     - xabikos.javascriptsnippets
   Python:
@@ -77,7 +76,6 @@ vscodeExtensions:
     - ironmansoftware.powershellprotools
     - magicstack.magicpython
     - mechatroner.rainbow-csv
-    - ms-azuretools.vscode-docker
     - ms-python.debugpy
     - ms-python.python
     - ms-python.vscode-pylance
