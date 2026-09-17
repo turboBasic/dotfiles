@@ -29,12 +29,36 @@ idiomatic_version_file_enable_tools = []
 description = "Execute Claude with its default settings"
 dir = "{{"{{"}}cwd{{"}}"}}"
 run = '''
-    unset AWS_PROFILE CLAUDE_CODE_USE_BEDROCK ANTHROPIC_DEFAULT_FABLE_MODEL ANTHROPIC_DEFAULT_OPUS_MODEL ANTHROPIC_DEFAULT_SONNET_MODEL ANTHROPIC_DEFAULT_HAIKU_MODEL
+    unset AWS_PROFILE \
+        CLAUDE_CODE_API_KEY_HELPER_TTL_MS \
+        CLAUDE_CODE_USE_BEDROCK \
+        ANTHROPIC_BASE_URL \
+        ANTHROPIC_DEFAULT_FABLE_MODEL \
+        ANTHROPIC_DEFAULT_OPUS_MODEL \
+        ANTHROPIC_DEFAULT_SONNET_MODEL \
+        ANTHROPIC_DEFAULT_HAIKU_MODEL
     claude $@
 '''
 
 {{- $TASK_CLAUDE_COMPANY := (list "mo" "ia" | join "") }}
+
 [tasks.claude-{{ $TASK_CLAUDE_COMPANY }}]
+description = "Execute Claude Code with the {{ $TASK_CLAUDE_COMPANY }} Anthropic proxy account"
+dir = "{{"{{"}}cwd{{"}}"}}"
+run = '''
+  OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/shell-work-vw") claude $@
+'''
+
+[tasks.claude-{{ $TASK_CLAUDE_COMPANY }}.env]
+CLAUDE_CODE_API_KEY_HELPER_TTL_MS = "120000"
+ENABLE_TOOL_SEARCH = "true"
+ANTHROPIC_BASE_URL = "https://llm.{{ $TASK_CLAUDE_COMPANY }}-01.k8s.prd.eu-central-1.{{ $TASK_CLAUDE_COMPANY }}-group.io/"
+ANTHROPIC_DEFAULT_FABLE_MODEL = "claude-fable-5"
+ANTHROPIC_DEFAULT_OPUS_MODEL = "claude-opus-5[1m]"
+ANTHROPIC_DEFAULT_SONNET_MODEL = "claude-sonnet-5"
+ANTHROPIC_DEFAULT_HAIKU_MODEL = "claude-haiku-4-5"
+
+[tasks.claude-{{ $TASK_CLAUDE_COMPANY }}-bedrock]
 description = "Execute Claude Code with the AWS Bedrock backend in {{ $TASK_CLAUDE_COMPANY }} AWS account"
 dir = "{{"{{"}}cwd{{"}}"}}"
 run = '''
@@ -42,13 +66,10 @@ run = '''
   OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/shell-work-vw") claude $@
 '''
 
-[tasks.claude-{{ $TASK_CLAUDE_COMPANY }}.env]
+[tasks.claude-{{ $TASK_CLAUDE_COMPANY }}-bedrock.env]
 AWS_PROFILE = "sso-ai"
 # AWS_REGION = "eu-central-1"
-# CLAUDE_CODE_USE_BEDROCK = 1
-CLAUDE_CODE_API_KEY_HELPER_TTL_MS = "120000"
-ENABLE_TOOL_SEARCH = "true"
-ANTHROPIC_BASE_URL = "https://llm.moia-01.k8s.prd.eu-central-1.moia-group.io/"
+CLAUDE_CODE_USE_BEDROCK = 1
 ANTHROPIC_DEFAULT_FABLE_MODEL = "global.anthropic.claude-fable-5"
 ANTHROPIC_DEFAULT_OPUS_MODEL = "eu.anthropic.claude-opus-5[1m]"
 ANTHROPIC_DEFAULT_SONNET_MODEL = "eu.anthropic.claude-sonnet-5"
@@ -58,3 +79,4 @@ ANTHROPIC_DEFAULT_HAIKU_MODEL = "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
 [shell_alias]
 claude-default = "mise run claude-default --"
 claude-{{ $TASK_CLAUDE_COMPANY }} = "mise run claude-{{ $TASK_CLAUDE_COMPANY }} --"
+claude-{{ $TASK_CLAUDE_COMPANY }}-bedrock = "mise run claude-{{ $TASK_CLAUDE_COMPANY }}-bedrock --"
