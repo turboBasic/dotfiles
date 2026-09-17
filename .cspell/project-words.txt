@@ -49,6 +49,7 @@ lefthook
 libdbus
 libexec
 libreadline
+litellm
 nmcli
 oathtool
 opencode

@@ -45,7 +45,10 @@ run = '''
 [tasks.claude-{{ $TASK_CLAUDE_COMPANY }}.env]
 AWS_PROFILE = "sso-ai"
 # AWS_REGION = "eu-central-1"
-CLAUDE_CODE_USE_BEDROCK = 1
+# CLAUDE_CODE_USE_BEDROCK = 1
+CLAUDE_CODE_API_KEY_HELPER_TTL_MS = "120000"
+ENABLE_TOOL_SEARCH = "true"
+ANTHROPIC_BASE_URL = "https://llm.moia-01.k8s.prd.eu-central-1.moia-group.io/"
 ANTHROPIC_DEFAULT_FABLE_MODEL = "global.anthropic.claude-fable-5"
 ANTHROPIC_DEFAULT_OPUS_MODEL = "eu.anthropic.claude-opus-5[1m]"
 ANTHROPIC_DEFAULT_SONNET_MODEL = "eu.anthropic.claude-sonnet-5"
