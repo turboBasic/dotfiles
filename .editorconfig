@@ -29,6 +29,9 @@ trim_trailing_whitespace = false
 [*.{hcl,tf,tfvars}]
 indent_size = 2
 
+[*.toml{,.tmpl}]
+indent_size = 2
+
 [*.xml]
 indent_size = 2
 
