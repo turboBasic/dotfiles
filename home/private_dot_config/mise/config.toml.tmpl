@@ -48,6 +48,7 @@ description = "Execute Claude Code with the {{ $TASK_CLAUDE_COMPANY }} Anthropic
 dir = "{{"{{"}}cwd{{"}}"}}"
 quiet = true
 run = '''
+  unset AWS_PROFILE CLAUDE_CODE_USE_BEDROCK
   OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/shell-work-vw") claude $@
 '''
 
@@ -65,6 +66,7 @@ description = "Execute Claude Code with the AWS Bedrock backend in {{ $TASK_CLAU
 dir = "{{"{{"}}cwd{{"}}"}}"
 quiet = true
 run = '''
+  unset ANTHROPIC_BASE_URL
   OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/shell-work-vw") claude $@
 '''
 
