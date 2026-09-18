@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+# Print today's spend and remaining budget for the moia AI Gateway (LiteLLM)
+# proxy. Reads the token already cached by /opt/moia/bin/litellm-token-helper;
+# run claude-moia (or litellm-<env>-helper) first if there is nothing cached yet.
+import argparse
+import json
+import os
+import sys
+import urllib.error
+import urllib.request
+
+ENVIRONMENTS = {
+    "dev": ("dev", "eu-central-1"),
+    "int": ("int", "eu-central-1"),
+    "prd": ("prd", "eu-central-1"),
+    "us-prd": ("prd", "us-east-1"),
+}
+GATEWAY_TEMPLATE = "https://llm.moia-01.k8s.{stage}.{region}.moia-group.io"
+
+
+def token_file(environment):
+    base = os.environ.get("XDG_STATE_HOME", "").strip()
+    if not base:
+        base = os.path.join(os.path.expanduser("~"), ".local", "state")
+    return os.path.join(base, "ai-gateway", "token-" + environment)
+
+
+def main(argv):
+    parser = argparse.ArgumentParser(
+        description="Print today's AI Gateway spend and remaining budget."
+    )
+    parser.add_argument(
+        "environment",
+        nargs="?",
+        default="prd",
+        choices=ENVIRONMENTS,
+        help="which AI gateway to check (default: prd)",
+    )
+    args = parser.parse_args(argv)
+
+    path = token_file(args.environment)
+    try:
+        with open(path) as f:
+            token = f.read().strip()
+    except FileNotFoundError:
+        print(
+            f"No cached token at {path} — run litellm-{args.environment}-helper once first",
+            file=sys.stderr,
+        )
+        return 1
+
+    stage, region = ENVIRONMENTS[args.environment]
+    url = GATEWAY_TEMPLATE.format(stage=stage, region=region) + "/moia-credential-status"
+    req = urllib.request.Request(
+        url, headers={"Authorization": f"Bearer {token}", "Accept": "application/json"}
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            info = json.loads(resp.read().decode())
+    except (urllib.error.URLError, urllib.error.HTTPError) as e:
+        print(f"Could not reach the AI Gateway status endpoint: {e}", file=sys.stderr)
+        return 1
+
+    if info.get("state") == "invalid":
+        print(
+            f"Cached token is invalid — run litellm-{args.environment}-helper to sign in again",
+            file=sys.stderr,
+        )
+        return 1
+
+    spend = float(info.get("spend", 0))
+    max_budget = float(info.get("max_budget", 0))
+    reset_at = info.get("budget_reset_at", "unknown")
+    print(
+        f"Spent: ${spend:.2f} of ${max_budget:.2f} "
+        f"(remaining: ${max_budget - spend:.2f}) — resets {reset_at}"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
