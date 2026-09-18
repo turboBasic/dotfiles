@@ -87,5 +87,7 @@
 	"explorer.confirmDelete": false,
 	"explorer.confirmDragAndDrop": false,
 	"security.promptForLocalFileProtocolHandling": false,
-	"svg.preview.mode": "svg"
+	"svg.preview.mode": "svg",
+	"todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
+	"claudeCode.hideOnboarding": true
 }

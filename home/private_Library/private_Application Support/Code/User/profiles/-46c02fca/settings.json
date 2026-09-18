@@ -100,5 +100,6 @@
     "chat.mcp.gallery.enabled": true,
     "chat.agentHost.byokModels.enabled": true,
     "security.promptForLocalFileProtocolHandling": false,
-    "svg.preview.mode": "svg"
+    "svg.preview.mode": "svg",
+    "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg"
 }

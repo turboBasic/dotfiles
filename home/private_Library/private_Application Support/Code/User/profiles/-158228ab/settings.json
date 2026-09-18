@@ -2,7 +2,7 @@
 // Profile path: ~/Library/Application Support/Code/User/profiles/-158228ab/settings.json
 {
     "python.analysis.autoImportCompletions": true,
-    "python.analysis.fixAll": ["source.unusedImports"],  
+    "python.analysis.fixAll": ["source.unusedImports"],
     "editor.defaultFormatter": "charliermarsh.ruff",
     "files.exclude": {
         "**/__pycache__": true,
@@ -126,5 +126,6 @@
     "chat.agentHost.byokModels.enabled": true,
     "explorer.confirmDragAndDrop": false,
     "security.promptForLocalFileProtocolHandling": false,
-    "svg.preview.mode": "svg"
+    "svg.preview.mode": "svg",
+    "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg"
 }
