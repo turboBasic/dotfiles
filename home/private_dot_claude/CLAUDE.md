@@ -10,7 +10,8 @@ raise a suggestion rather than acting on it.
 A rule below phrased as a prohibition — "no `requirements.txt`", "no `black`", "every
 project must have an `.editorconfig`" — constrains what you **write**. It is not a mandate
 to migrate what is already there. Never convert a foreign repo's build tooling, package
-manager, task runner, or lint configuration without being asked.
+manager, task runner, or lint configuration without being asked, and never introduce one
+where the repo has none.
 
 ---
 
@@ -126,24 +127,26 @@ owner and one lister per name, and a `Makefile` only for a real multi-target gra
 
 ### Linting and git hooks
 
-- **Prek is the linting entry point.** Never call linters (`ruff`, `mypy`, `gofmt`,
-  `biome`, etc.) directly. Reach it by the ordering above.
+- **Never call a linter (`ruff`, `mypy`, `gofmt`, `biome`) directly** — prek runs them.
+  Reach prek by the ordering above, and pass it a single hook name rather than running the
+  whole suite when only one hook applies.
 - **Where a repo has `lefthook.yml`, lefthook is its hook runner** — use it rather than
   adding a parallel prek config, and never migrate between the two without being asked.
 - When adding a linter or formatter, wire it into whichever runner the project already
   uses — not a standalone script and not a CI-only step.
 - Fix lint errors immediately when they appear — do not defer to a later step.
+- **A generated file failing lint is a generator bug.** Fix what emits it, never the output.
 - **Never disable a rule to make a run pass** without saying so. If a rule has to go, turn
   it off in the linter's own config with a comment giving the reason, and report it.
 - **Auto-fix hooks are normal.** When a hook reformats files (ruff, trailing whitespace,
-  etc.), re-stage the fixed files and retry — this is expected behavior, not an error to
-  investigate.
+  etc.), re-stage those files and retry — never `git add -A`, never anything the hook did
+  not touch. This is expected behavior, not an error to investigate.
 
 ### Tests
 
 - Find the test command by the ordering above; failing that, the stack's skill names it.
-- **Do not run tests automatically** after every change — only when asked or when
-  verifying a fix.
+- **Do not run the full suite automatically** after every change — only when asked or when
+  verifying a fix. A targeted test over what you just changed is fine.
 - If tests fail after your change, investigate and fix immediately before reporting done.
 
 ---
