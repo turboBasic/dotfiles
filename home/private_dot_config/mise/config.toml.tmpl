@@ -49,7 +49,7 @@ dir = "{{"{{"}}cwd{{"}}"}}"
 quiet = true
 run = '''
   unset AWS_PROFILE CLAUDE_CODE_USE_BEDROCK
-  OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/shell-work-vw") claude $@
+  OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/work-vw-service-account") claude $@
 '''
 
 [tasks.claude-{{ $TASK_CLAUDE_COMPANY }}.env]
@@ -67,7 +67,7 @@ dir = "{{"{{"}}cwd{{"}}"}}"
 quiet = true
 run = '''
   unset ANTHROPIC_BASE_URL
-  OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/shell-work-vw") claude $@
+  OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/work-vw-service-account") claude $@
 '''
 
 [tasks.claude-{{ $TASK_CLAUDE_COMPANY }}-bedrock.env]

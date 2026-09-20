@@ -48,7 +48,7 @@ Add it as a new concealed field on the existing token item
 `rbcvlawhbstklfig7ziwhju734`):
 
 ```shell
-op item edit rbcvlawhbstklfig7ziwhju734 "shell-work-vw[concealed]=$tok"
+op item edit rbcvlawhbstklfig7ziwhju734 "work-vw-service-account[concealed]=$tok"
 unset tok
 ```
 
@@ -60,7 +60,7 @@ unset tok
 In the shell where you'll run Claude Code:
 
 ```shell
-export OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/shell-work-vw")
+export OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/work-vw-service-account")
 ```
 
 - This is the **single** authentication of the session: one biometric prompt
@@ -76,7 +76,7 @@ Optional convenience function for your zsh config:
 
 ```zsh
 op-work() {
-  export OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/shell-work-vw") \
+  export OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/work-vw-service-account") \
     && op whoami
 }
 ```
@@ -132,7 +132,7 @@ token from the macOS Keychain avoids both the export and any prompt. The token
 is stored once:
 
 ```shell
-op read "op://Personal/rbcvlawhbstklfig7ziwhju734/work-reader-account" \
+op read "op://Personal/rbcvlawhbstklfig7ziwhju734/work-reader-service-account" \
   | { read -r tok; printf 'add-generic-password -U -s op-sa-work-vw -a %s -w %s\n' "$USER" "$tok" | security -i; }
 ```
 
