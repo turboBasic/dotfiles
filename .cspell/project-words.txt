@@ -74,6 +74,7 @@ tlrc
 tzdata
 utmctl
 vdir
+xattr
 xnviewmp
 zbar
 zman

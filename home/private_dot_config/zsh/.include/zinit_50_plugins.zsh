@@ -142,6 +142,10 @@ zinit --lucid --wait for \
     --cp='mise -> $ZPFX/bin/mise' \
     --atclone='
         chmod +x $ZPFX/bin/mise
+        # gh-r assets arrive with com.apple.provenance, and macOS SIGKILLs a Developer
+        # ID binary that is not notarized until that attribute is stripped — which
+        # leaves both files generated below empty, so no activation and no aliases.
+        xattr -c $ZPFX/bin/mise
         mise completion zsh > _mise
         mise activate zsh > mise.zsh
     ' \
