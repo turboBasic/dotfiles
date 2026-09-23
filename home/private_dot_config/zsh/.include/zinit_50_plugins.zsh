@@ -141,13 +141,19 @@ zinit --lucid --wait for \
     --mv='mise-v* -> mise' \
     --cp='mise -> $ZPFX/bin/mise' \
     --atclone='
-        chmod +x $ZPFX/bin/mise
-        # gh-r assets arrive with com.apple.provenance, and macOS SIGKILLs a Developer
-        # ID binary that is not notarized until that attribute is stripped — which
-        # leaves both files generated below empty, so no activation and no aliases.
-        xattr -c $ZPFX/bin/mise
+        # The gh-r mise asset is signed with a Developer ID but not notarized, so macOS
+        # SIGKILLs it and caches that verdict against the file itself. zinit copies
+        # onto the same inode on every update, inheriting the verdict, and clearing
+        # com.apple.provenance in place does not lift it — only installing the binary
+        # as a fresh file does. Otherwise both files below come out silently empty.
+        cp $ZPFX/bin/mise $ZPFX/bin/.mise.new
+        xattr -c $ZPFX/bin/.mise.new
+        chmod +x $ZPFX/bin/.mise.new
+        mv -f $ZPFX/bin/.mise.new $ZPFX/bin/mise
         mise completion zsh > _mise
         mise activate zsh > mise.zsh
+        [[ -s mise.zsh && -s _mise ]] ||
+            print -u2 "ERROR: $ZPFX/bin/mise is not runnable; shell has no mise"
     ' \
     --nocompile='!' \
     --compile='(mise.zsh|_mise)' \
