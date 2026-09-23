@@ -150,8 +150,12 @@ zinit --lucid --wait for \
         xattr -c $ZPFX/bin/.mise.new
         chmod +x $ZPFX/bin/.mise.new
         mv -f $ZPFX/bin/.mise.new $ZPFX/bin/mise
-        mise completion zsh > _mise
-        mise activate zsh > mise.zsh
+        # Generate both from the binary just installed, never PATH's mise: activate
+        # output hardcodes the generating binary's own path, so any other mise
+        # install (brew's precedes $ZPFX/bin on PATH) would end up owning the shell
+        # and skewing against the version zinit installed on the next update.
+        $ZPFX/bin/mise completion zsh > _mise
+        $ZPFX/bin/mise activate zsh > mise.zsh
         [[ -s mise.zsh && -s _mise ]] ||
             print -u2 "ERROR: $ZPFX/bin/mise is not runnable; shell has no mise"
     ' \
