@@ -150,10 +150,12 @@ zinit --lucid --wait for \
         xattr -c $ZPFX/bin/.mise.new
         chmod +x $ZPFX/bin/.mise.new
         mv -f $ZPFX/bin/.mise.new $ZPFX/bin/mise
-        # Generate both from the binary just installed, never PATH's mise: activate
-        # output hardcodes the generating binary's own path, so any other mise
-        # install (brew's precedes $ZPFX/bin on PATH) would end up owning the shell
-        # and skewing against the version zinit installed on the next update.
+        # Generate both from the binary just installed, never whichever mise PATH
+        # resolves: activate output hardcodes the absolute path of the binary that
+        # generated it, so any other install (brew puts one ahead of $ZPFX/bin on
+        # PATH) would end up owning the shell and diverging from the version zinit
+        # installs on the next update.
+        # NB: no apostrophes in this block -- it lives inside a single-quoted ice.
         $ZPFX/bin/mise completion zsh > _mise
         $ZPFX/bin/mise activate zsh > mise.zsh
         [[ -s mise.zsh && -s _mise ]] ||
