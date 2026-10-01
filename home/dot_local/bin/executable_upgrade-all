@@ -24,7 +24,7 @@ main() {
     brew update
 
     log "update zinit-managed mise"
-    zsh -c 'source "${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git/zinit.zsh"; zinit update jdx/mise'
+    update_zinit_mise
 
     log "mise upgrade"
     mise upgrade
@@ -58,6 +58,20 @@ load_brew_env() {
         exit 1
     fi
     eval "$("$brew_bin" shellenv)"
+}
+
+update_zinit_mise() {
+    # zinit update runs the ices registered in the current shell, falling back to
+    # those saved at clone time. A bare `source zinit.zsh` registers none, so the
+    # stale saved atclone ran and skipped the Gatekeeper workaround. Load the real
+    # config (-i) and flush the turbo queue so the jdx/mise ices are registered.
+    zsh -ic '@zinit-scheduler burst; zinit update jdx/mise' </dev/null || true
+
+    typeset mise_bin="$HOME/.local/share/zinit/polaris/bin/mise"
+    typeset mise_zsh="$HOME/.local/share/zinit/plugins/jdx---mise/mise.zsh"
+    if ! "$mise_bin" --version >/dev/null 2>&1 || [[ ! -s "$mise_zsh" ]]; then
+        log "error: zinit-managed mise is not runnable after update"
+    fi
 }
 
 pin_excluded_packages() {
