@@ -1,0 +1,83 @@
+#!/usr/bin/env zsh
+#
+# Repair the zinit-managed mise (jdx/mise) after macOS SIGKILLs it, without zinit
+# or network: reinstall the binary as a fresh file and regenerate its shell files.
+# Then repair the Homebrew mise the same way when it is installed but not runnable,
+# falling back to brew reinstall.
+#
+# Usage:
+#   repair-mise
+#
+# Example:
+#   repair-mise && exec zsh
+#
+
+set -euo pipefail
+
+main() {
+    typeset -g zinit_dir="${XDG_DATA_HOME:-$HOME/.local/share}/zinit"
+    typeset -g plugin_dir="$zinit_dir/plugins/jdx---mise"
+    typeset -g mise_bin="$zinit_dir/polaris/bin/mise"
+
+    validate_inputs
+    install_fresh_binary
+    generate_shell_files
+    print -r -- "zinit mise $("$mise_bin" --version) repaired"
+    repair_brew_mise
+    print -r -- "run: exec zsh"
+}
+
+validate_inputs() {
+    [[ -s "$plugin_dir/mise" ]] || {
+        print -u2 "ERROR: $plugin_dir/mise missing; reinstall with: zinit delete --yes jdx/mise && exec zsh"
+        exit 1
+    }
+}
+
+install_fresh_binary() {
+    # Gatekeeper caches its rejection against the file, so only a new inode clears it.
+    typeset tmp="${mise_bin:h}/.mise.new"
+    cp "$plugin_dir/mise" "$tmp"
+    xattr -c "$tmp"
+    chmod +x "$tmp"
+    mv -f "$tmp" "$mise_bin"
+    "$mise_bin" --version >/dev/null || {
+        print -u2 "ERROR: $mise_bin still not runnable; check: spctl -a -vvv -t exec $mise_bin"
+        exit 1
+    }
+}
+
+generate_shell_files() {
+    "$mise_bin" completion zsh >"$plugin_dir/_mise"
+    "$mise_bin" activate zsh >"$plugin_dir/mise.zsh"
+    zcompile "$plugin_dir/_mise"
+    zcompile "$plugin_dir/mise.zsh"
+}
+
+repair_brew_mise() {
+    typeset link=/opt/homebrew/bin/mise
+    [[ -L "$link" ]] || return 0
+    if "$link" --version >/dev/null 2>&1; then
+        print -r -- "brew mise healthy, untouched"
+        return 0
+    fi
+
+    # Same fresh-inode trick on the Cellar file the symlink points at.
+    typeset target="${link:A}"
+    if [[ -f "$target" ]]; then
+        cp "$target" "$target.new"
+        xattr -c "$target.new"
+        chmod +x "$target.new"
+        mv -f "$target.new" "$target"
+    fi
+    if ! "$link" --version >/dev/null 2>&1; then
+        HOMEBREW_NO_AUTO_UPDATE=1 /opt/homebrew/bin/brew reinstall mise
+    fi
+    "$link" --version >/dev/null 2>&1 || {
+        print -u2 "ERROR: $link still not runnable after brew reinstall"
+        exit 1
+    }
+    print -r -- "brew mise $("$link" --version 2>/dev/null) repaired"
+}
+
+main "$@"

@@ -68,6 +68,7 @@ rxvt
 setremotelogin
 setsid
 softwareupdate
+spctl
 stty
 systemsetup
 tlrc
