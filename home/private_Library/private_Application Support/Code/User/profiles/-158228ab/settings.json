@@ -1,8 +1,11 @@
 // Profile: Python
 // Profile path: ~/Library/Application Support/Code/User/profiles/-158228ab/settings.json
 {
+    "mise.binPath": "~/.local/share/zinit/polaris/bin/mise",
     "python.analysis.autoImportCompletions": true,
-    "python.analysis.fixAll": ["source.unusedImports"],
+    "python.analysis.fixAll": [
+        "source.unusedImports"
+    ],
     "editor.defaultFormatter": "charliermarsh.ruff",
     "files.exclude": {
         "**/__pycache__": true,
@@ -26,7 +29,6 @@
     "aws.cloudformation.telemetry.enabled": false,
     "claudeCode.preferredLocation": "panel",
     "claudeCode.selectedModel": "default",
-    "chat.viewSessions.orientation": "stacked",
     "redhat.telemetry.enabled": false,
     "files.autoSave": "afterDelay",
     "editor.renderWhitespace": "all",
@@ -127,5 +129,8 @@
     "explorer.confirmDragAndDrop": false,
     "security.promptForLocalFileProtocolHandling": false,
     "svg.preview.mode": "svg",
-    "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg"
+    "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
+    "notebook.formatOnSave.enabled": true,
+    "notebook.output.wordWrap": true,
+    "chat.viewSessions.orientation": "stacked"
 }

@@ -38,6 +38,8 @@ vscodeExtensions:
     - ms-vscode.remote-explorer
     - ms-vscode.remote-repositories
     - nefrob.vscode-just-syntax
+    - openai.chatgpt
+    - openai.codex-audio
     - pkief.material-icon-theme
     - qcz.text-power-tools
     - redhat.vscode-yaml
@@ -75,6 +77,7 @@ vscodeExtensions:
     - ms-python.python
     - ms-python.vscode-pylance
     - ms-python.vscode-python-envs
+    - ms-toolsai.datawrangler
     - ms-toolsai.jupyter
     - ms-toolsai.jupyter-keymap
     - ms-toolsai.jupyter-renderers

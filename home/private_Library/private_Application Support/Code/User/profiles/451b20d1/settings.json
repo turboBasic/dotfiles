@@ -1,6 +1,7 @@
 // Profile: Node.js
 // Profile path: ~/Library/Application Support/Code/User/profiles/451b20d1/settings.json
 {
+    "mise.binPath": "~/.local/share/zinit/polaris/bin/mise",
     "editor.formatOnPaste": true,
     "git.autofetch": true,
     // Never format markdown on save: files.autoSave is afterDelay, so it would rewrite

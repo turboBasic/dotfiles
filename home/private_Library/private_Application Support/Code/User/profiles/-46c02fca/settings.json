@@ -101,5 +101,6 @@
     "chat.agentHost.byokModels.enabled": true,
     "security.promptForLocalFileProtocolHandling": false,
     "svg.preview.mode": "svg",
-    "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg"
+    "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
+    "mise.binPath": "~/.local/share/zinit/polaris/bin/mise"
 }

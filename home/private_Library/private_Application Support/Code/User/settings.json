@@ -1,6 +1,7 @@
 // Profile: Default
 // Profile path: ~/Library/Application Support/Code/User/settings.json
 {
+  "mise.binPath": "~/.local/share/zinit/polaris/bin/mise",
   // General settings
   "files.autoSave": "afterDelay",
   "files.exclude": {

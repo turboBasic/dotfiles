@@ -1,6 +1,7 @@
 // Profile: Go
 // Profile path: ~/Library/Application Support/Code/User/profiles/-5b384f0/settings.json
 {
+    "mise.binPath": "~/.local/share/zinit/polaris/bin/mise",
     "explorer.confirmDelete": false,
     "editor.fontSize": 15,
     "conventionalCommits.showNewVersionNotes": false,
