@@ -29,6 +29,7 @@ tmpl
 toolname
 
 # Utilities
+agentlab
 atuin
 awscli
 bitwarden

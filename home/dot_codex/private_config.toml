@@ -1,4 +1,4 @@
-model = "gpt-5.5"
+model = "gpt-6-luna"
 model_reasoning_effort = "medium"
 
 notify = ["/Users/aamelnyk/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
@@ -46,6 +46,15 @@ enabled = true
 [plugins."browser@openai-bundled"]
 enabled = true
 
+[plugins."code-review@openai-bundled"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
 [features]
 js_repl = false
 
@@ -67,13 +76,13 @@ NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunct
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
 BROWSER_USE_CODEX_APP_VERSION = "26.727.51351"
-CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
+CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
 
 [mcp_servers.computer-use]
 command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
 args = ["mcp"]
 cwd = "."
-enabled = false
+enabled = true
 
 [projects."/Users/aamelnyk/Documents/Codex/2026-07-16/use-the-available-slack-integration-to"]
 trust_level = "trusted"
@@ -102,8 +111,11 @@ trust_level = "trusted"
 [projects."/Users/aamelnyk/00-projects/personal/turboBasic/dotfiles"]
 trust_level = "trusted"
 
+[projects."/Users/aamelnyk/00-projects/personal/turboBasic/agentlab"]
+trust_level = "trusted"
+
 [desktop]
-conversationDetailMode = "STEPS_COMMANDS"
+conversationDetailMode = "STEPS_PROSE"
 ambient-suggestions-enabled = true
 followUpQueueMode = "queue"
 
