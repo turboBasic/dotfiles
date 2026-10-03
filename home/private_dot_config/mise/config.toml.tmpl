@@ -46,8 +46,32 @@ run = '''
   if ! claude auth status 2>/dev/null | grep -qi "{{ $EMPLOYER_D_EMAIL }}"; then
     claude auth login --sso --email {{ $EMPLOYER_D_EMAIL }}
   fi
-  claude $@
+  claude $@ --mcp-config "$HOME/.config/claude/mcp.json"
 '''
+
+[tasks.claude-{{ $EMPLOYER_D_ORG }}.env]
+AWS_MCP_PROFILE = "cargonautica-admin"
+
+[tasks.claude-default]
+description = "Execute Claude with the default claude.ai account and MCP servers"
+dir = "{{"{{"}}cwd{{"}}"}}"
+quiet = true
+run = '''
+  unset AWS_PROFILE \
+    ANTHROPIC_API_KEY \
+    ANTHROPIC_AUTH_TOKEN \
+    CLAUDE_CODE_API_KEY_HELPER_TTL_MS \
+    CLAUDE_CODE_USE_BEDROCK \
+    ANTHROPIC_BASE_URL \
+    ANTHROPIC_DEFAULT_FABLE_MODEL \
+    ANTHROPIC_DEFAULT_OPUS_MODEL \
+    ANTHROPIC_DEFAULT_SONNET_MODEL \
+    ANTHROPIC_DEFAULT_HAIKU_MODEL
+  claude $@ --mcp-config "$HOME/.config/claude/mcp.json"
+'''
+
+[tasks.claude-default.env]
+AWS_MCP_PROFILE = "cargonautica-admin"
 
 {{- $CUSTOMER_M_ORG := (list "mo" "ia" | join "") }}
 
@@ -57,12 +81,13 @@ dir = "{{"{{"}}cwd{{"}}"}}"
 quiet = true
 run = '''
   unset AWS_PROFILE CLAUDE_CODE_USE_BEDROCK
-  OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/work-vw-service-account") claude --settings '{"apiKeyHelper":"/opt/{{ $CUSTOMER_M_ORG }}/bin/litellm-prd-helper"}' $@
+  OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/work-vw-service-account") claude --settings '{"apiKeyHelper":"/opt/{{ $CUSTOMER_M_ORG }}/bin/litellm-prd-helper"}' $@ --mcp-config "$HOME/.config/claude/mcp.json"
 '''
 
 [tasks.claude-{{ $CUSTOMER_M_ORG }}.env]
 CLAUDE_CODE_API_KEY_HELPER_TTL_MS = "120000"
 ENABLE_TOOL_SEARCH = "true"
+AWS_MCP_PROFILE = "sso-data-bridge-backend.dev.eu:read-only"
 ANTHROPIC_BASE_URL = "https://llm.{{ $CUSTOMER_M_ORG }}-01.k8s.prd.eu-central-1.{{ $CUSTOMER_M_ORG }}-group.io/"
 ANTHROPIC_DEFAULT_FABLE_MODEL = "claude-fable-5"
 ANTHROPIC_DEFAULT_OPUS_MODEL = "claude-opus-5-5[1m]"
@@ -89,6 +114,7 @@ ANTHROPIC_DEFAULT_HAIKU_MODEL = "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
 
 # aliases for Claude Code tasks
 [shell_alias]
+claude-default = "mise run claude-default --"
 claude-{{ $EMPLOYER_D_ORG }} = "mise run claude-{{ $EMPLOYER_D_ORG }} --"
 claude-{{ $CUSTOMER_M_ORG }} = "mise run claude-{{ $CUSTOMER_M_ORG }} --"
 claude-{{ $CUSTOMER_M_ORG }}-bedrock = "mise run claude-{{ $CUSTOMER_M_ORG }}-bedrock --"

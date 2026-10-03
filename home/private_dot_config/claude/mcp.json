@@ -1,0 +1,34 @@
+{
+  "mcpServers": {
+    "MCP_DOCKER": {
+      "command": "docker",
+      "args": ["mcp", "gateway", "run", "--profile", "profile"],
+      "env": {"MCP_GATEWAY_DOCKER_BIND_ALLOWED_PATHS": "${HOME}/00-projects"}
+    },
+    "1password": {
+      "type": "stdio",
+      "command": "/Applications/1Password.app/Contents/MacOS/onepassword-mcp",
+      "args": [],
+      "env": {}
+    },
+    "raindrop": {
+      "type": "stdio",
+      "command": "env",
+      "args": ["-u", "OP_SERVICE_ACCOUNT_TOKEN", "op", "run", "--env-file=${HOME}/.config/raindrop-mcp/op.env", "--no-masking", "--", "npx", "-y", "@adeze/raindrop-mcp"],
+      "env": {}
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "aws-mcp": {
+      "command": "uvx",
+      "args": ["mcp-proxy-for-aws@latest", "https://aws-mcp.us-east-1.api.aws/mcp", "--metadata", "INSTALL_SOURCE=aws-cli"],
+      "env": {"AWS_PROFILE": "${AWS_MCP_PROFILE}"}
+    },
+    "terraform": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "hashicorp/terraform-mcp-server:1.1.0", "stdio", "--toolsets=registry"]
+    }
+  }
+}

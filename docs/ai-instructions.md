@@ -60,6 +60,7 @@ home/                            ← chezmoi source dir (declared via .chezmoiro
 │   └── skills/symlink_raindrop.tmpl ← the one skill still symlinked to a project checkout
 ├── dot_local/bin/               ← scripts installed to ~/.local/bin
 ├── private_dot_config/
+│   ├── claude/mcp.json          ← MCP servers, loaded per task via `claude --mcp-config`
 │   ├── private_git/             ← per-account gitconfigs (templated, some encrypted)
 │   ├── zsh/                     ← zsh config, zinit, functions, profiles
 │   ├── mise/config.toml.tmpl
