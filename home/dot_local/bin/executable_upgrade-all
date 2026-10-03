@@ -35,6 +35,7 @@ main() {
 
     upgrade_formulas
     upgrade_casks
+    clear_quarantine
 
     log "brew autoremove"
     brew autoremove
@@ -118,6 +119,16 @@ upgrade_casks() {
     else
         log "no casks to upgrade"
     fi
+}
+
+# A cask upgrade lands a freshly quarantined binary, and macOS then blocks its
+# first exec until it is allowed by hand in Privacy & Security.
+clear_quarantine() {
+    typeset cask
+    for cask in 1password-cli sbx; do
+        [[ -d "/opt/homebrew/Caskroom/$cask" ]] || continue
+        xattr -dr com.apple.quarantine "/opt/homebrew/Caskroom/$cask" 2>/dev/null || true
+    done
 }
 
 main "$@"
