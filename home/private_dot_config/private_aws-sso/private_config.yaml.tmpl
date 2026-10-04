@@ -10,6 +10,8 @@ SSOConfig:
         Roles:
           AdministratorAccess:
             Profile: cargonautica-admin
+          ReadOnlyAccess:
+            Profile: cargonautica-readonly
   #{ $CUSTOMER_M_ORG }#:
     SSORegion: eu-central-1
     StartUrl: https://#{ $CUSTOMER_M_ORG }#-dev.awsapps.com/start

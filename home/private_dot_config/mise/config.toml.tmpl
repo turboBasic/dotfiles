@@ -47,8 +47,8 @@ run = '''
   if ! claude auth status 2>/dev/null | grep -qi "{{ $EMPLOYER_D_EMAIL }}"; then
     claude auth login --sso --email {{ $EMPLOYER_D_EMAIL }}
   fi
-  aws sts get-caller-identity --profile "$AWS_MCP_PROFILE" >/dev/null 2>&1 \
-    || aws sso login --profile "$AWS_MCP_PROFILE" || true
+  # aws-sso AutoLogin opens the browser here if the SSO token has expired.
+  aws sts get-caller-identity --profile "$AWS_MCP_PROFILE" >/dev/null || true
   claude $@ --mcp-config "$HOME/.config/claude/mcp.json"
 '''
 
@@ -70,8 +70,8 @@ run = '''
     ANTHROPIC_DEFAULT_OPUS_MODEL \
     ANTHROPIC_DEFAULT_SONNET_MODEL \
     ANTHROPIC_DEFAULT_HAIKU_MODEL
-  aws sts get-caller-identity --profile "$AWS_MCP_PROFILE" >/dev/null 2>&1 \
-    || aws sso login --profile "$AWS_MCP_PROFILE" || true
+  # aws-sso AutoLogin opens the browser here if the SSO token has expired.
+  aws sts get-caller-identity --profile "$AWS_MCP_PROFILE" >/dev/null || true
   claude $@ --mcp-config "$HOME/.config/claude/mcp.json"
 '''
 
@@ -86,8 +86,8 @@ dir = "{{"{{"}}cwd{{"}}"}}"
 quiet = true
 run = '''
   unset AWS_PROFILE CLAUDE_CODE_USE_BEDROCK
-  aws sts get-caller-identity --profile "$AWS_MCP_PROFILE" >/dev/null 2>&1 \
-    || aws sso login --profile "$AWS_MCP_PROFILE" || true
+  # aws-sso AutoLogin opens the browser here if the SSO token has expired.
+  aws sts get-caller-identity --profile "$AWS_MCP_PROFILE" >/dev/null || true
   OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://Personal/rbcvlawhbstklfig7ziwhju734/work-vw-service-account") claude --settings '{"apiKeyHelper":"/opt/{{ $CUSTOMER_M_ORG }}/bin/litellm-prd-helper"}' $@ --mcp-config "$HOME/.config/claude/mcp.json"
 '''
 

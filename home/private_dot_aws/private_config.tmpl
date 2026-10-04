@@ -4,23 +4,14 @@
 region = eu-central-1
 
 # Cargonautica
-{{- $CARGONAUTICA_ACCOUNT_ID := onepasswordRead "op://chezmoi/aws__cargonautica__s3-user/account-id" }}
-
-[sso-session cargonautica]
-sso_start_url = https://cargonautica.awsapps.com/start
-sso_region = eu-central-1
-sso_registration_scopes = sso:account:access
+{{- $CARGONAUTICA_ACCOUNT_ID := "381492075850" }}
 
 [profile cargonautica-admin]
-sso_session = cargonautica
-sso_account_id = {{ $CARGONAUTICA_ACCOUNT_ID }}
-sso_role_name = AdministratorAccess
+credential_process = /opt/homebrew/bin/aws-sso process --sso cargonautica --arn arn:aws:iam::{{ $CARGONAUTICA_ACCOUNT_ID }}:role/AdministratorAccess
 region = eu-central-1
 
 [profile cargonautica-readonly]
-sso_session = cargonautica
-sso_account_id = {{ $CARGONAUTICA_ACCOUNT_ID }}
-sso_role_name = ReadOnlyAccess
+credential_process = /opt/homebrew/bin/aws-sso process --sso cargonautica --arn arn:aws:iam::{{ $CARGONAUTICA_ACCOUNT_ID }}:role/ReadOnlyAccess
 region = eu-central-1
 
 ## User for accessing S3 folder for file share
