@@ -61,7 +61,7 @@ setopt  \
 
 
 ## Put Zinit plugins' bin dir and local bin dir in front of all paths
-path=( $HOME/.local/bin ${ZPFX:+"$ZPFX/bin"} $path )
+path=( $HOME/.local/bin ${ZPFX:+"$ZPFX/bin"} /usr/local/bin $path )
 path=( ${^path}(-N/) )
 
 

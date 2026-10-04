@@ -155,9 +155,11 @@ zinit --lucid --wait for \
         # generated it, so any other install (brew puts one ahead of $ZPFX/bin on
         # PATH) would end up owning the shell and diverging from the version zinit
         # installs on the next update.
+        # activate bakes PATH and MANPATH as they were in the generating shell, and
+        # sourcing the result would overwrite what zshrc built -- drop both exports.
         # NB: no apostrophes in this block -- it lives inside a single-quoted ice.
         $ZPFX/bin/mise completion zsh > _mise
-        $ZPFX/bin/mise activate zsh > mise.zsh
+        $ZPFX/bin/mise activate zsh | grep -Ev "^export (PATH|MANPATH)=" > mise.zsh
         [[ -s mise.zsh && -s _mise ]] ||
             print -u2 "ERROR: $ZPFX/bin/mise is not runnable; shell has no mise"
     ' \
@@ -166,8 +168,16 @@ zinit --lucid --wait for \
     --src='mise.zsh' \
     --run-atpull \
     --atpull='%atclone' \
+    --atinit='
+        # A parent shell (VS Code, tmux) hands down its own snapshot, and hook-env
+        # rebuilds PATH from it, discarding the order zshrc built.
+        unset __MISE_ORIG_PATH
+    ' \
     --atload='
         path=( ${path:#$ZINIT[PLUGINS_DIR]/jdx---mise} )
+        # The baked PATH that used to put mise first is gone. Seat tool dirs and shims
+        # behind ~/.local/bin; mise splices later tool dirs in just before the shims.
+        path=( $HOME/.local/bin ${(M)path:#$HOME/.local/share/mise/installs/*} $HOME/.local/share/mise/shims $path )
         # TODO: mise activate only emits `unalias` cleanup but never sets [shell_alias] entries;
         # hook-env also skips them — aliases never land in the session.
         # Workaround: eval them explicitly on load. Remove once upstream is fixed.
