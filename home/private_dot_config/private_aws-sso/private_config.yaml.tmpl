@@ -1,3 +1,5 @@
+# chezmoi:template:left-delimiter=#{ right-delimiter=}#
+#{- $CUSTOMER_M_ORG := (list "mo" "ia" | join "") -}#
 SSOConfig:
   cargonautica:
     SSORegion: eu-central-1
@@ -8,9 +10,9 @@ SSOConfig:
         Roles:
           AdministratorAccess:
             Profile: cargonautica-admin
-  moia:
+  #{ $CUSTOMER_M_ORG }#:
     SSORegion: eu-central-1
-    StartUrl: https://moia-dev.awsapps.com/start
+    StartUrl: https://#{ $CUSTOMER_M_ORG }#-dev.awsapps.com/start
     DefaultRegion: eu-central-1
     Accounts:
       224874703410:
@@ -43,7 +45,7 @@ SSOConfig:
           admt-data-platform-engineer-ro:
             Profile: 'sso-data-bridge-backend.prd.us:read-only'
             DefaultRegion: us-east-1
-DefaultSSO: moia
+DefaultSSO: #{ $CUSTOMER_M_ORG }#
 DefaultRegion: eu-central-1
 ConsoleDuration: 60
 CacheRefresh: 8
