@@ -17,6 +17,12 @@ sso_account_id = {{ $CARGONAUTICA_ACCOUNT_ID }}
 sso_role_name = AdministratorAccess
 region = eu-central-1
 
+[profile cargonautica-readonly]
+sso_session = cargonautica
+sso_account_id = {{ $CARGONAUTICA_ACCOUNT_ID }}
+sso_role_name = ReadOnlyAccess
+region = eu-central-1
+
 ## User for accessing S3 folder for file share
 [profile cargonautica.s3-user-mfa]
 mfa_serial = arn:aws:iam::{{ $CARGONAUTICA_ACCOUNT_ID }}:mfa/s3-user-mfa
