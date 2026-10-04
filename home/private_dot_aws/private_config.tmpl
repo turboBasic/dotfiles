@@ -14,17 +14,6 @@ region = eu-central-1
 credential_process = /opt/homebrew/bin/aws-sso process --sso cargonautica --arn arn:aws:iam::{{ $CARGONAUTICA_ACCOUNT_ID }}:role/ReadOnlyAccess
 region = eu-central-1
 
-## User for accessing S3 folder for file share
-[profile cargonautica.s3-user-mfa]
-mfa_serial = arn:aws:iam::{{ $CARGONAUTICA_ACCOUNT_ID }}:mfa/s3-user-mfa
-role_arn = arn:aws:iam::{{ $CARGONAUTICA_ACCOUNT_ID }}:role/S3AccessRole-generic-storage-s3-user
-source_profile = cargonautica.s3-user
-
-[profile cargonautica.s3-user]
-region = eu-central-1
-aws_access_key_id = {{ onepasswordRead "op://chezmoi/aws__cargonautica__s3-user/Security/access-key-id" }}
-aws_secret_access_key = {{ onepasswordRead "op://chezmoi/aws__cargonautica__s3-user/Security/secret-access-key"}}
-
 
 {{ $ACCOUNT_NAME := (list "mo" "ia" | join "") -}}
 {{ $ACCOUNT_ROLE := (list "ad" "mt-" "data-platform-engineer" | join "") -}}
