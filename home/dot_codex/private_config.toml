@@ -10,12 +10,10 @@ env_key = "OPENROUTER_API_KEY"
 wire_api = "responses"
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-03T16:18:58Z"
 source_type = "local"
 source = "/Users/aamelnyk/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-08-01T22:01:56Z"
 source_type = "local"
 source = "/Users/aamelnyk/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -46,6 +44,12 @@ enabled = true
 [plugins."browser@openai-bundled"]
 enabled = true
 
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."unified-computer-use@openai-bundled"]
+enabled = true
+
 [plugins."code-review@openai-bundled"]
 enabled = true
 
@@ -67,15 +71,17 @@ startup_timeout_sec = 120
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
 NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
-NODE_REPL_TRUSTED_CODE_PATHS = "/Users/aamelnyk/.codex"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/aamelnyk/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 CODEX_HOME = "/Users/aamelnyk/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "028a14b6eaa6d98dac2aae00764345ab9f244801ed8493d42b9af3be5575006e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
-NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
-NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab,mcpapps"
+BROWSER_USE_TINYSKY_ENABLED = "1"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.727.51351"
+BROWSER_USE_CODEX_APP_VERSION = "26.930.31730"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/aamelnyk/.codex/plugins/cache/openai-bundled/browser/26.930.31730/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+SKY_CUA_SERVICE_PATH = "/Users/aamelnyk/.codex/computer-use/Codex Computer Use.app"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
 
 [mcp_servers.computer-use]
@@ -114,12 +120,25 @@ trust_level = "trusted"
 [projects."/Users/aamelnyk/00-projects/personal/turboBasic/agentlab"]
 trust_level = "trusted"
 
+[projects."/Users/aamelnyk/00-projects/personal/turboBasic/PopulationCircles2026"]
+trust_level = "trusted"
+
+[projects."/Users/aamelnyk/00-projects/personal/turboBasic/style"]
+trust_level = "trusted"
+
 [desktop]
 conversationDetailMode = "STEPS_PROSE"
 ambient-suggestions-enabled = true
 followUpQueueMode = "queue"
 
 [shell_environment_policy.set]
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "028a14b6eaa6d98dac2aae00764345ab9f244801ed8493d42b9af3be5575006e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
-NODE_REPL_TRUSTED_CODE_PATHS = "/Users/aamelnyk/.codex"
+
+[tui]
+screen_reader_detection_done = true
+
+[tui.model_availability_nux]
+"gpt-6.1-sol" = 1
+
+[apps.connector_76869538009648d5b282a4bb21c3d157.tools."github.update_issue"]
+approval_mode = "approve"

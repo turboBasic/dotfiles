@@ -204,3 +204,5 @@ uici
 
 # Tooling terms
 stdlib
+mcpapps
+tinysky
