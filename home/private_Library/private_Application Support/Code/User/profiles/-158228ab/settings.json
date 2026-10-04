@@ -132,5 +132,8 @@
     "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
     "notebook.formatOnSave.enabled": true,
     "notebook.output.wordWrap": true,
-    "chat.viewSessions.orientation": "stacked"
+    "chat.viewSessions.orientation": "stacked",
+    "chat.tools.terminal.autoApprove": {
+        "prek": true
+    }
 }
