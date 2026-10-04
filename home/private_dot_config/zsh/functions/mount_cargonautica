@@ -1,0 +1,31 @@
+# shellcheck disable=all
+
+# Usage: mount_cargonautica [-u] [readonly|admin]
+
+local unmount=0
+[[ $1 == -u ]] && { unmount=1; shift }
+
+local -r role=${1:-readonly}
+local -r remote="cargonautica-$role"
+local -r mountpoint="$HOME/mnt/$remote"
+
+if (( unmount )); then
+    umount "$mountpoint"
+    return
+fi
+
+if [[ $role != (readonly|admin) ]]; then
+    print -u2 "unknown role: $role (readonly|admin)"
+    return 1
+fi
+
+if mount | command grep -q " on $mountpoint "; then
+    print "already mounted: $mountpoint"
+    return 0
+fi
+
+local -a flags=( --daemon --vfs-cache-mode full --volname "$remote" --log-file "$HOME/.cache/rclone-$remote.log" )
+[[ $role == readonly ]] && flags+=( --read-only )
+
+command mkdir -p "$mountpoint"
+rclone nfsmount "$remote:" "$mountpoint" $flags && print "mounted: $mountpoint"

@@ -206,3 +206,8 @@ uici
 stdlib
 mcpapps
 tinysky
+
+# rclone mount terms
+mountpoint
+nfsmount
+volname
