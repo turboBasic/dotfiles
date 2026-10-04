@@ -1,0 +1,650 @@
+version: 1
+id: profile
+name: Profile
+servers:
+    - type: image
+      secrets: default
+      image: mcp/playwright@sha256:8771dc4666e7c11440bfc6a0c6b00480e9a15b8891b45f29a52d7d995f8d1492
+      catalog_ref: mcp/docker-mcp-catalog:latest
+      snapshot:
+        server:
+            name: playwright
+            type: server
+            image: mcp/playwright@sha256:8771dc4666e7c11440bfc6a0c6b00480e9a15b8891b45f29a52d7d995f8d1492
+            description: Playwright MCP server.
+            title: Playwright
+            icon: https://avatars.githubusercontent.com/u/6154722?v=4
+            readme: https://desktop.docker.com/mcp/catalog/v3/readme/playwright.md
+            longLived: true
+            remote: {}
+            volumes:
+                - /Users/aamelnyk/.config/mcp-playwright-ca/nssdb:/home/node/.pki/nssdb
+            tools:
+                - name: browser_click
+                  description: Perform click on a web page
+                  arguments:
+                    - name: target
+                      type: string
+                      desc: Exact target element reference from the page snapshot, or a unique element selector
+                    - name: button
+                      type: string
+                      desc: Button to click, defaults to left
+                      optional: true
+                    - name: doubleClick
+                      type: boolean
+                      desc: Whether to perform a double click instead of a single click
+                      optional: true
+                    - name: element
+                      type: string
+                      desc: Human-readable element description used to obtain permission to interact with the element
+                      optional: true
+                    - name: modifiers
+                      type: array
+                      items:
+                        type: string
+                      desc: Modifier keys to press
+                      optional: true
+                  annotations:
+                    title: Click
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_close
+                  description: Close the page
+                  arguments: []
+                  annotations:
+                    title: Close browser
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_console_messages
+                  description: Returns all console messages
+                  arguments:
+                    - name: level
+                      type: string
+                      desc: Level of the console messages to return. Each level includes the messages of more severe levels. Defaults to "info".
+                    - name: all
+                      type: boolean
+                      desc: Return all console messages since the beginning of the session, not just since the last navigation. Defaults to false.
+                      optional: true
+                    - name: filename
+                      type: string
+                      desc: Filename to save the console messages to. If not provided, messages are returned as text.
+                      optional: true
+                  annotations:
+                    title: Get console messages
+                    readOnlyHint: true
+                    destructiveHint: false
+                    openWorldHint: true
+                - name: browser_drag
+                  description: Perform drag and drop between two elements
+                  arguments:
+                    - name: endTarget
+                      type: string
+                      desc: Exact target element reference from the page snapshot, or a unique element selector
+                    - name: startTarget
+                      type: string
+                      desc: Exact target element reference from the page snapshot, or a unique element selector
+                    - name: endElement
+                      type: string
+                      desc: Human-readable target element description used to obtain the permission to interact with the element
+                      optional: true
+                    - name: startElement
+                      type: string
+                      desc: Human-readable source element description used to obtain the permission to interact with the element
+                      optional: true
+                  annotations:
+                    title: Drag mouse
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_drop
+                  description: Drop files or MIME-typed data onto an element, as if dragged from outside the page. At least one of "paths" or "data" must be provided.
+                  arguments:
+                    - name: target
+                      type: string
+                      desc: Exact target element reference from the page snapshot, or a unique element selector
+                    - name: data
+                      type: object
+                      desc: 'Data to drop, as a map of MIME type to string value (e.g. {"text/plain": "hello", "text/uri-list": "https://example.com"}).'
+                      optional: true
+                    - name: element
+                      type: string
+                      desc: Human-readable element description used to obtain permission to interact with the element
+                      optional: true
+                    - name: paths
+                      type: array
+                      items:
+                        type: string
+                      desc: Absolute paths to files to drop onto the element.
+                      optional: true
+                  annotations:
+                    title: Drop files or data onto an element
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_evaluate
+                  description: Evaluate JavaScript expression on page or element
+                  arguments:
+                    - name: function
+                      type: string
+                      desc: () => { /* code */ } or (element) => { /* code */ } when element is provided
+                    - name: element
+                      type: string
+                      desc: Human-readable element description used to obtain permission to interact with the element
+                      optional: true
+                    - name: filename
+                      type: string
+                      desc: Filename to save the result to. If not provided, result is returned as text.
+                      optional: true
+                    - name: target
+                      type: string
+                      desc: Exact target element reference from the page snapshot, or a unique element selector
+                      optional: true
+                  annotations:
+                    title: Evaluate JavaScript
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_file_upload
+                  description: Upload one or multiple files
+                  arguments:
+                    - name: paths
+                      type: array
+                      items:
+                        type: string
+                      desc: The absolute paths to the files to upload. Can be single file or multiple files. If omitted, file chooser is cancelled.
+                      optional: true
+                  annotations:
+                    title: Upload files
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_fill_form
+                  description: Fill multiple form fields
+                  arguments:
+                    - name: fields
+                      type: array
+                      items:
+                        type: object
+                      desc: Fields to fill in
+                  annotations:
+                    title: Fill form
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_handle_dialog
+                  description: Handle a dialog
+                  arguments:
+                    - name: accept
+                      type: boolean
+                      desc: Whether to accept the dialog.
+                    - name: promptText
+                      type: string
+                      desc: The text of the prompt in case of a prompt dialog.
+                      optional: true
+                  annotations:
+                    title: Handle a dialog
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_hover
+                  description: Hover over element on page
+                  arguments:
+                    - name: target
+                      type: string
+                      desc: Exact target element reference from the page snapshot, or a unique element selector
+                    - name: element
+                      type: string
+                      desc: Human-readable element description used to obtain permission to interact with the element
+                      optional: true
+                  annotations:
+                    title: Hover mouse
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_navigate
+                  description: Navigate to a URL
+                  arguments:
+                    - name: url
+                      type: string
+                      desc: The URL to navigate to
+                  annotations:
+                    title: Navigate to a URL
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_navigate_back
+                  description: Go back to the previous page in the history
+                  arguments: []
+                  annotations:
+                    title: Go back
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_network_request
+                  description: Returns full details (headers and body) of a single network request, or a single part if `part` is set. Use the number from browser_network_requests.
+                  arguments:
+                    - name: index
+                      type: integer
+                      desc: 1-based index of the request, as printed by browser_network_requests.
+                    - name: filename
+                      type: string
+                      desc: Filename to save the result to. If not provided, output is returned as text.
+                      optional: true
+                    - name: part
+                      type: string
+                      desc: Return only this part of the request. Omit to return full details.
+                      optional: true
+                  annotations:
+                    title: Show network request details
+                    readOnlyHint: true
+                    destructiveHint: false
+                    openWorldHint: true
+                - name: browser_network_requests
+                  description: Returns a numbered list of network requests since loading the page. Use browser_network_request with the number to get full details.
+                  arguments:
+                    - name: static
+                      type: boolean
+                      desc: Whether to include successful static resources like images, fonts, scripts, etc. Defaults to false.
+                    - name: filename
+                      type: string
+                      desc: Filename to save the network requests to. If not provided, requests are returned as text.
+                      optional: true
+                    - name: filter
+                      type: string
+                      desc: Only return requests whose URL matches this regexp (e.g. "/api/.*user").
+                      optional: true
+                  annotations:
+                    title: List network requests
+                    readOnlyHint: true
+                    destructiveHint: false
+                    openWorldHint: true
+                - name: browser_press_key
+                  description: Press a key on the keyboard
+                  arguments:
+                    - name: key
+                      type: string
+                      desc: Name of the key to press or a character to generate, such as `ArrowLeft` or `a`
+                  annotations:
+                    title: Press a key
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_resize
+                  description: Resize the browser window
+                  arguments:
+                    - name: height
+                      type: number
+                      desc: Height of the browser window
+                    - name: width
+                      type: number
+                      desc: Width of the browser window
+                  annotations:
+                    title: Resize browser window
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_run_code_unsafe
+                  description: 'Run a Playwright code snippet. Unsafe: executes arbitrary JavaScript in the Playwright server process and is RCE-equivalent.'
+                  arguments:
+                    - name: code
+                      type: string
+                      desc: 'A JavaScript function containing Playwright code to execute. It will be invoked with a single argument, page, which you can use for any page interaction. For example: `async (page) => { await page.getByRole(''button'', { name: ''Submit'' }).click(); return await page.title(); }`'
+                      optional: true
+                    - name: filename
+                      type: string
+                      desc: Load code from the specified file. If both code and filename are provided, code will be ignored.
+                      optional: true
+                  annotations:
+                    title: Run Playwright code (unsafe)
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_select_option
+                  description: Select an option in a dropdown
+                  arguments:
+                    - name: target
+                      type: string
+                      desc: Exact target element reference from the page snapshot, or a unique element selector
+                    - name: values
+                      type: array
+                      items:
+                        type: string
+                      desc: Array of values to select in the dropdown. This can be a single value or multiple values.
+                    - name: element
+                      type: string
+                      desc: Human-readable element description used to obtain permission to interact with the element
+                      optional: true
+                  annotations:
+                    title: Select option
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_snapshot
+                  description: Capture accessibility snapshot of the current page, this is better than screenshot
+                  arguments:
+                    - name: boxes
+                      type: boolean
+                      desc: Include each element's bounding box as [box=x,y,width,height] in the snapshot. Coordinates are viewport-relative, in CSS pixels (Element.getBoundingClientRect)
+                      optional: true
+                    - name: depth
+                      type: number
+                      desc: Limit the depth of the snapshot tree
+                      optional: true
+                    - name: filename
+                      type: string
+                      desc: Save snapshot to markdown file instead of returning it in the response.
+                      optional: true
+                    - name: target
+                      type: string
+                      desc: Exact target element reference from the page snapshot, or a unique element selector
+                      optional: true
+                  annotations:
+                    title: Page snapshot
+                    readOnlyHint: true
+                    destructiveHint: false
+                    openWorldHint: true
+                - name: browser_tabs
+                  description: List, create, close, or select a browser tab.
+                  arguments:
+                    - name: action
+                      type: string
+                      desc: Operation to perform
+                    - name: index
+                      type: number
+                      desc: Tab index, used for close/select. If omitted for close, current tab is closed.
+                      optional: true
+                    - name: url
+                      type: string
+                      desc: URL to navigate to in the new tab, used for new.
+                      optional: true
+                  annotations:
+                    title: Manage tabs
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_take_screenshot
+                  description: Take a screenshot of the current page. You can't perform actions based on the screenshot, use browser_snapshot for actions.
+                  arguments:
+                    - name: type
+                      type: string
+                      desc: Image format for the screenshot. Default is png.
+                    - name: element
+                      type: string
+                      desc: Human-readable element description used to obtain permission to interact with the element
+                      optional: true
+                    - name: filename
+                      type: string
+                      desc: File name to save the screenshot to. Defaults to `page-{timestamp}.{png|jpeg}` if not specified. Prefer relative file names to stay within the output directory.
+                      optional: true
+                    - name: fullPage
+                      type: boolean
+                      desc: When true, takes a screenshot of the full scrollable page, instead of the currently visible viewport. Cannot be used with element screenshots.
+                      optional: true
+                    - name: target
+                      type: string
+                      desc: Exact target element reference from the page snapshot, or a unique element selector
+                      optional: true
+                  annotations:
+                    title: Take a screenshot
+                    readOnlyHint: true
+                    destructiveHint: false
+                    openWorldHint: true
+                - name: browser_type
+                  description: Type text into editable element
+                  arguments:
+                    - name: target
+                      type: string
+                      desc: Exact target element reference from the page snapshot, or a unique element selector
+                    - name: text
+                      type: string
+                      desc: Text to type into the element
+                    - name: element
+                      type: string
+                      desc: Human-readable element description used to obtain permission to interact with the element
+                      optional: true
+                    - name: slowly
+                      type: boolean
+                      desc: Whether to type one character at a time. Useful for triggering key handlers in the page. By default entire text is filled in at once.
+                      optional: true
+                    - name: submit
+                      type: boolean
+                      desc: Whether to submit entered text (press Enter after)
+                      optional: true
+                  annotations:
+                    title: Type text
+                    readOnlyHint: false
+                    destructiveHint: true
+                    openWorldHint: true
+                - name: browser_wait_for
+                  description: Wait for text to appear or disappear or a specified time to pass
+                  arguments:
+                    - name: text
+                      type: string
+                      desc: The text to wait for
+                      optional: true
+                    - name: textGone
+                      type: string
+                      desc: The text to wait for to disappear
+                      optional: true
+                    - name: time
+                      type: number
+                      desc: The time to wait in seconds
+                      optional: true
+                  annotations:
+                    title: Wait for
+                    readOnlyHint: true
+                    destructiveHint: false
+                    openWorldHint: true
+            metadata:
+                pulls: 1975529
+                stars: 37
+                githubStars: 35624
+                category: devops
+                tags:
+                    - playwright
+                    - devops
+                license: Apache License 2.0
+                owner: microsoft
+    - type: image
+      secrets: default
+      image: hashicorp/terraform-mcp-server@sha256:423a6b8e2ee06affcf090892f40c86469caba45fd2448ffa8ca5d717a174f7d5
+      catalog_ref: mcp/docker-mcp-catalog:latest
+      snapshot:
+        server:
+            name: terraform
+            type: server
+            image: hashicorp/terraform-mcp-server@sha256:423a6b8e2ee06affcf090892f40c86469caba45fd2448ffa8ca5d717a174f7d5
+            description: The Terraform MCP Server provides seamless integration with Terraform ecosystem, enabling advanced automation and interaction capabilities for Infrastructure as Code (IaC) development.
+            title: Hashicorp Terraform
+            icon: https://avatars.githubusercontent.com/u/761456?v=4
+            readme: https://desktop.docker.com/mcp/catalog/v3/readme/terraform.md
+            remote: {}
+            tools:
+                - name: get_latest_module_version
+                  description: Fetches the latest version of a Terraform module from the public registry
+                  arguments:
+                    - name: module_name
+                      type: string
+                      desc: The name of the module, this is usually the service or group of service the user is deploying e.g., 'security-group', 'secrets-manager' etc.
+                    - name: module_provider
+                      type: string
+                      desc: The name of the Terraform provider for the module, e.g., 'aws', 'google', 'azurerm' etc.
+                    - name: module_publisher
+                      type: string
+                      desc: The publisher of the module, e.g., 'hashicorp', 'aws-ia', 'terraform-google-modules', 'Azure' etc.
+                  annotations:
+                    title: Get Latest Module Version
+                    readOnlyHint: true
+                    destructiveHint: false
+                    idempotentHint: false
+                    openWorldHint: true
+                - name: get_latest_provider_version
+                  description: Fetches the latest version of a Terraform provider from the public registry
+                  arguments:
+                    - name: name
+                      type: string
+                      desc: The name of the Terraform provider, e.g., 'aws', 'azurerm', 'google', etc.
+                    - name: namespace
+                      type: string
+                      desc: The namespace of the Terraform provider, typically the name of the company, or their GitHub organization name that created the provider e.g., 'hashicorp'
+                  annotations:
+                    title: Get Latest Provider Version
+                    readOnlyHint: true
+                    destructiveHint: false
+                    idempotentHint: false
+                    openWorldHint: true
+                - name: get_module_details
+                  description: Fetches up-to-date documentation on how to use a Terraform module. You must call 'search_modules' first to obtain the exact valid and compatible module_id required to use this tool.
+                  arguments:
+                    - name: module_id
+                      type: string
+                      desc: Exact valid and compatible module_id retrieved from search_modules (e.g., 'squareops/terraform-kubernetes-mongodb/mongodb/2.1.1', 'GoogleCloudPlatform/vertex-ai/google/0.2.0')
+                  annotations:
+                    title: Retrieve documentation for a specific Terraform module
+                    readOnlyHint: true
+                    destructiveHint: false
+                    idempotentHint: false
+                    openWorldHint: true
+                - name: get_policy_details
+                  description: Fetches up-to-date documentation for a specific policy from the Terraform registry. You must call 'search_policies' first to obtain the exact terraform_policy_id required to use this tool.
+                  arguments:
+                    - name: terraform_policy_id
+                      type: string
+                      desc: Matching terraform_policy_id retrieved from the 'search_policies' tool (e.g., 'policies/hashicorp/CIS-Policy-Set-for-AWS-Terraform/1.0.1')
+                  annotations:
+                    title: Fetch detailed Terraform policy documentation using a terraform_policy_id
+                    readOnlyHint: true
+                    destructiveHint: false
+                    idempotentHint: false
+                    openWorldHint: true
+                - name: get_provider_capabilities
+                  description: "Get the capabilities of a Terraform provider including the types of resources, data sources, functions, guides, and other features it supports.\nThis tool analyzes the provider documentation to determine what types of capabilities are available:\n- resources: Infrastructure resources that can be created/managed\n- data-sources: Read-only data sources for querying existing infrastructure  \n- functions: Provider-specific functions for data transformation\n- guides: Documentation guides and tutorials for using the provider\n- actions: Available provider actions (if any)\n- ephemeral resources: Temporary resources for credentials and tokens\n- list-resources: List resources for querying existing cloud resources (Terraform Search)\n\nReturns a summary with counts and examples for each capability type."
+                  arguments:
+                    - name: name
+                      type: string
+                      desc: The name of the Terraform provider, e.g., 'aws', 'azurerm', 'google', etc.
+                    - name: namespace
+                      type: string
+                      desc: The namespace of the Terraform provider, typically the name of the company, or their GitHub organization name that created the provider e.g., 'hashicorp'
+                    - name: version
+                      type: string
+                      desc: The version of the provider to analyze (defaults to 'latest')
+                      optional: true
+                  annotations:
+                    title: Get Terraform provider capabilities and supported features
+                    readOnlyHint: true
+                    destructiveHint: false
+                    idempotentHint: false
+                    openWorldHint: true
+                - name: get_provider_details
+                  description: "Fetches up-to-date documentation for a specific service from a Terraform provider. \nYou must call 'search_providers' tool first to obtain the exact tfprovider-compatible provider_doc_id required to use this tool."
+                  arguments:
+                    - name: provider_doc_id
+                      type: string
+                      desc: Exact tfprovider-compatible provider_doc_id, (e.g., '8894603', '8906901') retrieved from 'search_providers'
+                  annotations:
+                    title: Fetch detailed Terraform provider documentation using a document ID
+                    readOnlyHint: true
+                    destructiveHint: false
+                    idempotentHint: false
+                    openWorldHint: true
+                - name: search_modules
+                  description: |-
+                    Resolves a Terraform module name to obtain a compatible module_id for the get_module_details tool and returns a list of matching Terraform modules.
+                    You MUST call this function before 'get_module_details' to obtain a valid and compatible module_id.
+                    When selecting the best match, consider the following:
+                    	- Name similarity to the query
+                    	- Description relevance
+                    	- Verification status (verified)
+                    	- Download counts (popularity)
+                    Return the selected module_id and explain your choice. If there are multiple good matches, mention this but proceed with the most relevant one.
+                    If no modules were found, reattempt the search with a new moduleName query.
+                  arguments:
+                    - name: module_query
+                      type: string
+                      desc: The query to search for Terraform modules.
+                    - name: current_offset
+                      type: number
+                      desc: Current offset for pagination
+                      optional: true
+                  annotations:
+                    title: Search and match Terraform modules based on name and relevance
+                    readOnlyHint: true
+                    destructiveHint: false
+                    idempotentHint: false
+                    openWorldHint: true
+                - name: search_policies
+                  description: |-
+                    Searches for Terraform policies based on a query string.
+                    This tool returns a list of matching policies, which can be used to retrieve detailed policy information using the 'get_policy_details' tool.
+                    You MUST call this function before 'get_policy_details' to obtain a valid terraform_policy_id.
+                    When selecting the best match, consider the following:
+                    	- Name similarity to the query
+                    	- Title relevance
+                    	- Verification status (verified)
+                    	- Download counts (popularity)
+                    Return the selected policyID and explain your choice. If there are multiple good matches, mention this but proceed with the most relevant one.
+                    If no policies were found, reattempt the search with a new policy_query.
+                  arguments:
+                    - name: policy_query
+                      type: string
+                      desc: The query to search for Terraform modules.
+                  annotations:
+                    title: Search and match Terraform policies based on name and relevance
+                    readOnlyHint: true
+                    destructiveHint: false
+                    idempotentHint: false
+                    openWorldHint: true
+                - name: search_providers
+                  description: |-
+                    This tool retrieves a list of potential documents based on the 'service_slug' and 'provider_document_type' provided.
+                    You MUST call this function before 'get_provider_details' to obtain a valid tfprovider-compatible 'provider_doc_id'.
+                    Use the most relevant single word as the search query for 'service_slug', if unsure about the 'service_slug', use the 'provider_name' for its value.
+                    When selecting the best match, consider the following:
+                    	- Title similarity to the query
+                    	- Category relevance
+                    Return the selected 'provider_doc_id' and explain your choice.
+                    If there are multiple good matches, mention this but proceed with the most relevant one.
+                  arguments:
+                    - name: provider_document_type
+                      type: string
+                      desc: |-
+                        The type of the document to retrieve,
+                        for general overview of the provider use 'overview',
+                        for guidance on upgrading a provider or custom configuration information use 'guides',
+                        for deploying resources use 'resources', for reading pre-deployed resources use 'data-sources',
+                        for functions use 'functions',
+                        for Terraform actions use 'actions',
+                        for listing resources using Terraform Search use 'list-resources'
+                    - name: provider_name
+                      type: string
+                      desc: The name of the Terraform provider to perform the read or deployment operation
+                    - name: provider_namespace
+                      type: string
+                      desc: The publisher of the Terraform provider, typically the name of the company, or their GitHub organization name that created the provider
+                    - name: service_slug
+                      type: string
+                      desc: The slug of the service you want to deploy or read using the Terraform provider, prefer using a single word, use underscores for multiple words and if unsure about the service_slug, use the provider_name for its value
+                    - name: provider_version
+                      type: string
+                      desc: The version of the Terraform provider to retrieve in the format 'x.y.z', or 'latest' to get the latest version
+                      optional: true
+                  annotations:
+                    title: Identify the most relevant provider document ID for a Terraform service
+                    readOnlyHint: true
+                    destructiveHint: false
+                    idempotentHint: false
+                    openWorldHint: true
+            metadata:
+                githubStars: 1541
+                category: devops
+                tags:
+                    - hashicorp
+                    - terraform
+                license: Mozilla Public License 2.0
+                owner: hashicorp
+secrets:
+    default:
+        provider: docker-desktop-store

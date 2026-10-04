@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# profile.yaml hash: {{ include "private_dot_config/docker-mcp/profile.yaml" | sha256sum }}
+
+# profile.yaml is generated: `docker mcp profile export profile home/private_dot_config/docker-mcp/profile.yaml`
+{{ if eq .chezmoi.os "darwin" }}
+if ! docker mcp version >/dev/null 2>&1; then
+    echo "docker-mcp: 'docker mcp' unavailable, skipping" >&2
+    exit 0
+fi
+
+docker mcp profile import "$HOME/.config/docker-mcp/profile.yaml"
+# Lets the agent pull and start catalog servers mid-session, bypassing this profile.
+docker mcp feature disable dynamic-tools
+{{ end }}

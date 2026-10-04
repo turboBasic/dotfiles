@@ -25,10 +25,6 @@
       "command": "uvx",
       "args": ["mcp-proxy-for-aws@latest", "https://aws-mcp.us-east-1.api.aws/mcp", "--metadata", "INSTALL_SOURCE=aws-cli"],
       "env": {"AWS_PROFILE": "${AWS_MCP_PROFILE}"}
-    },
-    "terraform": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "hashicorp/terraform-mcp-server:1.1.0", "stdio", "--toolsets=registry"]
     }
   }
 }
