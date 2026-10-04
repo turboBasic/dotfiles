@@ -175,6 +175,14 @@ Stack conventions live in skills rather than here. Load the skill before writing
 - **Go** — `stacks:go` (module layout, error wrapping, no global state, table-driven tests)
 - **Terraform** — `stacks:terraform` (naming, provider pinning, flat modules, and what not to run)
 
+### Library docs
+
+For library, SDK and CLI docs, use Context7 unless the skill list has a docs skill for that
+tool — the skill wins. Pin these IDs; resolving them is ambiguous: `just` →
+`/websites/just_systems_man_en` (never `/angus-c/just`), Claude Code → `/websites/code_claude`,
+Terraform → `/websites/developer_hashicorp_terraform`. Context7 has no useful entry for Zsh; use man pages
+and the upstream README.
+
 ---
 
 ## Where Instructions Live
