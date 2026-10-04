@@ -108,23 +108,14 @@ docs/
 
 ## Zinit Reference
 
-**Use the `zinit-kb` MCP server as the primary source for all Zinit questions.** It is
-registered in `.mcp.json` and available as the `zinit-kb` server. Prefer it over reading
-raw files or relying on training knowledge — Zinit has had forks and breaking changes.
+**Use the `zinit` skill (from the `zinit-docs` plugin) as the primary source for all Zinit
+questions.** It routes the question to a card category and reads the matching cards from the
+Zinit knowledge base. Prefer it over training knowledge — Zinit has had forks and breaking
+changes.
 
-MCP tools available:
+For convention and file-architecture questions specific to this repo, also read `docs/ZINIT.md`.
 
-- `search_cards` — keyword/tag/concept search across all KB cards; start here
-- `get_card` — fetch a full card by id (e.g. `wait`, `lucid`, `cmd-load`)
-- `list_cards` — list cards in a category or show category counts
-
-Typical lookup flow:
-
-1. Call `search_cards` with relevant terms (e.g. `"wait turbo"`, `"from'gh-r'"`, `"annex rust"`)
-2. Call `get_card` on the most relevant result(s) for full details
-3. For convention and file-architecture questions specific to this repo, also read `docs/ZINIT.md`
-
-Before generating any Zinit config, confirm ices and commands via the MCP server — do not
+Before generating any Zinit config, confirm ices and commands against the cards — do not
 rely solely on training knowledge.
 
 ## Chezmoi Reference
