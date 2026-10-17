@@ -1,229 +1,40 @@
 # AI Instructions
 
-@ARCHITECTURE.md
+Project rules for every harness. `CLAUDE.md`, `AGENTS.md` and `.github/copilot-instructions.md`
+only point here — edit this file, not them.
 
-> **Single source of truth for AI coding instructions.**
->
-> - **Claude Code** reads this via `CLAUDE.md` (`@docs/ai-instructions.md`).
-> - **Codex** reads `AGENTS.md`, which links to this file.
-> - **GitHub Copilot** reads `.github/copilot-instructions.md`, which links to this file.
-> - **Edit only this file.** Keep harness instruction files as thin pointers.
+chezmoi-managed dotfiles; the source dir is `home/` (`.chezmoiroot`). Read on demand:
 
----
+- [ARCHITECTURE.md](ARCHITECTURE.md) — install flow, encryption, template data, hooks, tests
+- [ZINIT.md](ZINIT.md) — Zinit conventions in this repo
+- [README.md](../README.md) — user workflows
 
-## Project Overview
+## References
 
-**dotfiles**: Personal workstation configuration managed by [chezmoi](https://www.chezmoi.io). The chezmoi source directory is `home/`.
+Check chezmoi and Zinit behaviour against docs, not training data — both have changed across
+versions and forks. chezmoi: the `chezmoi` skill, else `chezmoi-local`. Zinit: the `zinit` skill.
 
-For architecture details (install flow, encryption, hooks, test suite), see `docs/ARCHITECTURE.md`.
-For typical user workflows (installation, account updates), see `README.md`.
+## Rules
 
-## Tech Stack
+- Do not commit or push unless asked. Commit subject: `type(scope): subject`, imperative.
+- Shell scripts are Zsh with `set -euo pipefail`; `install.sh` stays POSIX because it runs
+  before Zsh exists.
+- In templates, switch delimiters (`chezmoi:template:left-delimiter`) only where content
+  clashes with `{{ }}`.
+- New secrets follow the [two-key model](ARCHITECTURE.md#encryption-model).
+- Gate platform-specific paths in `.chezmoiignore`, never inside the file.
+- Never hand-edit generated files; regenerate them:
+  `home/.chezmoidata/vscode-extensions.yaml` and VS Code profile `settings.json`
+  (`./vscode-import-profiles`), `docker-mcp/profile.yaml` (`docker mcp profile export`).
+- `.claude/skills/` is canonical; `.agents/skills` is a symlink to it.
 
-| Tool                  | Notes                                        |
-| --------------------- | -------------------------------------------- |
-| Configuration manager | chezmoi                                      |
-| Shell                 | Zsh                                          |
-| Templating            | Go templates (chezmoi)                       |
-| Encryption            | age (symmetric + asymmetric)                 |
-| Package management    | Homebrew, apt-get                            |
-| Secret management     | rbw (Bitwarden CLI)                          |
-| Task runner           | just (Makefile for rbw only)                 |
-| Linting               | prek (markdownlint-cli2, shellcheck, cspell) |
+## `chezmoi apply` without a TTY
 
-## Project Structure
-
-> **Keep this section current.** When adding a new directory, update the tree below in the
-> same change. Remove entries for deleted directories at the same time.
-
-```plaintext
-.agents/skills                   ← symlink to ../.claude/skills for Codex discovery
-.claude/skills/                  ← canonical repo-local skills; Copilot discovers these directly
-├── analyze-docker-log/
-└── chezmoi-local/
-home/                            ← chezmoi source dir (declared via .chezmoiroot)
-├── .chezmoi.toml.tmpl           ← config template, runs on init
-├── .chezmoidata/
-│   ├── packages.yaml            ← package manifest for macOS/Linux
-│   └── vscode-extensions.yaml   ← required extensions per VS Code profile
-├── .chezmoiignore
-├── .chezmoiscripts/
-│   ├── run_onchange_before_decrypt-chezmoi-secrets.sh  ← decrypts secrets
-│   ├── run_onchange_01-install-packages.sh.tmpl        ← installs packages
-│   ├── run_onchange_02-install-vscode-extensions.sh.tmpl ← installs profile extensions (macOS only)
-│   └── run_onchange_after_03-import-docker-mcp-profile.sh.tmpl ← imports the Docker MCP gateway profile (macOS only)
-├── .chezmoitemplates/           ← reusable template snippets
-│   ├── claude-plugin-skill-path ← resolves a skill from Claude's installed user-plugin registry
-│   └── mcp-context7-codex.toml  ← derives Codex's Context7 table from the Claude MCP JSON
-├── .chezmoiexternals/           ← external resources
-├── .secrets/
-│   ├── accounts.json.age        ← encrypted accounts
-│   └── age-00-chezmoi.key.age   ← encrypted main age private key
-├── private_dot_claude/          ← Claude Code user config
-│   ├── CLAUDE.md                ← global instructions for every project
-│   ├── private_RTK.md           ← rtk command reference, included by CLAUDE.md
-│   ├── private_settings.json.tmpl  ← settings; marketplaces and enabled plugins (templated)
-│   ├── rules/task-runners.md    ← path-scoped rule: loads only when a justfile/Makefile/mise.toml is read
-│   ├── skills/triage/           ← routes a stray thought to a repo and the backlog; account-scope, so no repo owns it
-│   └── skills/symlink_raindrop.tmpl ← the one skill still symlinked to a project checkout
-├── dot_codex/                   ← Codex global adapter and settings
-│   ├── AGENTS.md               ← points to the Claude instructions and rules
-│   └── private_config.toml.tmpl ← existing settings plus derived Context7 registration
-├── private_dot_copilot/         ← Copilot global adapter and derived MCP config
-│   ├── copilot-instructions.md ← points to the Claude instructions and rules
-│   ├── private_mcp-config.json.tmpl ← Context7 for Copilot CLI, derived from Claude MCP JSON
-│   └── skills/symlink_zinit.tmpl ← links the installed Claude Zinit plugin skill
-├── private_dot_agents/skills/   ← Codex links to Claude's triage, raindrop and installed Zinit plugin skills
-├── dot_local/bin/               ← scripts installed to ~/.local/bin
-├── private_dot_config/
-│   ├── claude/mcp.json          ← MCP servers, loaded per task via `claude --mcp-config`
-│   ├── docker-mcp/profile.yaml  ← Docker MCP gateway profile (generated by `docker mcp profile export`)
-│   ├── herdr/config.toml        ← Homebrew-managed Herdr: login Zsh and in-app notifications
-│   ├── private_git/             ← per-account gitconfigs (templated, some encrypted)
-│   ├── zsh/                     ← zsh config, zinit, functions, profiles
-│   ├── mise/config.toml.tmpl
-│   ├── atuin/, bat/, cspell/, rclone/, ripgrep/, tmux/
-│   └── opencode/skill/symlink_triage.tmpl ← points OpenCode at the Claude Code triage skill
-├── 00-projects/personal/        ← VS Code workspace files for ~/00-projects/personal
-│   ├── *.code-workspace         ← plain (relative paths only)
-│   └── *.code-workspace.tmpl   ← templated (contain absolute paths via .chezmoi.homeDir / .projectDir)
-├── private_Library/             ← macOS ~/Library (ignored on Linux)
-├── symlink_dot_bashrc
-├── symlink_dot_zshenv
-└── README.md.tmpl
-justfile                         ← task entry point (test, rbw, clean, update-accounts)
-Makefile                         ← rbw build graph only; `just rbw` delegates here
-mise.toml                        ← pins chezmoi, just and prek for this repo
-.pre-commit-config.yaml          ← prek hooks: markdownlint-cli2, shellcheck, cspell
-.markdownlint-cli2.jsonc         ← markdownlint rules, ignores and per-path overrides
-install.sh                       ← POSIX bootstrap (also chezmoi hook)
-tests/                           ← integration test suite
-├── integration/                 ← individual test scripts (*.sh)
-├── integration-tests-runner.zsh ← test runner (install + execute tests)
-├── test-integration-runner.zsh ← isolated regression checks for runner exit status
-├── herdr-pilot.py               ← frozen-input parallel test pilot and result reporting
-├── test_herdr_pilot.py          ← isolated pilot regression checks
-├── test-macos.sh                ← macOS test driver (UTM VM over SSH)
-├── pinentry-env.sh             ← non-interactive Bitwarden test pinentry
-├── README-macos.md              ← macOS VM setup instructions
-├── bin/<arch>/                  ← pre-built rbw binaries per platform
-├── Dockerfile.ubuntu            ← test container image
-└── Dockerfile.rbw-ubuntu        ← builds rbw binaries for linux/<arch>
-op-export-accounts               ← 1Password account export helper
-op-update-accounts               ← Full pipeline: export → commit → chezmoi init --apply
-vscode-import-profiles           ← Regenerates VS Code profile settings.json copies from live data
-docs/
-├── ai-instructions.md           ← you are here
-├── ARCHITECTURE.md              ← install flow, encryption, hooks, template data, test suite
-├── ZINIT.md                     ← Zinit plugin manager conventions and reference
-├── guide-claude-plugins.md      ← Claude Code marketplaces: what a fresh machine needs
-├── guide-work-vw-service-account.md ← work service-account setup
-├── guide-vscode-profiles.md     ← VS Code profile folder hashing, storage.json, useDefaultFlags
-├── guide-herdr-tests.md         ← parallel test pilot, protected artifacts and diagnosis
-├── adr/                         ← Architecture Decision Records (NNNN-title.md + template.md)
-├── zinit/                       ← Zinit Knowledge Base submodule
-│   ├── cards/                   ← ~500 KB cards (ices, commands, concepts, annexes, packages, recipes, troubleshooting, installation, migration)
-│   └── mcp/                     ← MCP server exposing search_cards / get_card / list_cards tools
-└── chezmoi/                     ← chezmoi reference documentation corpus
-```
-
-## Zinit Reference
-
-**Use the `zinit` skill (from the `zinit-docs` plugin) as the primary source for all Zinit
-questions.** It routes the question to a card category and reads the matching cards from the
-Zinit knowledge base. Prefer it over training knowledge — Zinit has had forks and breaking
-changes.
-
-For convention and file-architecture questions specific to this repo, also read `docs/ZINIT.md`.
-
-Before generating any Zinit config, confirm ices and commands against the cards — do not
-rely solely on training knowledge.
-
-## Chezmoi Reference
-
-**Use the `chezmoi` skill (Claude Code global skill) as the primary source for all chezmoi questions.** Invoke it with the `/chezmoi` skill or via the `chezmoi` skill tool. Prefer it over reading raw files or relying on training knowledge.
-
-The local corpus at `docs/chezmoi/` is available as a fallback for offline or deeper lookups. If you use it directly, read `docs/chezmoi/CLAUDE.md` first to orient, then read specific files as needed.
-
-Key lookups in the local corpus:
-
-- File naming / source attributes: `docs/chezmoi/src/reference/source-state-attributes.md`
-- Template functions: `docs/chezmoi/src/reference/templates/functions/<function>.md`
-- Config file options: `docs/chezmoi/src/reference/configuration-file/`
-- CLI commands: `docs/chezmoi/src/reference/commands/<command>.md`
-- Special dirs/files: `docs/chezmoi/src/reference/special-directories/`, `docs/chezmoi/src/reference/special-files/`
-
-### Applying chezmoi while skipping conflicted files
-
-`chezmoi apply` is non-interactive in this environment (no `/dev/tty`), so any target
-with local drift (e.g. `~/.claude/settings.json` edited outside chezmoi) aborts the
-whole run with `could not open a new TTY` instead of prompting.
-
-To apply everything except known-conflicting targets:
-
-1. List every managed target, NUL-delimited (handles paths with spaces, e.g. under
-   `~/Library/Application Support/`):
-   `chezmoi managed -0 --path-style=absolute`
-2. Filter out the conflicting file **and its parent directory**. The parent directory
-   is itself a managed target, and applying it recurses into all children — so
-   excluding only the file is not enough; the directory entry re-triggers the same
-   conflict.
-3. Pipe the filtered list into `xargs -0 chezmoi apply -v`.
+A drifted target aborts the whole run with `could not open a new TTY`. Apply the rest by
+excluding the file **and its parent directory** — a directory target recurses into it. Never
+`--force`; the user resolves drift.
 
 ```sh
-chezmoi managed -0 --path-style=absolute \
-  | tr '\0' '\n' \
-  | grep -vE '^/Users/aamelnyk/\.claude$|^/Users/aamelnyk/\.claude/settings\.json$' \
-  | tr '\n' '\0' \
-  | xargs -0 chezmoi apply -v
+chezmoi managed -0 --path-style=absolute | tr '\0' '\n' \
+  | grep -vE '^/path/dir$|^/path/dir/file$' | tr '\n' '\0' | xargs -0 chezmoi apply -v
 ```
-
-Skipped files stay diverged from the repo until the user resolves them explicitly —
-do not use `--force` to silently overwrite local changes.
-
-## Source Directory Conventions
-
-Files under `home/` follow standard chezmoi naming:
-
-- `dot_` → `.` prefix in target
-- `private_` → mode 0600
-- `symlink_` → symlink in target
-- `executable_` → mode +x
-- `*.tmpl` → processed as Go template
-- `modify_` → modify script
-- `run_` / `run_once_` / `run_onchange_` → scripts in `.chezmoiscripts/`
-
-## Code Style & Conventions
-
-### Formatting
-
-- Follow `.editorconfig` in the repository root for formatting rules (charset, line endings,
-  indentation, trailing whitespace, final newline).
-- If a formatting rule here conflicts with `.editorconfig`, `.editorconfig` wins.
-
-### Shell scripts
-
-- Target Zsh unless POSIX portability is required (e.g. `install.sh`).
-- Use `set -euo pipefail` in Zsh scripts.
-- Quote all variable expansions.
-
-### Chezmoi templates
-
-- Use standard Go template delimiters `{{` / `}}` unless the file content conflicts
-  (e.g. heredocs); in that case use custom delimiters declared via
-  `chezmoi:template:left-delimiter` / `right-delimiter` directives.
-
-### Commit messages
-
-- Use Conventional Commits format: `type(scope): subject`
-  (e.g. `feat(zsh): add fzf integration`), with an imperative subject and no trailing period.
-
-## AI Behaviour Guidelines
-
-- **Minimal changes**: prefer targeted edits over large refactors unless explicitly asked.
-- **Follow existing patterns**: read the surrounding code before suggesting changes.
-- **No secrets**: never generate tokens, passwords, or credentials.
-- **Encryption**: when adding new secret files, follow the two-key encryption model
-  documented in `docs/ARCHITECTURE.md`.
-- **Platform awareness**: check `.chezmoiignore` when adding platform-specific files;
-  gate paths appropriately for `darwin` / `linux`.

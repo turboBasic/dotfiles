@@ -6,8 +6,7 @@ This repository is a [chezmoi](https://www.chezmoi.io)-managed dotfiles setup. T
 
 ## Repository layout
 
-See [docs/ai-instructions.md § "Project Structure"](ai-instructions.md#project-structure) for the full directory tree.
-Key top-level paths relevant to this document:
+Key top-level paths:
 
 - `home/` — chezmoi source dir (declared via `.chezmoiroot`)
 - `install.sh` — POSIX bootstrap (single source of truth; also chezmoi hook)
