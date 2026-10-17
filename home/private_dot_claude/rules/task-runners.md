@@ -28,8 +28,7 @@ paths:
   multi-line bodies and a `--list` a human reads. The split is by audience, not by capability.
 - **A task goes in mise when it needs something Just cannot give it** — per-task env or secret
   injection, a task-scoped tool version, file-based staleness, or availability with no repo in
-  sight. The `claude-*` tasks in `~/.config/mise/config.toml` qualify twice over: they inject a
-  secret-backed token and they are user-level, not project-level.
+  sight.
 - **A mise task a human runs gets a just recipe fronting it**, and calls go `just` → `mise run`,
   never the reverse. Bidirectional wrapping leaves no owner for a task name.
 - **One owner and one lister per name.** A name appearing in both `just --list` and `mise tasks`
@@ -39,8 +38,6 @@ paths:
   producing many files needs no stamp target to hang itself on. A `Makefile` earns its place only
   for a real graph — intermediate artifacts that are themselves prerequisites, pattern rules, a
   build where asking for one target is a meaningful request.
-- **The dotfiles `Makefile` stays as it is** — decided 2026-09-20. It gates the rbw docker build on
-  a stamp file, it predates this rule, and it works; do not propose migrating it.
 - **Recipes carry no `mise exec --` prefix**, relying on mise being activated. That holds in an
   interactive shell and in CI through `jdx/mise-action`. For a non-interactive or GUI-launched
   process — a hook runner fired from a GUI git client, a cron job — the backstop is the shims
