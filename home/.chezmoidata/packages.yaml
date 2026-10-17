@@ -40,6 +40,7 @@ packages:
         - gh
         - git
         - git-lfs
+        - golangci-lint
         - graphviz
         - hatch
         - jira-cli
@@ -55,6 +56,7 @@ packages:
         - repo
         - ripgrep
         - rtk
+        - rust
         - scc
         - shellcheck
         - taproom
@@ -72,10 +74,13 @@ packages:
         - chatgpt
         - claude-code
         - commander-one
+        - codex
+        - copilot-cli
         - docker-desktop
         - font-fira-code-nerd-font
         - font-jetbrains-mono-nerd-font
         - gimp
+        - github-copilot-app
         - google-earth-pro
         - inkscape
         - iterm2
@@ -87,6 +92,7 @@ packages:
         - raindropio
         - raycast
         - rclone-ui
+        - sbx
         - slack
         - sublime-text
         - taphouse
