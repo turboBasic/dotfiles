@@ -78,6 +78,49 @@ run = '''
 [tasks.claude-default.env]
 AWS_MCP_PROFILE = "cargonautica-readonly"
 
+[tasks.claude-openrouter]
+description = "Execute Claude Code using OpenRouter credits instead of a claude.ai subscription"
+dir = "{{"{{"}}cwd{{"}}"}}"
+quiet = true
+run = '''
+#!/usr/bin/env zsh
+set -euo pipefail
+unset AWS_PROFILE \
+  CLAUDE_CODE_USE_BEDROCK \
+  CLAUDE_CODE_USE_VERTEX \
+  CLAUDE_CODE_USE_FOUNDRY \
+  CLAUDE_CODE_OAUTH_TOKEN \
+  CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR \
+  CLAUDE_CODE_API_KEY_HELPER_TTL_MS \
+  CLAUDE_CODE_SUBAGENT_MODEL \
+  ANTHROPIC_CUSTOM_HEADERS
+if [[ -z "${OPENROUTER_API_KEY:-}" ]]; then
+  auth_file="${XDG_DATA_HOME:-$HOME/.local/share}/opencode/auth.json"
+  if [[ ! -r "$auth_file" ]]; then
+    print -u2 "claude-openrouter: set OPENROUTER_API_KEY or log in to OpenRouter with opencode auth login"
+    exit 1
+  fi
+  if ! OPENROUTER_API_KEY=$(jq -er \
+    '.openrouter | select(.type == "api") | .key | select(type == "string" and length > 0)' "$auth_file"); then
+    print -u2 "claude-openrouter: no valid OpenRouter API key in $auth_file; set OPENROUTER_API_KEY or run opencode auth login"
+    exit 1
+  fi
+fi
+export ANTHROPIC_AUTH_TOKEN="$OPENROUTER_API_KEY"
+exec claude --settings '{"apiKeyHelper":"","fastMode":false}' "$@" --mcp-config "$HOME/.config/claude/mcp.json"
+'''
+
+[tasks.claude-openrouter.env]
+AWS_MCP_PROFILE = "cargonautica-readonly"
+ANTHROPIC_API_KEY = ""
+ANTHROPIC_BASE_URL = "https://openrouter.ai/api"
+ANTHROPIC_MODEL = "sonnet"
+ANTHROPIC_DEFAULT_FABLE_MODEL = "anthropic/claude-fable-5.1[1m]"
+ANTHROPIC_DEFAULT_OPUS_MODEL = "anthropic/claude-opus-5.5[1m]"
+ANTHROPIC_DEFAULT_SONNET_MODEL = "anthropic/claude-sonnet-5.5[1m]"
+ANTHROPIC_DEFAULT_HAIKU_MODEL = "anthropic/claude-haiku-5.5[1m]"
+ANTHROPIC_SMALL_FAST_MODEL = "anthropic/claude-haiku-5.5[1m]"
+
 {{- $CUSTOMER_M_ORG := (list "mo" "ia" | join "") }}
 
 [tasks.claude-{{ $CUSTOMER_M_ORG }}]
@@ -123,5 +166,6 @@ ANTHROPIC_DEFAULT_HAIKU_MODEL = "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
 [shell_alias]
 claude-default = "mise run claude-default --"
 claude-{{ $EMPLOYER_D_ORG }} = "mise run claude-{{ $EMPLOYER_D_ORG }} --"
+claude-openrouter = "mise run claude-openrouter --"
 claude-{{ $CUSTOMER_M_ORG }} = "mise run claude-{{ $CUSTOMER_M_ORG }} --"
 claude-{{ $CUSTOMER_M_ORG }}-bedrock = "mise run claude-{{ $CUSTOMER_M_ORG }}-bedrock --"
