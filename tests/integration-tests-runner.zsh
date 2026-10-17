@@ -23,6 +23,7 @@ function execute_tests() {
     printf '\n%s\n\n' "## Executing tests..."
     (
         cd "$CHEZMOI_DATA_DIR" || exit
+        local failed=0
         for t in tests/integration/*.sh; do
             test_short_name=${${t##*/}%.sh}
             log "▫️ Execute test $test_short_name ($REPO_RAW_URL/$t):"
@@ -31,9 +32,11 @@ function execute_tests() {
                 result=SUCCESS
             else
                 result=FAILURE
+                failed=1
             fi
             printf '%s %-40s (%s)\n' $result $test_short_name $CHEZMOI_DATA_DIR/$t
         done
+        exit "$failed"
     )
 }
 
