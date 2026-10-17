@@ -1,6 +1,11 @@
 # Encryption key used by Chezmoi
 *.key.age
 
+{{ if not (includeTemplate "claude-plugin-skill-path" (dict "homeDir" .chezmoi.homeDir "plugin" "zinit-docs@turbobasic" "skillPath" ".claude/skills/zinit")) }}
+.agents/skills/zinit
+.copilot/skills/zinit
+{{ end }}
+
 {{ if ne .chezmoi.os "darwin" }}
 Library
 .config/docker-mcp

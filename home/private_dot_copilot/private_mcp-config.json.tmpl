@@ -1,0 +1,3 @@
+{{- $server := (include "private_dot_config/claude/mcp.json" | fromJson).mcpServers.context7 -}}
+{{- $server = merge (dict "tools" (list "*")) $server -}}
+{{ dict "mcpServers" (dict "context7" $server) | toPrettyJson }}

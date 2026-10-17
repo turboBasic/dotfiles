@@ -5,8 +5,9 @@
 > **Single source of truth for AI coding instructions.**
 >
 > - **Claude Code** reads this via `CLAUDE.md` (`@docs/ai-instructions.md`).
+> - **Codex** reads `AGENTS.md`, which links to this file.
 > - **GitHub Copilot** reads `.github/copilot-instructions.md`, which links to this file.
-> - **Edit only this file.** Keep Copilot instructions as a thin pointer.
+> - **Edit only this file.** Keep harness instruction files as thin pointers.
 
 ---
 
@@ -36,6 +37,10 @@ For typical user workflows (installation, account updates), see `README.md`.
 > same change. Remove entries for deleted directories at the same time.
 
 ```plaintext
+.agents/skills                   ← symlink to ../.claude/skills for Codex discovery
+.claude/skills/                  ← canonical repo-local skills; Copilot discovers these directly
+├── analyze-docker-log/
+└── chezmoi-local/
 home/                            ← chezmoi source dir (declared via .chezmoiroot)
 ├── .chezmoi.toml.tmpl           ← config template, runs on init
 ├── .chezmoidata/
@@ -48,6 +53,8 @@ home/                            ← chezmoi source dir (declared via .chezmoiro
 │   ├── run_onchange_02-install-vscode-extensions.sh.tmpl ← installs profile extensions (macOS only)
 │   └── run_onchange_after_03-import-docker-mcp-profile.sh.tmpl ← imports the Docker MCP gateway profile (macOS only)
 ├── .chezmoitemplates/           ← reusable template snippets
+│   ├── claude-plugin-skill-path ← resolves a skill from Claude's installed user-plugin registry
+│   └── mcp-context7-codex.toml  ← derives Codex's Context7 table from the Claude MCP JSON
 ├── .chezmoiexternals/           ← external resources
 ├── .secrets/
 │   ├── accounts.json.age        ← encrypted accounts
@@ -59,6 +66,14 @@ home/                            ← chezmoi source dir (declared via .chezmoiro
 │   ├── rules/task-runners.md    ← path-scoped rule: loads only when a justfile/Makefile/mise.toml is read
 │   ├── skills/triage/           ← routes a stray thought to a repo and the backlog; account-scope, so no repo owns it
 │   └── skills/symlink_raindrop.tmpl ← the one skill still symlinked to a project checkout
+├── dot_codex/                   ← Codex global adapter and settings
+│   ├── AGENTS.md               ← points to the Claude instructions and rules
+│   └── private_config.toml.tmpl ← existing settings plus derived Context7 registration
+├── private_dot_copilot/         ← Copilot global adapter and derived MCP config
+│   ├── copilot-instructions.md ← points to the Claude instructions and rules
+│   ├── private_mcp-config.json.tmpl ← Context7 for Copilot CLI, derived from Claude MCP JSON
+│   └── skills/symlink_zinit.tmpl ← links the installed Claude Zinit plugin skill
+├── private_dot_agents/skills/   ← Codex links to Claude's triage, raindrop and installed Zinit plugin skills
 ├── dot_local/bin/               ← scripts installed to ~/.local/bin
 ├── private_dot_config/
 │   ├── claude/mcp.json          ← MCP servers, loaded per task via `claude --mcp-config`

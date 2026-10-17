@@ -1,0 +1,3 @@
+{{- $server := (include "private_dot_config/claude/mcp.json" | fromJson).mcpServers.context7 -}}
+[mcp_servers.context7]
+url = {{ $server.url | quote }}

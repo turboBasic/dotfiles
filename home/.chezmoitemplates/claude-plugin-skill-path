@@ -1,0 +1,14 @@
+{{- $registryPath := joinPath .homeDir ".claude/plugins/installed_plugins.json" -}}
+{{- $skillPath := "" -}}
+{{- if stat $registryPath -}}
+  {{- $plugins := (include $registryPath | fromJson).plugins -}}
+  {{- range (index $plugins .plugin | default (list)) -}}
+    {{- if eq .scope "user" -}}
+      {{- $candidate := joinPath .installPath $.skillPath -}}
+      {{- if stat (joinPath $candidate "SKILL.md") -}}
+        {{- $skillPath = $candidate -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $skillPath -}}

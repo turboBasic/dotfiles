@@ -65,6 +65,60 @@ account scope. **A second harness reaches the same file through a symlink of its
 `private_dot_config/opencode/skill/symlink_triage.tmpl` points OpenCode's global skill directory
 (`~/.config/opencode/skill/`) at the applied Claude Code skill, so there is still one file, not two copies.
 
+## Reuse from Codex and Copilot
+
+The Claude files remain the source of truth. Chezmoi installs thin global adapters at
+`~/.codex/AGENTS.md` and `~/.copilot/copilot-instructions.md`. Both direct the harness to read
+`~/.claude/CLAUDE.md`, resolve its imports relative to `~/.claude/`, and consult the existing
+`task-runners` rule for files matching its `paths`. This rule is loaded by instruction rather
+than by a native path-scoped rule engine in these adapters.
+
+Individual links under `~/.agents/skills/` expose `triage` and `raindrop` to Codex, preserving
+other installed skills. Copilot discovers `~/.claude/skills/` directly. Edit the Claude skill
+source; the links contain no skill instructions. The `raindrop` link still depends on its
+vault checkout being present.
+
+These adapters expose instructions and local skills. Claude plugin installations, shell
+settings, hooks and MCP registrations remain specific to their harness. In particular,
+discovering the `raindrop` skill does not register its MCP server.
+
+After applying the adapters, start a fresh session. Check Codex's `/skills` list or Copilot's
+Agent Customizations editor for the skills, and ask the harness to identify the global
+instruction source it read. Copilot CLI also provides `/instructions` for discovery checks.
+
+### Plugin-skill pilot: Zinit
+
+Codex's `~/.agents/skills/zinit` and Copilot's `~/.copilot/skills/zinit` link to the same
+installed `zinit-docs@turbobasic` skill. The shared `claude-plugin-skill-path` chezmoi template
+reads the user-scope entry in `~/.claude/plugins/installed_plugins.json`; no cache version or
+skill body is copied into this repository. The instruction adapters explain how to resolve
+the skill's `${CLAUDE_SKILL_DIR}` paths through the symlink to its real directory.
+
+When the user-scope plugin or its skill is absent, `.chezmoiignore` skips both links. Install
+the plugin with Claude first, then apply the two links. After a Claude plugin update, reapply
+the links so they follow the newly recorded installation path. Project-only plugin installs
+are not exposed globally. Ignoring a link leaves any existing destination untouched.
+
+### MCP pilot: Context7
+
+`home/private_dot_config/claude/mcp.json` owns the Context7 server definition. Chezmoi derives
+the URL for Codex's `~/.codex/config.toml` and the HTTP registration for
+`~/.copilot/mcp-config.json`, shared by Copilot CLI and Copilot harness sessions in VS Code.
+Edit the Claude JSON, then reapply the derived configurations.
+
+The Codex template currently maps Context7's URL; Copilot's generated JSON reuses the HTTP
+definition. Authentication and additional transport fields need an explicit adapter update
+if they are added later. Native configuration locations and schemas are documented by
+[Codex](https://developers.openai.com/codex/mcp),
+[Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers),
+and [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
+
+The other documentation plugins (`chezmoi-docs`, `mise-docs`, `1password-docs`, `uv-docs`,
+`aws-sso-cli-docs`) and workflow plugins (`planning`, `hygiene`, `scaffold`, `stacks`) remain
+in Claude's existing setup. Claude's language-server plugins and hooks require native
+integration in each harness. The Docker gateway, 1Password, Raindrop and AWS MCP servers also
+remain in the Claude MCP configuration; this pilot exposes Context7 only.
+
 ## Scope reference
 
 | Scope     | Written to                           | Committed?                              |

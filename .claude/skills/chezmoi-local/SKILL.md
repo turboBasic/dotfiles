@@ -1,5 +1,5 @@
 ---
-name: chezmoi
+name: chezmoi-local
 description: Answer chezmoi questions using the local documentation corpus at docs/chezmoi. Use when the user asks anything about chezmoi commands, templates, configuration, source attributes, encryption, or password manager integrations.
 ---
 
@@ -12,9 +12,9 @@ Steps:
 3. Read those files directly.
 4. Answer based on what you read — do not rely solely on training knowledge.
 
-If the question is about a specific CLI command, read `docs/chezmoi/reference/commands/<command>.md`.
-If it is about a template function, read `docs/chezmoi/reference/templates/functions/<function>.md`.
-If it is about source file naming, read `docs/chezmoi/reference/source-state-attributes.md`.
-If it is about configuration, read the relevant file under `docs/chezmoi/reference/configuration-file/`.
+If the question is about a specific CLI command, read `docs/chezmoi/src/reference/commands/<command>.md`.
+If it is about a template function, read `docs/chezmoi/src/reference/templates/functions/<function>.md`.
+If it is about source file naming, read `docs/chezmoi/src/reference/source-state-attributes.md`.
+If it is about configuration, read the relevant file under `docs/chezmoi/src/reference/configuration-file/`.
 
-The question to answer: $ARGUMENTS
+Use the user's current request as the question to answer.

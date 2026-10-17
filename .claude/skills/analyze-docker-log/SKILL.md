@@ -90,5 +90,3 @@ These produce hundreds of lines that waste context and obscure real issues:
 - Homebrew download/pour progress (`###...`, `Pouring ...`, `Downloading ...`)
 - Git clone progress (`remote:`, `Receiving objects`, `Resolving deltas`, `Enumerating objects`)
 - Blank lines and lines that are only whitespace
-
-$ARGUMENTS
