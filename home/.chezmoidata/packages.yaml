@@ -43,6 +43,7 @@ packages:
         - golangci-lint
         - graphviz
         - hatch
+        - herdr
         - jira-cli
         - tap: "terror/tap"
           name: "just-lsp"

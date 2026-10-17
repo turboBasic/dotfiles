@@ -66,6 +66,10 @@ Verify passwordless SSH works:
 ssh tester@tahoe26base.local echo "ok"
 ```
 
+The test driver checks batch-mode SSH to this hostname before cloning the VM. If it
+fails, configure the host's SSH key authorization and confirm mDNS resolution before
+starting a macOS test.
+
 ### 7. Shut down the VM
 
 The base VM must be stopped before the test script can clone it.

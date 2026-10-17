@@ -19,10 +19,32 @@ lint-install:
     prek install
 
 # Run all integration tests
-test: test-ubuntu test-macos
+test: test-runner test-pilot test-ubuntu test-macos
+
+# Check integration runner failure reporting without installing dotfiles
+test-runner:
+    zsh {{ tests_dir }}/test-integration-runner.zsh
+
+# Check pilot artifacts and result classification without Docker, UTM or Herdr
+test-pilot:
+    python3 -m unittest discover -s {{ tests_dir }} -p 'test_herdr_pilot.py'
+
+# Freeze tracked worktree inputs; explicitly include any untracked files needed
+pilot-prepare *args:
+    python3 {{ tests_dir }}/herdr-pilot.py prepare {{ args }}
+
+# Create Herdr test panes and an analyst shell for a prepared run
+pilot-launch run:
+    python3 {{ tests_dir }}/herdr-pilot.py launch {{ quote(run) }}
+
+# Report outcomes without printing potentially sensitive log content
+pilot-report run:
+    python3 {{ tests_dir }}/herdr-pilot.py report {{ quote(run) }}
 
 # Run integration tests in Docker
-test-ubuntu: (_require "AGE_PASSPHRASE")
+test-ubuntu: (_require "AGE_PASSPHRASE" "RBW_EMAIL" "RBW_PASSWORD" "RBW_TOTP_SEED")
+    #!/usr/bin/env bash
+    set -euo pipefail
     docker buildx build \
         --platform {{ platform }} \
         --load \
@@ -32,10 +54,13 @@ test-ubuntu: (_require "AGE_PASSPHRASE")
     docker run --interactive --tty --rm \
         --platform {{ platform }} \
         --env AGE_PASSPHRASE \
+        --env RBW_EMAIL \
+        --env RBW_PASSWORD \
+        --env RBW_TOTP_SEED \
         --env NONINTERACTIVE=1 \
-        --volume "$PWD":/repo \
+        --volume "$PWD":/repo:ro \
         {{ image_name }} \
-        zsh -c "cp -a /repo ~/.local/share/chezmoi && cd ~/.local/share/chezmoi && zsh tests/integration-tests-runner.zsh --local" 2>&1 \
+        zsh -c "rbw config set email \"\$RBW_EMAIL\" && rbw config set lock_timeout 86400 && rbw config set pinentry /usr/local/bin/pinentry-env && cp -a /repo ~/.local/share/chezmoi && cd ~/.local/share/chezmoi && zsh tests/integration-tests-runner.zsh --local" 2>&1 \
     | tee {{ log_file }}
 
 # Run integration tests on macOS via UTM VM

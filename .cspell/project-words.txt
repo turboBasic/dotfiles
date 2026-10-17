@@ -45,6 +45,7 @@ findutils
 fira
 gmkdir
 gnubin
+herdr
 inkscape
 iterm
 lefthook

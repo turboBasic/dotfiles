@@ -1,0 +1,14 @@
+[terminal]
+default_shell = "/bin/zsh"
+shell_mode = "login"
+new_cwd = "follow"
+
+[update]
+# Homebrew owns binary updates.
+version_check = false
+
+[ui.toast]
+delivery = "herdr"
+
+[ui.sound]
+enabled = false

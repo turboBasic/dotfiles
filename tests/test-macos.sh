@@ -26,6 +26,7 @@ readonly SSH_OPTS=(-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -
 
 
 main() {
+    check_passwordless_ssh
     echo "## Cloning VM '${VM_BASE}' -> '${VM_TEST}'..."
     utmctl clone "$VM_BASE" --name "$VM_TEST"
     trap cleanup EXIT INT TERM
@@ -43,6 +44,14 @@ main() {
     wait_for_network
     transfer_repo
     run_tests
+}
+
+check_passwordless_ssh() {
+    echo "## Checking passwordless SSH to ${VM_BASE_HOST}..."
+    if ! ssh "${SSH_OPTS[@]}" -o BatchMode=yes "${VM_USER}@${VM_BASE_HOST}" /usr/bin/true; then
+        echo "ERROR: passwordless SSH to ${VM_BASE_HOST} is required; configure the host key before running the macOS test" >&2
+        return 1
+    fi
 }
 
 cleanup() {

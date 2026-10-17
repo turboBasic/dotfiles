@@ -344,7 +344,9 @@ Integration tests live in `tests/integration/`, one script per assertion, run vi
 ```sh
 just                        # list all recipes
 just test                   # runs test-ubuntu + test-macos
-just test-ubuntu            # Docker-based Ubuntu tests (requires AGE_PASSPHRASE)
+just test-runner            # checks result reporting without installing dotfiles
+just test-pilot             # checks pilot artifacts without Docker, UTM or Herdr
+just test-ubuntu            # Docker-based Ubuntu tests (requires AGE_PASSPHRASE and RBW_* credentials)
 just test-macos             # macOS tests via UTM VM (requires AGE_PASSPHRASE, RBW_EMAIL, RBW_PASSWORD, RBW_TOTP_SEED)
 just rbw                    # build rbw binaries (default: arm64)
 just arch=amd64 rbw         # build rbw binaries for amd64
@@ -352,6 +354,15 @@ just update-accounts        # export accounts, encrypt, commit, apply
 ```
 
 Missing environment variables are reported by name before any work starts.
+
+The integration runner executes every assertion even if one fails, then exits nonzero
+if any assertion failed. The Docker recipe preserves failures through its log pipeline,
+so a successful `tee` cannot hide a failed container run. `just test-runner` checks
+all-pass and failing-assertion cases using an isolated temporary home and a stub installer.
+
+For the optional parallel Docker/macOS experiment, see
+[Herdr test pilot](guide-herdr-tests.md). It keeps the existing test recipes, freezes
+their inputs, and records separate protected logs and completion evidence.
 
 `just` is the entry point for every task. The `Makefile` is retained solely for the rbw
 build graph, the one place with genuine file-based staleness: a stamp file gates an
