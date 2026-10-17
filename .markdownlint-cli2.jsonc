@@ -1,6 +1,6 @@
 {
   // Chezmoi templates are Go-template source, not markdown.
-  "ignores": ["**/*.tmpl"],
+  "ignores": ["**/*.tmpl", "tmp/**"],
 
   "config": {
     "default": true,
