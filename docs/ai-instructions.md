@@ -9,6 +9,14 @@ chezmoi-managed dotfiles; the source dir is `home/` (`.chezmoiroot`). Read on de
 - [ZINIT.md](ZINIT.md) — Zinit conventions in this repo
 - [README.md](../README.md) — user workflows
 
+Before editing, read the guide for what you touch:
+
+- VS Code user config, `vscode-import-profiles`, `vscode-extensions.yaml` →
+  [guide-vscode-profiles.md](guide-vscode-profiles.md)
+- Claude settings, `private_dot_copilot/`, `dot_codex/`, `private_dot_agents/` →
+  [guide-claude-plugins.md](guide-claude-plugins.md)
+- `tests/*herdr*` → [guide-herdr-tests.md](guide-herdr-tests.md)
+
 ## References
 
 Check chezmoi and Zinit behaviour against docs, not training data — both have changed across
