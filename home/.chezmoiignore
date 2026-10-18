@@ -6,6 +6,14 @@
 .copilot/skills/zinit
 {{ end }}
 
+{{ range $plugin, $skills := dict "scaffold@turbobasic" (list "modern-python" "new-project") "stacks@turbobasic" (list "shell" "go" "terraform") }}
+{{ range $skills }}
+{{ if not (includeTemplate "claude-plugin-skill-path" (dict "homeDir" $.chezmoi.homeDir "plugin" $plugin "skillPath" (joinPath "skills" .))) }}
+.agents/skills/{{ . }}
+{{ end }}
+{{ end }}
+{{ end }}
+
 {{ if ne .chezmoi.os "darwin" }}
 Library
 .config/docker-mcp

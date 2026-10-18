@@ -25,7 +25,7 @@ Claude files remain the source of truth:
 
 - Codex and Copilot global instruction files point to `~/.claude/CLAUDE.md`.
 - Copilot discovers `~/.claude/skills/`; Codex uses links under `~/.agents/skills/`.
-- The Zinit skill links resolve the installed user-scope plugin path. Apply them after
+- The Zinit and Codex scaffold/stack skill links resolve the installed user-scope plugin path. Apply them after
   installing or updating the Claude plugin; project-scoped installs are not exposed globally.
 - `home/private_dot_config/claude/mcp.json` owns Context7's server configuration. Chezmoi
   derives Codex and Copilot registrations from it; edit the Claude JSON, then apply.
@@ -33,6 +33,14 @@ Claude files remain the source of truth:
 These adapters share instructions, skills and the Context7 registration only. They do not
 install Claude plugins or transfer Claude-specific settings, hooks or MCP servers. In
 particular, discovering a skill does not register its MCP server.
+
+Codex exposes `scaffold:modern-python`, `scaffold:new-project`, `stacks:shell`, `stacks:go`
+and `stacks:terraform` as `modern-python`, `new-project`, `shell`, `go` and `terraform` in
+`~/.agents/skills/`, matching each skill's existing `name` metadata. Its global `AGENTS.md`
+maps the shared instructions' plugin-qualified names to these catalog names. Chezmoi omits
+links when the corresponding user-scope plugin or `SKILL.md` is absent, so machines without
+those plugins do not get broken links. The plugin directories remain the source of truth,
+including any bundled references or scripts.
 
 ## Exceptions
 
