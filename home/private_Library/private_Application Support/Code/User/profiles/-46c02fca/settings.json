@@ -1,6 +1,7 @@
 // Profile: VW.ADMT
 // Profile path: ~/Library/Application Support/Code/User/profiles/-46c02fca/settings.json
 {
+    "mise.updateEnvAutomatically": false,
     "workbench.colorTheme": "Monokai",
     "explorer.confirmDelete": false,
     "mise.configureExtensionsAutomatically": true,

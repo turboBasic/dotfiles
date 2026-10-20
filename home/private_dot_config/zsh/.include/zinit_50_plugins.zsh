@@ -165,7 +165,7 @@ zinit --lucid --wait for \
     ' \
     --nocompile='!' \
     --compile='(mise.zsh|_mise)' \
-    --src='mise.zsh' \
+    --pick='mise.zsh' \
     --run-atpull \
     --atpull='%atclone' \
     --atinit='

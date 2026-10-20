@@ -1,6 +1,7 @@
 // Profile: Node.js
 // Profile path: ~/Library/Application Support/Code/User/profiles/451b20d1/settings.json
 {
+    "mise.updateEnvAutomatically": false,
     "mise.binPath": "~/.local/share/zinit/polaris/bin/mise",
     "editor.formatOnPaste": true,
     "git.autofetch": true,

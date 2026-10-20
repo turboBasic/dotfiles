@@ -2,6 +2,7 @@
 // Profile path: ~/Library/Application Support/Code/User/profiles/73029c16/settings.json
 // NOTE: useDefaultFlags.settings is true — VS Code reads the root Code/User/settings.json for this profile; this file is not currently active.
 {
+  "mise.updateEnvAutomatically": false,
   // Inherit all settings from the Default profile. Only extensions are different
   //
   // General settings

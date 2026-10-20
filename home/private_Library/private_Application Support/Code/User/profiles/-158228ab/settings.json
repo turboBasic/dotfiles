@@ -1,6 +1,7 @@
 // Profile: Python
 // Profile path: ~/Library/Application Support/Code/User/profiles/-158228ab/settings.json
 {
+    "mise.updateEnvAutomatically": false,
     "mise.binPath": "~/.local/share/zinit/polaris/bin/mise",
     "python.analysis.autoImportCompletions": true,
     "python.analysis.fixAll": [

@@ -1,6 +1,7 @@
 // Profile: Go
 // Profile path: ~/Library/Application Support/Code/User/profiles/-5b384f0/settings.json
 {
+    "mise.updateEnvAutomatically": false,
     "mise.binPath": "~/.local/share/zinit/polaris/bin/mise",
     "explorer.confirmDelete": false,
     "editor.fontSize": 15,
@@ -100,5 +101,7 @@
         "**/.gitea/workflows/*.yaml",
         "**/.forgejo/workflows/*.yml",
         "**/.forgejo/workflows/*.yaml"
-    ]
+    ],
+    "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
+    "workbench.editor.empty.hint": "hidden"
 }

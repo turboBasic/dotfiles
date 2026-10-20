@@ -3,6 +3,7 @@
 // NOTE: useDefaultFlags.settings is true — VS Code reads the root Code/User/settings.json for this profile; this file is not currently active.
 // Visual settings copied from the Default profile.
 {
+  "mise.updateEnvAutomatically": false,
   "editor.fontFamily": "FiraCode Nerd Font, Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": false,
   "editor.fontSize": 15,
