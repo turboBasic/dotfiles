@@ -187,6 +187,14 @@ zinit --lucid --wait for \
     jdx/mise \
     --as='null' \
     --from='gh-r' \
+    --ver='v0.39.1' \
+    --bpick='waza-*' \
+    --mv='waza-* -> waza' \
+    --sbin='waza' \
+    --atclone='chmod +x waza' \
+    microsoft/waza \
+    --as='null' \
+    --from='gh-r' \
     --fbin \
     jdx/usage \
     --wait='1' \

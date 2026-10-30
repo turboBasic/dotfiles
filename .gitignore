@@ -58,3 +58,4 @@ debug.tf
 
 # Zsh files
 *.zwc
+.aider*

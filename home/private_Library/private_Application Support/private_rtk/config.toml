@@ -59,3 +59,8 @@ grep_max_per_file = 100
 status_max_files = 15
 status_max_untracked = 10
 passthrough_max_chars = 2000
+
+[retriever]
+mode = "sqlite"
+tee_max_files = 20
+tee_max_file_size = 1048576

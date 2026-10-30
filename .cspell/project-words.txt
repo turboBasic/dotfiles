@@ -116,6 +116,7 @@ sharkdp
 sindresorhus
 sqids
 submods
+waza
 zdharma
 zicdreplay
 zicompinit
