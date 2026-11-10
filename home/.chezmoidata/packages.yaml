@@ -48,6 +48,7 @@ packages:
         - tap: "terror/tap"
           name: "just-lsp"
         - less
+        - mas
         - midnight-commander
         - mise
         - neovim
@@ -97,7 +98,6 @@ packages:
         - slack
         - sublime-text
         - taphouse
-        - telegram
         - utm
         - visual-studio-code
         - vlc
