@@ -136,5 +136,10 @@
     "chat.viewSessions.orientation": "stacked",
     "chat.tools.terminal.autoApprove": {
         "prek": true
+    },
+    "chat.tools.urls.autoApprove": {
+        "https://code.visualstudio.com": true,
+        "https://github.com/microsoft/vscode/wiki/*": true,
+        "https://www.google.com/search": true
     }
 }

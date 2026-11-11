@@ -91,5 +91,6 @@
 	"security.promptForLocalFileProtocolHandling": false,
 	"svg.preview.mode": "svg",
 	"todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
-	"claudeCode.hideOnboarding": true
+	"claudeCode.hideOnboarding": true,
+	"githubIssues.showIssueNumberInTree": true
 }

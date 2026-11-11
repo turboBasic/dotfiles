@@ -103,5 +103,41 @@
         "**/.forgejo/workflows/*.yaml"
     ],
     "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
-    "workbench.editor.empty.hint": "hidden"
+    "chat.tools.terminal.autoApprove": {
+        "/^just lint$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    },
+    "workbench.editor.empty.hint": "hidden",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "chatCustomizationsEvaluations.model": "gpt-6-luna",
+    "chatCustomizationsEvaluations.waza.alwaysRunAfterFixDiagnostics": true,
+    "chatCustomizationsEvaluations.waza.command": "~/.local/share/zinit/polaris/bin/waza",
+    "githubPullRequests.queries": [
+        {
+            "label": "Copilot on My Behalf",
+            "query": "repo:${owner}/${repository} is:open author:copilot assignee:${user}"
+        },
+        {
+            "label": "Local Pull Request Branches",
+            "query": "default"
+        },
+        {
+            "label": "Waiting For My Review",
+            "query": "repo:${owner}/${repository} is:open review-requested:${user}"
+        },
+        {
+            "label": "Created By Me",
+            "query": "repo:${owner}/${repository} is:open author:${user}"
+        },
+        {
+            "label": "All Open",
+            "query": "default"
+        },
+        {
+            "label": "All Closed",
+            "query": "repo:${owner}/${repository} -is:open"
+        }
+    ]
 }
